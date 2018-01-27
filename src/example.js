@@ -1,9 +1,9 @@
 import React from 'react';
 import Form from "react-jsonschema-form";
 import _ from 'lodash';
-import Admin from "react-crud-admin";
+import Admin from "./admin.js";
 
-export default class Example extends Admin
+class Example extends Admin
 {
     constructor()
     {
@@ -91,3 +91,4 @@ export default class Example extends Admin
 	}
     }
 }
+export default Example;

@@ -35,10 +35,11 @@
   },
     "scripts": {
     "docs": "esdoc -c esdoc.json",
-    "build": "webpack --progress --profile --colors",
+	"build": "webpack --config webpack.config.production.js --progress --profile --colors",
+	"deploy": "webpack --config webpack.config.deployment.js --progress --profile --colors",
     "start": "webpack-dev-server --progress --profile --colors",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "docs": "documentation build ./srx/admin.jsx -f md > ./public/doc.md"
+    "test": "echo \"Error: no test specified\" && exit 1"
+
   },
   "author": "Mubarak Jibril",
   "license": "ISC"

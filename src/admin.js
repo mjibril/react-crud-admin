@@ -1,16 +1,15 @@
 import React from 'react';
 import _ from 'lodash';
-import Set from './set';
+import Set from './set.js';
 import './admin.scss';
+
 const displayType = {
     list : "list",
     change : "change"
     };
-/**
- * ReactAdmin Class. This 
- */
-export default class Admin extends React.Component {
-    name='default'
+
+class Admin extends React.Component {
+    name='default' 
     name_plural='defaults'
     live_search=false
     field_transforms={}
@@ -586,3 +585,4 @@ export default class Admin extends React.Component {
 
 
 
+export default Admin;

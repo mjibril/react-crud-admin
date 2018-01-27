@@ -12,19 +12,19 @@ const PORT = process.env.PORT || "9999";
 
 /*
 
+	`webpack-dev-server/client?http://${HOST}:${PORT}`,
+		`webpack/hot/only-dev-server`,
 	
 */
 module.exports = {
     entry: [
 	'whatwg-fetch',
-	`webpack-dev-server/client?http://${HOST}:${PORT}`,
-	`webpack/hot/only-dev-server`,
 	'./src/index.js' // Your appʼs entry point
 	],
 	devtool: process.env.WEBPACK_DEVTOOL || 'cheap-module-source-map',
 	output: {
 		path: path.join(__dirname, 'public'),
-	    filename: 'bundle.js',
+	    filename: 'bundle.js'
 
 	},
 
