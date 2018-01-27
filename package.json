@@ -1,0 +1,45 @@
+{
+  "name": "react-crud-admin",
+  "version": "1.0.3",
+  "description": "React Admin inspired by DjangoAdmin",
+  "main": "public/bundle.js",
+  "dependencies": {
+    "bootstrap": "",
+    "lodash": "",
+    "moment": "",
+    "moment-timezone": "",
+    "react": "",
+    "react-dom": "^16.2.0",
+    "react-jsonschema-form": "^1.0.0",
+    "whatwg-fetch": ""
+  },
+  "devDependencies": {
+    "babel-core": "",
+    "babel-loader": "",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-runtime": "",
+    "babel-preset-es2015": "",
+    "babel-preset-react": "",
+    "babel-preset-stage-2": "",
+    "css-loader": "",
+    "esdoc-standard-plugin": "^1.0.0",
+    "file-loader": "",
+    "html-webpack-plugin": "",
+    "node-sass": "",
+    "resolve-url-loader": "",
+    "sass-loader": "",
+    "style-loader": "",
+    "url-loader": "",
+    "webpack": "",
+    "webpack-dev-server": ""
+  },
+    "scripts": {
+    "docs": "esdoc -c esdoc.json",
+    "build": "webpack --progress --profile --colors",
+    "start": "webpack-dev-server --progress --profile --colors",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "docs": "documentation build ./srx/admin.jsx -f md > ./public/doc.md"
+  },
+  "author": "Mubarak Jibril",
+  "license": "ISC"
+}

@@ -1,0 +1,63 @@
+
+@import "../node_modules/bootstrap/scss/bootstrap.scss";
+
+.sort-active
+{
+    background-color : #5bc0de;
+    color: white;
+}
+.sort-reverse-active
+{
+    background-color : white;
+    color: #5bc0de;;
+}
+
+.search-field, .add-button
+{
+
+    margin : 10px;
+}
+
+progress
+{
+    width: 100%;
+}
+
+.summary
+{
+    font-size: 110%;
+    font-weight: bold;
+}
+
+
+h1,h2,h3
+{
+    color: #efece6;
+}
+a
+{
+    color: #f4b342;
+}
+
+
+.ra-back-button
+{
+    @extend .btn;
+    @extend .btn-info;
+    margin :  30px 0 30px 0;
+}
+
+.ra-add-button
+{
+    @extend .btn;
+    @extend .btn-info;
+    @extend  .float-right;
+    margin : 10px;
+    
+}
+
+.ra-action-button
+{
+    @extend  .float-right;
+    margin : 10px;
+}
