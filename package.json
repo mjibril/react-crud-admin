@@ -1,6 +1,6 @@
 {
   "name": "react-crud-admin",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "React Admin inspired by DjangoAdmin",
   "main": "public/bundle.js",
   "dependencies": {
@@ -22,7 +22,6 @@
     "babel-preset-react": "",
     "babel-preset-stage-2": "",
     "css-loader": "",
-    "esdoc-standard-plugin": "^1.0.0",
     "file-loader": "",
     "html-webpack-plugin": "",
     "node-sass": "",
@@ -33,14 +32,18 @@
     "webpack": "",
     "webpack-dev-server": ""
   },
-    "scripts": {
-    "docs": "esdoc -c esdoc.json",
-	"build": "webpack --config webpack.config.production.js --progress --profile --colors",
-	"deploy": "webpack --config webpack.config.deployment.js --progress --profile --colors",
+  "scripts": {
+    "docs": "esdoc -c .esdoc.json",
+    "build": "webpack --config webpack.config.production.js --progress --profile --colors",
+    "publish": "webpack --config webpack.config.deployment.js --progress --profile --colors",
     "start": "webpack-dev-server --progress --profile --colors",
     "test": "echo \"Error: no test specified\" && exit 1"
-
   },
+    "repository" :
+    { "type" : "git"
+      , "url" : "https://github.com/mjibril/react-crud-admin.git"
+    },
+    
   "author": "Mubarak Jibril",
   "license": "ISC"
 }

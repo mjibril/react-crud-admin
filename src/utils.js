@@ -10,7 +10,7 @@ export function toTitleCase(word)
 }
 
 
-
+/*
 export function add(items,newItem,isEqual)
 {
     result=[];
@@ -108,3 +108,4 @@ export function  difference(array1,array2,isEqual)
     
     return result;
 }
+*/

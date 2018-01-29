@@ -6,101 +6,160 @@ import './admin.scss';
 const displayType = {
     list : "list",
     change : "change"
-    };
+};
 
+/** Admin Class extends React.Component. To implement a CRUD interface similar to Django Admin one needs to extend the Admin class. */
 class Admin extends React.Component {
-    name='default' 
-    name_plural='defaults'
-    live_search=false
-    field_transforms={}
-    header_transforms={}
-    extra_fields={}
-    list_display=[]
-    list_display_links=[]
-    ordering=[]
-    list_per_page=2
-    _sort_fields=[]
-    is_object_equal=(a,b)=> a==b 
-    actions={
+	
+    constructor(props)
+    {
+	
+	super(props);
+	
+	this.name='default'
+	this.name_plural='defaults'
+	this.live_search=false
+	this.field_transforms={}
+	this.header_transforms={}
+	this.extra_fields={}
+	this.list_display=[]
+	this.list_display_links=[]
+	this.list_per_page=10
+	this.sort_fields=[]
+	this.is_object_equal=(a,b)=> a==b
+	
+	this.actions={
 	    "delete" : (selected_objects)=>{
 		
 	    }
 	}
-	    
+	
     
-    _all_selected=false
-   
-	
-    constructor(props)
-    {
-	super(props);
-	
-	
-	this.state = {displayType : displayType.list , total: 0,  page_number : 1,object : null,queryset:[],selected_objects:new Set([],this.is_object_equal)}
+	this._all_selected=false
+
+	let queryset=this.get_queryset();
+	this.state = {displayType : displayType.list , total: queryset.length,  page_number : 1,object : null,queryset: queryset,selected_objects:new Set([],this.is_object_equal)}
 	
 	this._handle_search = this._handle_search.bind(this);
 	this.select_all = this.select_all.bind(this);
 	this.select_one=this.select_one.bind(this);
-	
+
     }
-    /**
+     /**
      * This function returns an array of objects that will serve as the
-     * queryset for the Admin class. Typically involves an HTTP request
+     * queryset for the admin interface. Typically involves an HTTP request
      * to a backend.
-     * @param {} None 
-     * @returns {array} An array of objects.
+     *  
+     * @returns {object[]} An array of objects.
      */
-    
+
     get_queryset(page_number=this.state.page_number,list_per_page=this.list_per_page)
     {
-
+    
 
 	return []
     }
+
     
     /**
-     * This functions returns a JSON Schema object describing the Schema of 
-     * the objects in the array returned by getQueryset(). Learn more on JSON Schema
-     * https://spacetelescope.github.io/understanding-json-schema/
-     * @param {object} The object.
-     * @returns {object} A JSON Schema object.
+     * This functions returns a JSON Schema Form for editing
+     * the objects in the array returned by get_queryset(). This method needs to be overridden to
+     * so as to return a Form Component for the object.  Learn more on 
+     * JSON schema forms from https://github.com/mozilla-services/react-jsonschema-form 
+     * and JSON Schema from https://spacetelescope.github.io/understanding-json-schema/
+     * @param {object} object - The current selected object.
+     * @returns  A JSON Schema Form Component.
      */
 
-    get_form(obj=null)
+    get_form(object=null)
     {
 	
 	return {}
     }
-    get_ordering()
+    /**
+     * Returns a true/false value. Controls wether search is implement on live input or not.
+     * Can be overriden by the live_search member variable. Default is false.
+     *
+     *@return {boolean} 
+     */
+
+    get_live_search()
     {
-	if(this.ordering)
-	{
-	    return this.ordering;
-	}
+	return false
 	
-	return []
     }
+    
+    /**
+     * Gets an actions object whose properties are action names and values are action methods.
+     * This an be overridden by the action member variable. The default "delete" method is not
+     * implemented.
+     *
+     * @example
+     * ```javascript
+     * actions = { "delete" : (selected_objects)=>{ } }
+     * ```
+     *
+     * Each actions object property (e.g. "delete") is passed an array of selected objects. One
+     * can then handle those objects. Actions will appear on the list display page within a
+     * dropdown. Selecting an action should have the action method applied to all currently 
+     * selected objects.
+     *
+     *@return {object} An actions object
+     */
+    
     get_actions()
     {
+
 	if(this.actions)
 	{
 	    return this.actions;
 	}
 	
-	return []
+	return {}
 
 
     }
+    /**
+     *   Gets the list/array of properties of the objects in the queryset that are clickable
+     *    when displayed on the list display page. It can be overwritten by the member variable
+     *   list_display_links. A property is any string that should exist in the objects within 
+     * a queryset and works with lodash's _.at function. 
+     *
+     *   @example
+     *   let object={ name : "any name",{ address : { street : "any"}},emails: ["any@any.com"]}
+     *  
+     *   The properties "name","address.street" and "emails[0]" are all acceptable
+     *
+     * @return {string[]} A list of properties of the object to be displayed
+     */
+
     get_list_display_links()
     {
+
 	if(this.list_display_links)
 	{
 	    return this.list_display_links;
 	}
 	return [];
     }
+/**
+     *   Gets the list/array of properties/field names of the objects in the queryset to be
+     *   displayed on the list display page. It can be overwritten by the member variable
+     *   list_display. A property is any string that should exist in the objects within 
+     *   a queryset and works with lodash's _.at function. See more at
+     *   https://lodash.com/docs/4.17.4#at 
+     *
+     *   @example
+     *   let object={ name : "any name",{ address : { street : "any"}},emails: ["any@any.com"]}
+     *  
+     *   The properties "name","address.street" and "emails[0]" are all acceptable
+     *
+     * @return {string[]} A list of properties of the object to be displayed 
+     */
+
     get_list_display()
     {
+     
 	if(this.list_display)
 	{
 		return this.list_display;
@@ -109,37 +168,80 @@ class Admin extends React.Component {
 	return []
 	
     }
+    /**
+     * Returns an ordered queryset. The method checks to see if sorting is active and sorts
+     * the current queryset based on the sort order. 
+     * @private
+     * @return {object[]} An ordered queryset 
+     */
+
+
     _get_ordered_queryset()
     {
-	
-	if(this.get_ordering())
+
+	if(this.sort_fields.length>0)
 	{
-	   let ordering= this._sort_fields.length >=1  ? this._sort_fields : this.get_ordering();
-	   return  this.state.queryset 
+	    
+	    return this.sort_by(this.sort_fields) 
 	}
-	//return this.get_queryset();
-	return this.state.queryset
-	
+
+	return this.state.queryset ?  this.state.queryset : [];
+
     }
+    /**
+     * Implements search. This method should be overridden to implement a custom search
+     *
+     *@param {string} term - the search term
+     *@return {object[]} the queryset as a result of the search
+     */
+
     
     search(term)
     {
-	//
+	return this.state.queryset
     }
+    /**
+     * Grants permission to delete object. This method is not implemented and can be handled via
+     *  implementing actions.
+     *
+     *@param {object} object - 
+     *@return {boolean} Returns true is the object has been deleted or false otherwise
+     */
 
     has_delete_permission(object)
     {
 	
         return true
     }
+    /**
+     * Grants permission to add an object. This method controls rendering of the Add 
+     * button
+     *
+     *
+     *@return {boolean} Returns true is the object can be added or false otherwise
+     */
+
     has_add_permission()
     {
 	return true;
     }
+    /**
+     * Grants permission to change an object. It disables all links to the add/change page when
+     * enabled
+     *
+     *@return {boolean} Returns true is the object can be changed or false otherwise
+     */
+
     has_change_permission(object=null)
     {
 	return true
     }
+    /**
+     * Grants permission to access this admin interface. 
+     *
+     *@return {boolean} Returns true if access is allowed false otherwise
+     */
+
     has_module_permission()
     {
 	return true
@@ -161,40 +263,68 @@ class Admin extends React.Component {
 	    return 'sort-reverse-active';
 	}
 	return 'sort-active';
-    }*/
+	}*/
+
+    /**
+     * This method adds up/down arrows to field headers on the list display page table
+     *
+     * @private 
+     * @param {strin} field -  the field/property name
+     
+     
+     */   
+
+
     _order_state_arrow(field)
     {
 
-	let index=_.findIndex(this._sort_fields,item=> item.hasOwnProperty(field));
+	let index=_.findIndex(this.sort_fields,item=> item.hasOwnProperty(field));
 	
 	if(index<0)
 	{
 	    return null;
 
 	}
-	if(this._sort_fields[index][field]=='desc')
+	if(this.sort_fields[index][field]=='desc')
 	{
 	   
 	    return <span>&#8681;</span>
 	}
 	return  <span> &#8679;</span>
     }
+    /**
+     *  This method  should be overriden and called after saving an object in the add/change view.       *  This method is not called at all here but provides hints on what to do after saving
+     *  an object. Change the state displayType to "list", object to "null" and refresh the quer         *  yset.
+     */   
     
     response_add(options)
     {
 	
-	this.setState({displayType :displayType.list, object :null  });
-	this.get_queryset();
+	this.setState({displayType :displayType.list, object :null,queryset: this.get_queryset()  });
+
 	return true
     }
+    /**
+     *  This method should be overriden and called after saving an object in the add/change view.         *  This method is not called at all here but provides hints on what to do after saving
+     *  an object. Change the state displayType to "list", object to "null" and refresh the quer         *  yset.
+     */   
+
     response_change(options)
     {
-
-	this.setState({displayType :displayType.list, object :null  });
-	this.get_queryset();
+	this.setState({displayType :displayType.list, object :null,queryset: this.get_queryset()  });
+	
 	return true
     }
-
+    /**
+     * A private method to wrap a table entry in an <a></a> tag in the display page.
+     * The method checks if permission is given to display links using the has_change_permission method
+     * @private
+     * @param {object} object - the current object to be displayed as a table
+     * entry in the display page
+     * @param {string} label - the name of the field 
+     
+     */
+   
     _create_object_link(object,label)
     {
 	if(this.has_change_permission(object))
@@ -259,27 +389,27 @@ class Admin extends React.Component {
     }
     sort_by(sort_fields)
     {
-	
+	return this.state.queryset ? this.state.queryset : [];
     }
 
     _sort_handler(field)
     {
-	
+
 	return (event)=>
 	{
-
-	    let index=_.findIndex(this._sort_fields,item=> item.hasOwnProperty(field));
+	    
+	    let index=_.findIndex(this.sort_fields,item=> item.hasOwnProperty(field));
 	    if(index>=0)
 	    {
-		if(this._sort_fields[index][field]=='asc')
+		if(this.sort_fields[index][field]=='asc')
 		{
-		    this._sort_fields[index][field]='desc';
+		    this.sort_fields[index][field]='desc';
 
 		    
 		}
 		else
 		{
-		    this._sort_fields=_.filter(this._sort_fields,item => !item.hasOwnProperty(field));
+		    this.sort_fields=_.filter(this.sort_fields,item => !item.hasOwnProperty(field));
 		    
 		}
 
@@ -287,21 +417,27 @@ class Admin extends React.Component {
 	    }
 	    else
 	    {
-		let temp={};
-		temp[field]='asc'
-		this._sort_fields.push(temp);
-		
+		let temp={}
+		temp[field]='asc';
+		this.sort_fields.push(temp);
+
 	    }
-	    //console.log(JSON.stringify(this._sort_fields));
-	    this.sort_by(this._sort_fields)
+	  
+	    this.sort_by(this.sort_fields)
 	    this.forceUpdate();
 
 	}
     }
+    /**
+     * This method is an event handler that listens to when all objects of the queryset
+     * displayed within a single display page are selected
+     */   
+
     select_all(event)
     {
 
-	//console.log(this.state.selected_objects.getItems())
+
+	
 	if(this._all_selected)
 	{
 	    
@@ -315,8 +451,14 @@ class Admin extends React.Component {
 	this._all_selected=!this._all_selected;
 	
     }
+    /**
+     * This method is an event handler that listens when a single objects of the queryset
+     * displayed is selected
+     */   
+
     select_one(object)
     {
+
 	return (event)=>{
 
 	    if(this.state.selected_objects.contains(object))
@@ -333,8 +475,16 @@ class Admin extends React.Component {
 
 
 	    }
+
 	}
     }
+
+    /**
+     * Generate the table body for the list display page
+     *
+     * @return  An array of table rows <tr/>
+     */
+
     _get_table_body()
     {
 	return this._get_ordered_queryset().map((object,i)=>
@@ -352,19 +502,35 @@ class Admin extends React.Component {
 
 
     }
+    /**
+     * Changes the state property "loading" to true. The state property can be used to show a
+     * progress indicator.
+     */
 
     show_progress()
     {
+	  
 
 	this.setState({loading: true});
     }
+    /**
+     * Changes the state property "loading" to false. This method  can be used to hide a
+     * progress indicator by inspecting the "loading" property of the state object.
+     */
+
     hide_progress()
     {
 
 	this.setState({loading: false});
     }
-    _render_progress()
+    /**
+     * The default progress indicator. Can be overriden.
+     * @return A progress indicator component
+     */
+
+    render_progress()
     {
+
 
 	return 	    <div className="fetch-progress" >
 	 <progress>
@@ -372,6 +538,13 @@ class Admin extends React.Component {
 	    </div>
 
     }
+    /**
+     * An event listener that listens to the search event. This method calls search method which
+     * implements a custom search. The method uses the "live_search" property to implement live 
+     * search or not.
+     * @private
+     * @param {object} event The search onChange event
+     */
 
     _handle_search(event)
     {
@@ -382,7 +555,9 @@ class Admin extends React.Component {
 	    let key= event.which || event.keyCode;
             if(this.live_search || key==13)
 	    {
-		this.search(term);
+		let queryset=this.search(term);
+		this.setState({queryset:queryset,total:queryset.length})
+
 	    }
 
 	}
@@ -394,23 +569,42 @@ class Admin extends React.Component {
 	
 
     }
+    /**
+     * Renders the search component
+     * @private 
+     * @return A search input field
+     */
+
     _render_search_field()
     {
-
 	return 	<div className="search-field">
 	<input name="search" type="text" className="form-control" placeholder="Search" onChange={this._handle_search}   onKeyUp={this._handle_search}/>
 	</div>
 
     }
+    /**
+     * Renders the add object button. Checks to see if permission is given by has_add_permission
+     * @private 
+     * @return An add button component
+     */
+
     _render_add_button()
     {
+
 	if(this.has_add_permission())
 	{
 		return <button className={"ra-add-button"} onClick={this._object_link_clicked(null)} > Add {_.startCase(this.name)}</button>
 	}
     }
+    /**
+     * Renders the table in the display page. This calls _get_table_header and _get_table_body
+     * @private 
+     * @return An a table displaying the state queryset set objects
+     */
+
     _render_table()
     {
+
 	return 	<table className="table">
 		<thead>
 	        <tr>
@@ -426,45 +620,80 @@ class Admin extends React.Component {
 
 
     }
+    /**
+     * An event listener that listens to actions selected.
+     * 
+     *@param {string} action -  the action selected
+     */
 
 
     action_selected(action)
     {
+
 	return (event)=>{
 
-	    this.actions[action](this.state.selected_objects);
+	    this.actions[action](this.state.selected_objects.getItems());
 	    this.get_queryset(this.state.page_number,this.list_per_page);
 	}
 	
 
     }
+    /**
+     * An event listener that listens when a page is  selected.
+     * 
+     *@param {number} page -  the page number selected
+     */
+
     selectPage(page)
     {
+
 	return (event)=>
 	{
 	
-	    this.setState({page_number: page.page},()=>{this.get_queryset()});
+	    this.setState({page_number: page.page},()=>{
+
+		this.setState({queryset: this.get_queryset()})
+
+	    });
 	    event.preventDefault();
 	}
 
 
 
     }
+    /**
+     * An event listener that listens when the next page is  selected.
+     * 
+     */
+
     nextPage()
     {
+
 	this.setState({page_number: Math.min(this.state.page_number+1,this.state.total)});
 	    
 	
     }
+    /**
+     * An event listener that listens when the previous page is  selected.
+     * 
+     */
+
     prevPage()
     {
+
 	this.setState({page_number: Math.max(this.state.page_number-1,1)});
 	    
 	
     }
+    /**
+     * Renders the pagination UI
+     * 
+     * @return A component that renders the pagination controls
+     */
 
     _render_pagination()
     {
+
 	let pages=[];
 	if(this.state.total)
 	{
@@ -500,6 +729,12 @@ class Admin extends React.Component {
 	</nav>
 	</div>
     }
+    /**
+     * Renders the actions select component
+     * 
+     * @return A component that renders a select input for all actions in the list display page
+     */
+
     _render_actions()
     {
 
@@ -513,16 +748,30 @@ class Admin extends React.Component {
 	</select>
 	
     }
+    /**
+     * Renders the back button component in the add/change view
+     * 
+     * @return A component that renders a back button
+     */
+
+
     _render_back_button()
     {
+	
 	return <div><button className={"ra-back-button"} onClick={()=>{this.setState({displayType : displayType.list,object: null })}}> Back </button></div>
 	
 
     }
+    /**
+     * Renders the admin interface component
+     * 
+     * @return A component that renders the admin interface
+     */
+
     render()
     {
 
-	history.pushState({}, "List View", "#");
+
 	if(this.state.displayType == displayType.list)
 	{
 
@@ -533,7 +782,7 @@ class Admin extends React.Component {
 		{this._render_search_field()}
 		{this._render_actions()}
 		{this._render_table()}
-		{this.state.loading ? this._render_progress() : null} 
+		{this.state.loading ? this.render_progress() : null} 
 		{this._render_pagination()}
 		</div>
 	    )
@@ -541,7 +790,7 @@ class Admin extends React.Component {
 	}
 	else
 	{
-	    history.pushState({}, "Change View", "#/"+this.name.toLowerCase()+"/change");
+	    
 	    
 	    return (
 		
@@ -554,32 +803,7 @@ class Admin extends React.Component {
 
 	
     }
-    /*
-    registerListener()
-    {
-
-	window.onhashchange = (event)=> {
-
-	    
-	    let length= location.hash.length;
-	    let _location= location.hash [ length-1]=='/' ? location.hash.slice(0,length-1) : location.hash;
-
-	    
-	    if(_location == this.location)
-	    {
-
-		this.setState({displayType : displayType.list})
-
-	    };
-
-	}
-	
-    }*/
-    init()
-    {
-
-	//this.registerListener();
-    }
+    
 }
 
 

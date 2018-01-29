@@ -2,6 +2,9 @@
     "source": "./src",
     "destination": "./docs",
     "plugins": [
-	{"name" :"esdoc-standard-plugin"}
-    ]
+	{"name" :"esdoc-standard-plugin"},
+	{"name" :"esdoc-jsx-plugin"}
+	
+    ],
+    "excludes": ["voter.js","example.js","set.js","utils.js"]
 }

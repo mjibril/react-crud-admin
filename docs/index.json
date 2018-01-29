@@ -1,0 +1,1935 @@
+[
+  {
+    "__docId__": 1,
+    "kind": "external",
+    "name": "Infinity",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Infinity",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Infinity",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 2,
+    "kind": "external",
+    "name": "NaN",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NaN",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~NaN",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 3,
+    "kind": "external",
+    "name": "undefined",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~undefined",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 4,
+    "kind": "external",
+    "name": "null",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/null",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~null",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 5,
+    "kind": "external",
+    "name": "Object",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Object",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 6,
+    "kind": "external",
+    "name": "object",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~object",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 7,
+    "kind": "external",
+    "name": "Function",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Function",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 8,
+    "kind": "external",
+    "name": "function",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~function",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 9,
+    "kind": "external",
+    "name": "Boolean",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Boolean",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 10,
+    "kind": "external",
+    "name": "boolean",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~boolean",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 11,
+    "kind": "external",
+    "name": "Symbol",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Symbol",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 12,
+    "kind": "external",
+    "name": "Error",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Error",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 13,
+    "kind": "external",
+    "name": "EvalError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/EvalError",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~EvalError",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 14,
+    "kind": "external",
+    "name": "InternalError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/InternalError",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~InternalError",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 15,
+    "kind": "external",
+    "name": "RangeError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RangeError",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~RangeError",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 16,
+    "kind": "external",
+    "name": "ReferenceError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~ReferenceError",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 17,
+    "kind": "external",
+    "name": "SyntaxError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/SyntaxError",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~SyntaxError",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 18,
+    "kind": "external",
+    "name": "TypeError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypeError",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~TypeError",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 19,
+    "kind": "external",
+    "name": "URIError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/URIError",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~URIError",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 20,
+    "kind": "external",
+    "name": "Number",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Number",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 21,
+    "kind": "external",
+    "name": "number",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~number",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 22,
+    "kind": "external",
+    "name": "Date",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Date",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 23,
+    "kind": "external",
+    "name": "String",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~String",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 24,
+    "kind": "external",
+    "name": "string",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~string",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 25,
+    "kind": "external",
+    "name": "RegExp",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~RegExp",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 26,
+    "kind": "external",
+    "name": "Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Array",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 27,
+    "kind": "external",
+    "name": "Int8Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int8Array",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Int8Array",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 28,
+    "kind": "external",
+    "name": "Uint8Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Uint8Array",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 29,
+    "kind": "external",
+    "name": "Uint8ClampedArray",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8ClampedArray",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Uint8ClampedArray",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 30,
+    "kind": "external",
+    "name": "Int16Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int16Array",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Int16Array",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 31,
+    "kind": "external",
+    "name": "Uint16Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint16Array",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Uint16Array",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 32,
+    "kind": "external",
+    "name": "Int32Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int32Array",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Int32Array",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 33,
+    "kind": "external",
+    "name": "Uint32Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint32Array",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Uint32Array",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 34,
+    "kind": "external",
+    "name": "Float32Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Float32Array",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 35,
+    "kind": "external",
+    "name": "Float64Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float64Array",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Float64Array",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 36,
+    "kind": "external",
+    "name": "Map",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Map",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 37,
+    "kind": "external",
+    "name": "Set",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Set",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 38,
+    "kind": "external",
+    "name": "WeakMap",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakMap",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~WeakMap",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 39,
+    "kind": "external",
+    "name": "WeakSet",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakSet",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~WeakSet",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 40,
+    "kind": "external",
+    "name": "ArrayBuffer",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~ArrayBuffer",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 41,
+    "kind": "external",
+    "name": "DataView",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~DataView",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 42,
+    "kind": "external",
+    "name": "JSON",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~JSON",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 43,
+    "kind": "external",
+    "name": "Promise",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Promise",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 44,
+    "kind": "external",
+    "name": "Generator",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Generator",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Generator",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 45,
+    "kind": "external",
+    "name": "GeneratorFunction",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/GeneratorFunction",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~GeneratorFunction",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 46,
+    "kind": "external",
+    "name": "Reflect",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Reflect",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Reflect",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 47,
+    "kind": "external",
+    "name": "Proxy",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Proxy",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 48,
+    "kind": "file",
+    "name": "src/admin.js",
+    "content": "import React from 'react';\nimport _ from 'lodash';\nimport Set from './set.js';\nimport './admin.scss';\n\nconst displayType = {\n    list : \"list\",\n    change : \"change\"\n};\n\n/** Admin Class extends React.Component. To implement a CRUD interface similar to Django Admin one needs to extend the Admin class. */\nclass Admin extends React.Component {\n\t\n    constructor(props)\n    {\n\t\n\tsuper(props);\n\t\n\tthis.name='default'\n\tthis.name_plural='defaults'\n\tthis.live_search=false\n\tthis.field_transforms={}\n\tthis.header_transforms={}\n\tthis.extra_fields={}\n\tthis.list_display=[]\n\tthis.list_display_links=[]\n\tthis.list_per_page=10\n\tthis.sort_fields=[]\n\tthis.is_object_equal=(a,b)=> a==b\n\t\n\tthis.actions={\n\t    \"delete\" : (selected_objects)=>{\n\t\t\n\t    }\n\t}\n\t\n    \n\tthis._all_selected=false\n\n\tlet queryset=this.get_queryset();\n\tthis.state = {displayType : displayType.list , total: queryset.length,  page_number : 1,object : null,queryset: queryset,selected_objects:new Set([],this.is_object_equal)}\n\t\n\tthis._handle_search = this._handle_search.bind(this);\n\tthis.select_all = this.select_all.bind(this);\n\tthis.select_one=this.select_one.bind(this);\n\n    }\n     /**\n     * This function returns an array of objects that will serve as the\n     * queryset for the admin interface. Typically involves an HTTP request\n     * to a backend.\n     *  \n     * @returns {object[]} An array of objects.\n     */\n\n    get_queryset(page_number=this.state.page_number,list_per_page=this.list_per_page)\n    {\n    \n\n\treturn []\n    }\n\n    \n    /**\n     * This functions returns a JSON Schema Form for editing\n     * the objects in the array returned by get_queryset(). This method needs to be overridden to\n     * so as to return a Form Component for the object.  Learn more on \n     * JSON schema forms from https://github.com/mozilla-services/react-jsonschema-form \n     * and JSON Schema from https://spacetelescope.github.io/understanding-json-schema/\n     * @param {object} object - The current selected object.\n     * @returns  A JSON Schema Form Component.\n     */\n\n    get_form(object=null)\n    {\n\t\n\treturn {}\n    }\n    /**\n     * Returns a true/false value. Controls wether search is implement on live input or not.\n     * Can be overriden by the live_search member variable. Default is false.\n     *\n     *@return {boolean} \n     */\n\n    get_live_search()\n    {\n\treturn false\n\t\n    }\n    \n    /**\n     * Gets an actions object whose properties are action names and values are action methods.\n     * This an be overridden by the action member variable. The default \"delete\" method is not\n     * implemented.\n     *\n     * @example\n     * ```javascript\n     * actions = { \"delete\" : (selected_objects)=>{ } }\n     * ```\n     *\n     * Each actions object property (e.g. \"delete\") is passed an array of selected objects. One\n     * can then handle those objects. Actions will appear on the list display page within a\n     * dropdown. Selecting an action should have the action method applied to all currently \n     * selected objects.\n     *\n     *@return {object} An actions object\n     */\n    \n    get_actions()\n    {\n\n\tif(this.actions)\n\t{\n\t    return this.actions;\n\t}\n\t\n\treturn {}\n\n\n    }\n    /**\n     *   Gets the list/array of properties of the objects in the queryset that are clickable\n     *    when displayed on the list display page. It can be overwritten by the member variable\n     *   list_display_links. A property is any string that should exist in the objects within \n     * a queryset and works with lodash's _.at function. \n     *\n     *   @example\n     *   let object={ name : \"any name\",{ address : { street : \"any\"}},emails: [\"any@any.com\"]}\n     *  \n     *   The properties \"name\",\"address.street\" and \"emails[0]\" are all acceptable\n     *\n     * @return {string[]} A list of properties of the object to be displayed\n     */\n\n    get_list_display_links()\n    {\n\n\tif(this.list_display_links)\n\t{\n\t    return this.list_display_links;\n\t}\n\treturn [];\n    }\n/**\n     *   Gets the list/array of properties/field names of the objects in the queryset to be\n     *   displayed on the list display page. It can be overwritten by the member variable\n     *   list_display. A property is any string that should exist in the objects within \n     *   a queryset and works with lodash's _.at function. See more at\n     *   https://lodash.com/docs/4.17.4#at \n     *\n     *   @example\n     *   let object={ name : \"any name\",{ address : { street : \"any\"}},emails: [\"any@any.com\"]}\n     *  \n     *   The properties \"name\",\"address.street\" and \"emails[0]\" are all acceptable\n     *\n     * @return {string[]} A list of properties of the object to be displayed \n     */\n\n    get_list_display()\n    {\n     \n\tif(this.list_display)\n\t{\n\t\treturn this.list_display;\n\n\t}\n\treturn []\n\t\n    }\n    /**\n     * Returns an ordered queryset. The method checks to see if sorting is active and sorts\n     * the current queryset based on the sort order. \n     * @private\n     * @return {object[]} An ordered queryset \n     */\n\n\n    _get_ordered_queryset()\n    {\n\n\tif(this.sort_fields.length>0)\n\t{\n\t    \n\t    return this.sort_by(this.sort_fields) \n\t}\n\n\treturn this.state.queryset ?  this.state.queryset : [];\n\n    }\n    /**\n     * Implements search. This method should be overridden to implement a custom search\n     *\n     *@param {string} term - the search term\n     *@return {object[]} the queryset as a result of the search\n     */\n\n    \n    search(term)\n    {\n\treturn this.state.queryset\n    }\n    /**\n     * Grants permission to delete object. This method is not implemented and can be handled via\n     *  implementing actions.\n     *\n     *@param {object} object - \n     *@return {boolean} Returns true is the object has been deleted or false otherwise\n     */\n\n    has_delete_permission(object)\n    {\n\t\n        return true\n    }\n    /**\n     * Grants permission to add an object. This method controls rendering of the Add \n     * button\n     *\n     *\n     *@return {boolean} Returns true is the object can be added or false otherwise\n     */\n\n    has_add_permission()\n    {\n\treturn true;\n    }\n    /**\n     * Grants permission to change an object. It disables all links to the add/change page when\n     * enabled\n     *\n     *@return {boolean} Returns true is the object can be changed or false otherwise\n     */\n\n    has_change_permission(object=null)\n    {\n\treturn true\n    }\n    /**\n     * Grants permission to access this admin interface. \n     *\n     *@return {boolean} Returns true if access is allowed false otherwise\n     */\n\n    has_module_permission()\n    {\n\treturn true\n    }\n    /*\n    _order_state(field)\n    {\n\n\tlet index=_.findIndex(this._sort_fields,item=> item.hasOwnProperty(field));\n\t\n\tif(index<0)\n\t{\n\t    return 'sort-not-active';\n\n\t}\n\tif(this._sort_fields[index][field]=='desc')\n\t{\n\t   \n\t    return 'sort-reverse-active';\n\t}\n\treturn 'sort-active';\n\t}*/\n\n    /**\n     * This method adds up/down arrows to field headers on the list display page table\n     *\n     * @private \n     * @param {strin} field -  the field/property name\n     \n     \n     */   \n\n\n    _order_state_arrow(field)\n    {\n\n\tlet index=_.findIndex(this.sort_fields,item=> item.hasOwnProperty(field));\n\t\n\tif(index<0)\n\t{\n\t    return null;\n\n\t}\n\tif(this.sort_fields[index][field]=='desc')\n\t{\n\t   \n\t    return <span>&#8681;</span>\n\t}\n\treturn  <span> &#8679;</span>\n    }\n    /**\n     *  This method  should be overriden and called after saving an object in the add/change view.       *  This method is not called at all here but provides hints on what to do after saving\n     *  an object. Change the state displayType to \"list\", object to \"null\" and refresh the quer         *  yset.\n     */   \n    \n    response_add(options)\n    {\n\t\n\tthis.setState({displayType :displayType.list, object :null,queryset: this.get_queryset()  });\n\n\treturn true\n    }\n    /**\n     *  This method should be overriden and called after saving an object in the add/change view.         *  This method is not called at all here but provides hints on what to do after saving\n     *  an object. Change the state displayType to \"list\", object to \"null\" and refresh the quer         *  yset.\n     */   \n\n    response_change(options)\n    {\n\tthis.setState({displayType :displayType.list, object :null,queryset: this.get_queryset()  });\n\t\n\treturn true\n    }\n    /**\n     * A private method to wrap a table entry in an <a></a> tag in the display page.\n     * The method checks if permission is given to display links using the has_change_permission method\n     * @private\n     * @param {object} object - the current object to be displayed as a table\n     * entry in the display page\n     * @param {string} label - the name of the field \n     \n     */\n   \n    _create_object_link(object,label)\n    {\n\tif(this.has_change_permission(object))\n\t{\n\t    return <a onClick={this._object_link_clicked(object)} href=\"#\"> {label} </a>\n\t}\n\telse\n\t{\n\t    return <span> {label} </span>\n\t}\n    }\n    _get_prop_label(label)\n    {\n\tlet labels=label.split('.');\n\treturn labels[labels.length-1];\n    }\n    _get_table_header()\n    {\n\treturn this.get_list_display().map((item)=>\n\t{\n\t\treturn <th key={item}  onClick={this._sort_handler(item)} > { this.header_transforms[item] ? this.header_transforms[item](item): _.startCase(this._get_prop_label(item))}{    this._order_state_arrow(item)} </th>\n\t})\n\n    }\n\n    _object_link_clicked(object)\n    {\n\t\n\treturn (event)=>\n\t{\n\t    this.setState({displayType :displayType.change, object :object  });\n\t    event.preventDefault();\n\t}\n    }\n\n    _display_field(object,item)\n    {\n\tlet label=_.at(object,item)\n\t\n\tif(_.has(this.field_transforms,item))\n\t{\n\t    return this.field_transforms[item](label)\n\n\t}\n\n\tif(_.at(this.extra_fields,item))\n\t{\n\t    \n\t    if(this.extra_fields[item])\n\t    {\n\t\tlabel=this.extra_fields[item](object,item)\n\t    }\n\t    \n\t}\n\n\treturn label;\n    }\n    _refresh_queryset(queryset)\n    {\n\tthis.setState({queryset : queryset});\n\n    }\n    sort_by(sort_fields)\n    {\n\treturn this.state.queryset ? this.state.queryset : [];\n    }\n\n    _sort_handler(field)\n    {\n\n\treturn (event)=>\n\t{\n\t    \n\t    let index=_.findIndex(this.sort_fields,item=> item.hasOwnProperty(field));\n\t    if(index>=0)\n\t    {\n\t\tif(this.sort_fields[index][field]=='asc')\n\t\t{\n\t\t    this.sort_fields[index][field]='desc';\n\n\t\t    \n\t\t}\n\t\telse\n\t\t{\n\t\t    this.sort_fields=_.filter(this.sort_fields,item => !item.hasOwnProperty(field));\n\t\t    \n\t\t}\n\n\t\t\n\t    }\n\t    else\n\t    {\n\t\tlet temp={}\n\t\ttemp[field]='asc';\n\t\tthis.sort_fields.push(temp);\n\n\t    }\n\t  \n\t    this.sort_by(this.sort_fields)\n\t    this.forceUpdate();\n\n\t}\n    }\n    /**\n     * This method is an event handler that listens to when all objects of the queryset\n     * displayed within a single display page are selected\n     */   \n\n    select_all(event)\n    {\n\n\n\t\n\tif(this._all_selected)\n\t{\n\t    \n\t    this.setState({selected_objects : new Set([],this.is_object_equal)});\n\t}\n\telse\n\t{\n\t    this.setState({selected_objects : new Set(this.state.queryset,this.is_object_equal)})\n\t    \n\t}\n\tthis._all_selected=!this._all_selected;\n\t\n    }\n    /**\n     * This method is an event handler that listens when a single objects of the queryset\n     * displayed is selected\n     */   \n\n    select_one(object)\n    {\n\n\treturn (event)=>{\n\n\t    if(this.state.selected_objects.contains(object))\n\t    {\n\t\tthis.state.selected_objects.remove(object);\n\n\t\tthis.setState({selected_objects : this.state.selected_objects});\n\n\t    }\n\t    else\n\t    {\n\t\tthis.state.selected_objects.add(object);\n\t\tthis.setState({selected_objects : this.state.selected_objects});\n\n\n\t    }\n\n\t}\n    }\n\n    /**\n     * Generate the table body for the list display page\n     *\n     * @return  An array of table rows <tr/>\n     */\n\n    _get_table_body()\n    {\n\treturn this._get_ordered_queryset().map((object,i)=>\n\t    {\n\t\treturn <tr>\n\t\t<td>  <input type=\"checkbox\" id={i+'_checkbox'} onChange={this.select_one(object)} checked={this.state.selected_objects.contains(object)}/> <label htmlFor={i+'_checkbox'}>&nbsp;</label> </td>\n\t\t{this.get_list_display().map((item)=>\n\t\t{\n\t\t    \n\t\t    return <td key={item} > { this.get_list_display_links().find((a)=>{return item==a}) ? this._create_object_link(object, this._display_field(object,item)) : this._display_field(object,item)}  </td>\n\t\t    \n\t\t    })}\n\t\t</tr>\n\t    })\n\n\n    }\n    /**\n     * Changes the state property \"loading\" to true. The state property can be used to show a\n     * progress indicator.\n     */\n\n    show_progress()\n    {\n\t  \n\n\tthis.setState({loading: true});\n    }\n    /**\n     * Changes the state property \"loading\" to false. This method  can be used to hide a\n     * progress indicator by inspecting the \"loading\" property of the state object.\n     */\n\n    hide_progress()\n    {\n\n\tthis.setState({loading: false});\n    }\n    /**\n     * The default progress indicator. Can be overriden.\n     * @return A progress indicator component\n     */\n\n    render_progress()\n    {\n\n\n\treturn \t    <div className=\"fetch-progress\" >\n\t <progress>\n\t    \t    </progress> \n\t    </div>\n\n    }\n    /**\n     * An event listener that listens to the search event. This method calls search method which\n     * implements a custom search. The method uses the \"live_search\" property to implement live \n     * search or not.\n     * @private\n     * @param {object} event The search onChange event\n     */\n\n    _handle_search(event)\n    {\n\tlet term=event.target.value;\n\t\n\tif(term)\n\t{\n\t    let key= event.which || event.keyCode;\n            if(this.live_search || key==13)\n\t    {\n\t\tlet queryset=this.search(term);\n\t\tthis.setState({queryset:queryset,total:queryset.length})\n\n\t    }\n\n\t}\n\telse\n\t{\n\t    \n\t    this.setState({queryset:this.get_queryset(),total:this.get_queryset().length})\n\t}\n\t\n\n    }\n    /**\n     * Renders the search component\n     * @private \n     * @return A search input field\n     */\n\n    _render_search_field()\n    {\n\treturn \t<div className=\"search-field\">\n\t<input name=\"search\" type=\"text\" className=\"form-control\" placeholder=\"Search\" onChange={this._handle_search}   onKeyUp={this._handle_search}/>\n\t</div>\n\n    }\n    /**\n     * Renders the add object button. Checks to see if permission is given by has_add_permission\n     * @private \n     * @return An add button component\n     */\n\n    _render_add_button()\n    {\n\n\tif(this.has_add_permission())\n\t{\n\t\treturn <button className={\"ra-add-button\"} onClick={this._object_link_clicked(null)} > Add {_.startCase(this.name)}</button>\n\t}\n    }\n    /**\n     * Renders the table in the display page. This calls _get_table_header and _get_table_body\n     * @private \n     * @return An a table displaying the state queryset set objects\n     */\n\n    _render_table()\n    {\n\n\treturn \t<table className=\"table\">\n\t\t<thead>\n\t        <tr>\n\t         <th>  <input type=\"checkbox\" id=\"all_boxes\" onChange={this.select_all} />  <label htmlFor=\"all_boxes\">&nbsp;</label> </th>\n\t\t{this._get_table_header()}\n\t\t</tr>\n\t\t</thead>\n\t\t<tbody>\n\t\t{this._get_table_body()}\n\t\t</tbody>\n\t\t</table>\n\t\n\n\n    }\n    /**\n     * An event listener that listens to actions selected.\n     * \n     *@param {string} action -  the action selected\n     */\n\n\n    action_selected(action)\n    {\n\n\treturn (event)=>{\n\n\t    this.actions[action](this.state.selected_objects.getItems());\n\t    this.get_queryset(this.state.page_number,this.list_per_page);\n\t}\n\t\n\n    }\n    /**\n     * An event listener that listens when a page is  selected.\n     * \n     *@param {number} page -  the page number selected\n     */\n\n    selectPage(page)\n    {\n\n\treturn (event)=>\n\t{\n\t\n\t    this.setState({page_number: page.page},()=>{\n\n\t\tthis.setState({queryset: this.get_queryset()})\n\n\t    });\n\t    event.preventDefault();\n\t}\n\n\n\n    }\n    /**\n     * An event listener that listens when the next page is  selected.\n     * \n     */\n\n    nextPage()\n    {\n\n\tthis.setState({page_number: Math.min(this.state.page_number+1,this.state.total)});\n\t    \n\t\n    }\n    /**\n     * An event listener that listens when the previous page is  selected.\n     * \n     */\n\n    prevPage()\n    {\n\n\tthis.setState({page_number: Math.max(this.state.page_number-1,1)});\n\t    \n\t\n    }\n    /**\n     * Renders the pagination UI\n     * \n     * @return A component that renders the pagination controls\n     */\n\n    _render_pagination()\n    {\n\n\tlet pages=[];\n\tif(this.state.total)\n\t{\n\t    let numpages=Math.ceil(this.state.total/this.list_per_page);\n\t    for(var i=0;i<numpages;i++)\n\t    {\n\t\tpages.push(i+1);\n\n\t    }\n\t}\n\n\treturn <div className=\"pull-right\">\n\t    <span className=\"summary\">{this.list_per_page*(this.state.page_number-1)+1 }-{Math.min(this.list_per_page*(this.state.page_number-1)+this.list_per_page,this.state.total)} of {this.state.total} </span>  \n\n\t<nav  aria-label=\"Page navigation\">\n\t<ul className=\"pagination\">\n\t<li>\n\t<a href=\"#\" aria-label=\"Previous\" onClick={this.prevPage}>\n\t<span aria-hidden=\"true\">&laquo;</span>\n\t</a>\n\t</li>\n\t{pages.map((page)=>{\n\t    return <li><a href=\"#\" onClick={this.selectPage({page})}>{page}</a></li>\n\t})\n\t}\n\t<li>\n\t<a href=\"#\" onClick={this.nextPage} aria-label=\"Next\">\n\t<span aria-hidden=\"true\">&raquo;</span>\n\t</a>\n\t</li>\n\t</ul>\n\t\n\t</nav>\n\t</div>\n    }\n    /**\n     * Renders the actions select component\n     * \n     * @return A component that renders a select input for all actions in the list display page\n     */\n\n    _render_actions()\n    {\n\n\t    \n\treturn <select className=\"ra-action-button\">\n\t<option value=\"\" disabled selected>Choose an action</option>\n\t{ _.keys(this.actions).map((action)=>{\n\t    return <option value={action} onChange={this.action_selected(action)}>{_.startCase(action)}</option> \n\n\t    })}\n\t</select>\n\t\n    }\n    /**\n     * Renders the back button component in the add/change view\n     * \n     * @return A component that renders a back button\n     */\n\n\n    _render_back_button()\n    {\n\t\n\treturn <div><button className={\"ra-back-button\"} onClick={()=>{this.setState({displayType : displayType.list,object: null })}}> Back </button></div>\n\t\n\n    }\n    /**\n     * Renders the admin interface component\n     * \n     * @return A component that renders the admin interface\n     */\n\n    render()\n    {\n\n\n\tif(this.state.displayType == displayType.list)\n\t{\n\n\t    return (\n\t\t<div className=\"list\">\n\n\t\t{this._render_add_button()}\n\t\t{this._render_search_field()}\n\t\t{this._render_actions()}\n\t\t{this._render_table()}\n\t\t{this.state.loading ? this.render_progress() : null} \n\t\t{this._render_pagination()}\n\t\t</div>\n\t    )\n\t    \n\t}\n\telse\n\t{\n\t    \n\t    \n\t    return (\n\t\t\n\t\t<div className=\"change-form\">\n\t\t{this._render_back_button()}\n\t\t{this.get_form(this.state.object)}\n\t\t</div>\n\t    )\n\t}\n\n\t\n    }\n    \n}\n\n\n\n\nexport default Admin;\n",
+    "static": true,
+    "longname": "/home/mubarak/Dropbox/Projects/ReactAdmin/src/admin.js",
+    "access": "public",
+    "description": null,
+    "lineNumber": 1
+  },
+  {
+    "__docId__": 49,
+    "kind": "variable",
+    "name": "displayType",
+    "memberof": "src/admin.js",
+    "static": true,
+    "longname": "src/admin.js~displayType",
+    "access": "public",
+    "export": false,
+    "importPath": "react-crud-admin/src/admin.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 6,
+    "undocument": true,
+    "type": {
+      "types": [
+        "{\"list\": string, \"change\": string}"
+      ]
+    },
+    "ignore": true
+  },
+  {
+    "__docId__": 50,
+    "kind": "class",
+    "name": "Admin",
+    "memberof": "src/admin.js",
+    "static": true,
+    "longname": "src/admin.js~Admin",
+    "access": "public",
+    "export": true,
+    "importPath": "react-crud-admin/src/admin.js",
+    "importStyle": "Admin",
+    "description": "Admin Class extends React.Component. To implement a CRUD interface similar to Django Admin one needs to extend the Admin class.",
+    "lineNumber": 12,
+    "interface": false,
+    "extends": [
+      "react~React.Component"
+    ]
+  },
+  {
+    "__docId__": 51,
+    "kind": "constructor",
+    "name": "constructor",
+    "memberof": "src/admin.js~Admin",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/admin.js~Admin#constructor",
+    "access": "public",
+    "description": null,
+    "lineNumber": 14,
+    "undocument": true
+  },
+  {
+    "__docId__": 52,
+    "kind": "member",
+    "name": "name",
+    "memberof": "src/admin.js~Admin",
+    "static": false,
+    "longname": "src/admin.js~Admin#name",
+    "access": "public",
+    "description": null,
+    "lineNumber": 19,
+    "undocument": true,
+    "type": {
+      "types": [
+        "string"
+      ]
+    }
+  },
+  {
+    "__docId__": 53,
+    "kind": "member",
+    "name": "name_plural",
+    "memberof": "src/admin.js~Admin",
+    "static": false,
+    "longname": "src/admin.js~Admin#name_plural",
+    "access": "public",
+    "description": null,
+    "lineNumber": 20,
+    "undocument": true,
+    "type": {
+      "types": [
+        "string"
+      ]
+    }
+  },
+  {
+    "__docId__": 54,
+    "kind": "member",
+    "name": "live_search",
+    "memberof": "src/admin.js~Admin",
+    "static": false,
+    "longname": "src/admin.js~Admin#live_search",
+    "access": "public",
+    "description": null,
+    "lineNumber": 21,
+    "undocument": true,
+    "type": {
+      "types": [
+        "boolean"
+      ]
+    }
+  },
+  {
+    "__docId__": 55,
+    "kind": "member",
+    "name": "field_transforms",
+    "memberof": "src/admin.js~Admin",
+    "static": false,
+    "longname": "src/admin.js~Admin#field_transforms",
+    "access": "public",
+    "description": null,
+    "lineNumber": 22,
+    "undocument": true,
+    "type": {
+      "types": [
+        "{}"
+      ]
+    }
+  },
+  {
+    "__docId__": 56,
+    "kind": "member",
+    "name": "header_transforms",
+    "memberof": "src/admin.js~Admin",
+    "static": false,
+    "longname": "src/admin.js~Admin#header_transforms",
+    "access": "public",
+    "description": null,
+    "lineNumber": 23,
+    "undocument": true,
+    "type": {
+      "types": [
+        "{}"
+      ]
+    }
+  },
+  {
+    "__docId__": 57,
+    "kind": "member",
+    "name": "extra_fields",
+    "memberof": "src/admin.js~Admin",
+    "static": false,
+    "longname": "src/admin.js~Admin#extra_fields",
+    "access": "public",
+    "description": null,
+    "lineNumber": 24,
+    "undocument": true,
+    "type": {
+      "types": [
+        "{}"
+      ]
+    }
+  },
+  {
+    "__docId__": 58,
+    "kind": "member",
+    "name": "list_display",
+    "memberof": "src/admin.js~Admin",
+    "static": false,
+    "longname": "src/admin.js~Admin#list_display",
+    "access": "public",
+    "description": null,
+    "lineNumber": 25,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*[]"
+      ]
+    }
+  },
+  {
+    "__docId__": 59,
+    "kind": "member",
+    "name": "list_display_links",
+    "memberof": "src/admin.js~Admin",
+    "static": false,
+    "longname": "src/admin.js~Admin#list_display_links",
+    "access": "public",
+    "description": null,
+    "lineNumber": 26,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*[]"
+      ]
+    }
+  },
+  {
+    "__docId__": 60,
+    "kind": "member",
+    "name": "list_per_page",
+    "memberof": "src/admin.js~Admin",
+    "static": false,
+    "longname": "src/admin.js~Admin#list_per_page",
+    "access": "public",
+    "description": null,
+    "lineNumber": 27,
+    "undocument": true,
+    "type": {
+      "types": [
+        "number"
+      ]
+    }
+  },
+  {
+    "__docId__": 61,
+    "kind": "member",
+    "name": "sort_fields",
+    "memberof": "src/admin.js~Admin",
+    "static": false,
+    "longname": "src/admin.js~Admin#sort_fields",
+    "access": "public",
+    "description": null,
+    "lineNumber": 28,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*[]"
+      ]
+    }
+  },
+  {
+    "__docId__": 62,
+    "kind": "member",
+    "name": "is_object_equal",
+    "memberof": "src/admin.js~Admin",
+    "static": false,
+    "longname": "src/admin.js~Admin#is_object_equal",
+    "access": "public",
+    "description": null,
+    "lineNumber": 29,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 63,
+    "kind": "member",
+    "name": "actions",
+    "memberof": "src/admin.js~Admin",
+    "static": false,
+    "longname": "src/admin.js~Admin#actions",
+    "access": "public",
+    "description": null,
+    "lineNumber": 31,
+    "undocument": true,
+    "type": {
+      "types": [
+        "{\"delete\": *}"
+      ]
+    }
+  },
+  {
+    "__docId__": 64,
+    "kind": "member",
+    "name": "_all_selected",
+    "memberof": "src/admin.js~Admin",
+    "static": false,
+    "longname": "src/admin.js~Admin#_all_selected",
+    "access": "private",
+    "description": null,
+    "lineNumber": 38,
+    "undocument": true,
+    "type": {
+      "types": [
+        "boolean"
+      ]
+    }
+  },
+  {
+    "__docId__": 65,
+    "kind": "member",
+    "name": "state",
+    "memberof": "src/admin.js~Admin",
+    "static": false,
+    "longname": "src/admin.js~Admin#state",
+    "access": "public",
+    "description": null,
+    "lineNumber": 41,
+    "undocument": true,
+    "type": {
+      "types": [
+        "{\"displayType\": *, \"total\": *, \"page_number\": number, \"object\": *, \"queryset\": *, \"selected_objects\": *}"
+      ]
+    }
+  },
+  {
+    "__docId__": 69,
+    "kind": "method",
+    "name": "get_queryset",
+    "memberof": "src/admin.js~Admin",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/admin.js~Admin#get_queryset",
+    "access": "public",
+    "description": "This function returns an array of objects that will serve as the\nqueryset for the admin interface. Typically involves an HTTP request\nto a backend.\n ",
+    "lineNumber": 56,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{object[]} An array of objects."
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "object[]"
+      ],
+      "spread": false,
+      "description": "An array of objects."
+    },
+    "params": [
+      {
+        "name": "page_number",
+        "optional": true,
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "list_per_page",
+        "optional": true,
+        "types": [
+          "*"
+        ]
+      }
+    ]
+  },
+  {
+    "__docId__": 70,
+    "kind": "method",
+    "name": "get_form",
+    "memberof": "src/admin.js~Admin",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/admin.js~Admin#get_form",
+    "access": "public",
+    "description": "This functions returns a JSON Schema Form for editing\nthe objects in the array returned by get_queryset(). This method needs to be overridden to\nso as to return a Form Component for the object.  Learn more on \nJSON schema forms from https://github.com/mozilla-services/react-jsonschema-form \nand JSON Schema from https://spacetelescope.github.io/understanding-json-schema/",
+    "lineNumber": 74,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": " A JSON Schema Form Component."
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "object",
+        "description": "The current selected object."
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "*"
+      ],
+      "spread": false,
+      "description": "A JSON Schema Form Component."
+    }
+  },
+  {
+    "__docId__": 71,
+    "kind": "method",
+    "name": "get_live_search",
+    "memberof": "src/admin.js~Admin",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/admin.js~Admin#get_live_search",
+    "access": "public",
+    "description": "Returns a true/false value. Controls wether search is implement on live input or not.\nCan be overriden by the live_search member variable. Default is false.",
+    "lineNumber": 86,
+    "return": {
+      "nullable": null,
+      "types": [
+        "boolean"
+      ],
+      "spread": false,
+      "description": ""
+    },
+    "params": []
+  },
+  {
+    "__docId__": 72,
+    "kind": "method",
+    "name": "get_actions",
+    "memberof": "src/admin.js~Admin",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/admin.js~Admin#get_actions",
+    "access": "public",
+    "description": "Gets an actions object whose properties are action names and values are action methods.\nThis an be overridden by the action member variable. The default \"delete\" method is not\nimplemented.",
+    "examples": [
+      "```javascript\nactions = { \"delete\" : (selected_objects)=>{ } }\n```\n\nEach actions object property (e.g. \"delete\") is passed an array of selected objects. One\ncan then handle those objects. Actions will appear on the list display page within a\ndropdown. Selecting an action should have the action method applied to all currently \nselected objects."
+    ],
+    "lineNumber": 110,
+    "return": {
+      "nullable": null,
+      "types": [
+        "object"
+      ],
+      "spread": false,
+      "description": "An actions object"
+    },
+    "params": []
+  },
+  {
+    "__docId__": 73,
+    "kind": "method",
+    "name": "get_list_display_links",
+    "memberof": "src/admin.js~Admin",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/admin.js~Admin#get_list_display_links",
+    "access": "public",
+    "description": "  Gets the list/array of properties of the objects in the queryset that are clickable\n   when displayed on the list display page. It can be overwritten by the member variable\n  list_display_links. A property is any string that should exist in the objects within \na queryset and works with lodash's _.at function. ",
+    "examples": [
+      "  let object={ name : \"any name\",{ address : { street : \"any\"}},emails: [\"any@any.com\"]}\n \n  The properties \"name\",\"address.street\" and \"emails[0]\" are all acceptable"
+    ],
+    "lineNumber": 136,
+    "return": {
+      "nullable": null,
+      "types": [
+        "string[]"
+      ],
+      "spread": false,
+      "description": "A list of properties of the object to be displayed"
+    },
+    "params": []
+  },
+  {
+    "__docId__": 74,
+    "kind": "method",
+    "name": "get_list_display",
+    "memberof": "src/admin.js~Admin",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/admin.js~Admin#get_list_display",
+    "access": "public",
+    "description": "  Gets the list/array of properties/field names of the objects in the queryset to be\n  displayed on the list display page. It can be overwritten by the member variable\n  list_display. A property is any string that should exist in the objects within \n  a queryset and works with lodash's _.at function. See more at\n  https://lodash.com/docs/4.17.4#at ",
+    "examples": [
+      "  let object={ name : \"any name\",{ address : { street : \"any\"}},emails: [\"any@any.com\"]}\n \n  The properties \"name\",\"address.street\" and \"emails[0]\" are all acceptable"
+    ],
+    "lineNumber": 160,
+    "return": {
+      "nullable": null,
+      "types": [
+        "string[]"
+      ],
+      "spread": false,
+      "description": "A list of properties of the object to be displayed"
+    },
+    "params": []
+  },
+  {
+    "__docId__": 75,
+    "kind": "method",
+    "name": "_get_ordered_queryset",
+    "memberof": "src/admin.js~Admin",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/admin.js~Admin#_get_ordered_queryset",
+    "access": "private",
+    "description": "Returns an ordered queryset. The method checks to see if sorting is active and sorts\nthe current queryset based on the sort order. ",
+    "lineNumber": 179,
+    "return": {
+      "nullable": null,
+      "types": [
+        "object[]"
+      ],
+      "spread": false,
+      "description": "An ordered queryset"
+    },
+    "params": []
+  },
+  {
+    "__docId__": 76,
+    "kind": "method",
+    "name": "search",
+    "memberof": "src/admin.js~Admin",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/admin.js~Admin#search",
+    "access": "public",
+    "description": "Implements search. This method should be overridden to implement a custom search",
+    "lineNumber": 199,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "term",
+        "description": "the search term"
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "object[]"
+      ],
+      "spread": false,
+      "description": "the queryset as a result of the search"
+    }
+  },
+  {
+    "__docId__": 77,
+    "kind": "method",
+    "name": "has_delete_permission",
+    "memberof": "src/admin.js~Admin",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/admin.js~Admin#has_delete_permission",
+    "access": "public",
+    "description": "Grants permission to delete object. This method is not implemented and can be handled via\n implementing actions.",
+    "lineNumber": 211,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "object",
+        "description": ""
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "boolean"
+      ],
+      "spread": false,
+      "description": "Returns true is the object has been deleted or false otherwise"
+    }
+  },
+  {
+    "__docId__": 78,
+    "kind": "method",
+    "name": "has_add_permission",
+    "memberof": "src/admin.js~Admin",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/admin.js~Admin#has_add_permission",
+    "access": "public",
+    "description": "Grants permission to add an object. This method controls rendering of the Add \nbutton",
+    "lineNumber": 224,
+    "return": {
+      "nullable": null,
+      "types": [
+        "boolean"
+      ],
+      "spread": false,
+      "description": "Returns true is the object can be added or false otherwise"
+    },
+    "params": []
+  },
+  {
+    "__docId__": 79,
+    "kind": "method",
+    "name": "has_change_permission",
+    "memberof": "src/admin.js~Admin",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/admin.js~Admin#has_change_permission",
+    "access": "public",
+    "description": "Grants permission to change an object. It disables all links to the add/change page when\nenabled",
+    "lineNumber": 235,
+    "return": {
+      "nullable": null,
+      "types": [
+        "boolean"
+      ],
+      "spread": false,
+      "description": "Returns true is the object can be changed or false otherwise"
+    },
+    "params": [
+      {
+        "name": "object",
+        "optional": true,
+        "types": [
+          "undefined"
+        ],
+        "defaultValue": "undefined"
+      }
+    ]
+  },
+  {
+    "__docId__": 80,
+    "kind": "method",
+    "name": "has_module_permission",
+    "memberof": "src/admin.js~Admin",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/admin.js~Admin#has_module_permission",
+    "access": "public",
+    "description": "Grants permission to access this admin interface. ",
+    "lineNumber": 245,
+    "return": {
+      "nullable": null,
+      "types": [
+        "boolean"
+      ],
+      "spread": false,
+      "description": "Returns true if access is allowed false otherwise"
+    },
+    "params": []
+  },
+  {
+    "__docId__": 81,
+    "kind": "method",
+    "name": "_order_state_arrow",
+    "memberof": "src/admin.js~Admin",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/admin.js~Admin#_order_state_arrow",
+    "access": "private",
+    "description": "This method adds up/down arrows to field headers on the list display page table",
+    "lineNumber": 278,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "strin"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "field",
+        "description": "the field/property name"
+      }
+    ],
+    "return": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 82,
+    "kind": "method",
+    "name": "response_add",
+    "memberof": "src/admin.js~Admin",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/admin.js~Admin#response_add",
+    "access": "public",
+    "description": " This method  should be overriden and called after saving an object in the add/change view.       *  This method is not called at all here but provides hints on what to do after saving\n an object. Change the state displayType to \"list\", object to \"null\" and refresh the quer         *  yset.",
+    "lineNumber": 300,
+    "params": [
+      {
+        "name": "options",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "return": {
+      "types": [
+        "boolean"
+      ]
+    }
+  },
+  {
+    "__docId__": 83,
+    "kind": "method",
+    "name": "response_change",
+    "memberof": "src/admin.js~Admin",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/admin.js~Admin#response_change",
+    "access": "public",
+    "description": " This method should be overriden and called after saving an object in the add/change view.         *  This method is not called at all here but provides hints on what to do after saving\n an object. Change the state displayType to \"list\", object to \"null\" and refresh the quer         *  yset.",
+    "lineNumber": 312,
+    "params": [
+      {
+        "name": "options",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "return": {
+      "types": [
+        "boolean"
+      ]
+    }
+  },
+  {
+    "__docId__": 84,
+    "kind": "method",
+    "name": "_create_object_link",
+    "memberof": "src/admin.js~Admin",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/admin.js~Admin#_create_object_link",
+    "access": "private",
+    "description": "A private method to wrap a table entry in an <a></a> tag in the display page.\nThe method checks if permission is given to display links using the has_change_permission method",
+    "lineNumber": 328,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "object",
+        "description": "the current object to be displayed as a table\nentry in the display page"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "label",
+        "description": "the name of the field"
+      }
+    ],
+    "return": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 85,
+    "kind": "method",
+    "name": "_get_prop_label",
+    "memberof": "src/admin.js~Admin",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/admin.js~Admin#_get_prop_label",
+    "access": "private",
+    "description": null,
+    "lineNumber": 339,
+    "undocument": true,
+    "params": [
+      {
+        "name": "label",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "return": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 86,
+    "kind": "method",
+    "name": "_get_table_header",
+    "memberof": "src/admin.js~Admin",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/admin.js~Admin#_get_table_header",
+    "access": "private",
+    "description": null,
+    "lineNumber": 344,
+    "undocument": true,
+    "params": [],
+    "return": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 87,
+    "kind": "method",
+    "name": "_object_link_clicked",
+    "memberof": "src/admin.js~Admin",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/admin.js~Admin#_object_link_clicked",
+    "access": "private",
+    "description": null,
+    "lineNumber": 353,
+    "undocument": true,
+    "params": [
+      {
+        "name": "object",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "return": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 88,
+    "kind": "method",
+    "name": "_display_field",
+    "memberof": "src/admin.js~Admin",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/admin.js~Admin#_display_field",
+    "access": "private",
+    "description": null,
+    "lineNumber": 363,
+    "undocument": true,
+    "params": [
+      {
+        "name": "object",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "item",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "return": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 89,
+    "kind": "method",
+    "name": "_refresh_queryset",
+    "memberof": "src/admin.js~Admin",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/admin.js~Admin#_refresh_queryset",
+    "access": "private",
+    "description": null,
+    "lineNumber": 385,
+    "undocument": true,
+    "params": [
+      {
+        "name": "queryset",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "return": null
+  },
+  {
+    "__docId__": 90,
+    "kind": "method",
+    "name": "sort_by",
+    "memberof": "src/admin.js~Admin",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/admin.js~Admin#sort_by",
+    "access": "public",
+    "description": null,
+    "lineNumber": 390,
+    "undocument": true,
+    "params": [
+      {
+        "name": "sort_fields",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "return": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 91,
+    "kind": "method",
+    "name": "_sort_handler",
+    "memberof": "src/admin.js~Admin",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/admin.js~Admin#_sort_handler",
+    "access": "private",
+    "description": null,
+    "lineNumber": 395,
+    "undocument": true,
+    "params": [
+      {
+        "name": "field",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "return": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 93,
+    "kind": "method",
+    "name": "select_all",
+    "memberof": "src/admin.js~Admin",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/admin.js~Admin#select_all",
+    "access": "public",
+    "description": "This method is an event handler that listens to when all objects of the queryset\ndisplayed within a single display page are selected",
+    "lineNumber": 436,
+    "params": [
+      {
+        "name": "event",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "return": null
+  },
+  {
+    "__docId__": 95,
+    "kind": "method",
+    "name": "select_one",
+    "memberof": "src/admin.js~Admin",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/admin.js~Admin#select_one",
+    "access": "public",
+    "description": "This method is an event handler that listens when a single objects of the queryset\ndisplayed is selected",
+    "lineNumber": 459,
+    "params": [
+      {
+        "name": "object",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "return": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 96,
+    "kind": "method",
+    "name": "_get_table_body",
+    "memberof": "src/admin.js~Admin",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/admin.js~Admin#_get_table_body",
+    "access": "private",
+    "description": "Generate the table body for the list display page",
+    "lineNumber": 488,
+    "return": {
+      "nullable": null,
+      "types": [
+        "*"
+      ],
+      "spread": false,
+      "description": "An array of table rows <tr/>"
+    },
+    "params": []
+  },
+  {
+    "__docId__": 97,
+    "kind": "method",
+    "name": "show_progress",
+    "memberof": "src/admin.js~Admin",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/admin.js~Admin#show_progress",
+    "access": "public",
+    "description": "Changes the state property \"loading\" to true. The state property can be used to show a\nprogress indicator.",
+    "lineNumber": 510,
+    "params": [],
+    "return": null
+  },
+  {
+    "__docId__": 98,
+    "kind": "method",
+    "name": "hide_progress",
+    "memberof": "src/admin.js~Admin",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/admin.js~Admin#hide_progress",
+    "access": "public",
+    "description": "Changes the state property \"loading\" to false. This method  can be used to hide a\nprogress indicator by inspecting the \"loading\" property of the state object.",
+    "lineNumber": 521,
+    "params": [],
+    "return": null
+  },
+  {
+    "__docId__": 99,
+    "kind": "method",
+    "name": "render_progress",
+    "memberof": "src/admin.js~Admin",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/admin.js~Admin#render_progress",
+    "access": "public",
+    "description": "The default progress indicator. Can be overriden.",
+    "lineNumber": 531,
+    "return": {
+      "nullable": null,
+      "types": [
+        "*"
+      ],
+      "spread": false,
+      "description": "A progress indicator component"
+    },
+    "params": []
+  },
+  {
+    "__docId__": 100,
+    "kind": "method",
+    "name": "_handle_search",
+    "memberof": "src/admin.js~Admin",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/admin.js~Admin#_handle_search",
+    "access": "private",
+    "description": "An event listener that listens to the search event. This method calls search method which\nimplements a custom search. The method uses the \"live_search\" property to implement live \nsearch or not.",
+    "lineNumber": 549,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "event",
+        "description": "The search onChange event"
+      }
+    ],
+    "return": null
+  },
+  {
+    "__docId__": 101,
+    "kind": "method",
+    "name": "_render_search_field",
+    "memberof": "src/admin.js~Admin",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/admin.js~Admin#_render_search_field",
+    "access": "private",
+    "description": "Renders the search component",
+    "lineNumber": 578,
+    "return": {
+      "nullable": null,
+      "types": [
+        "*"
+      ],
+      "spread": false,
+      "description": "A search input field"
+    },
+    "params": []
+  },
+  {
+    "__docId__": 102,
+    "kind": "method",
+    "name": "_render_add_button",
+    "memberof": "src/admin.js~Admin",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/admin.js~Admin#_render_add_button",
+    "access": "private",
+    "description": "Renders the add object button. Checks to see if permission is given by has_add_permission",
+    "lineNumber": 591,
+    "return": {
+      "nullable": null,
+      "types": [
+        "*"
+      ],
+      "spread": false,
+      "description": "An add button component"
+    },
+    "params": []
+  },
+  {
+    "__docId__": 103,
+    "kind": "method",
+    "name": "_render_table",
+    "memberof": "src/admin.js~Admin",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/admin.js~Admin#_render_table",
+    "access": "private",
+    "description": "Renders the table in the display page. This calls _get_table_header and _get_table_body",
+    "lineNumber": 605,
+    "return": {
+      "nullable": null,
+      "types": [
+        "*"
+      ],
+      "spread": false,
+      "description": "An a table displaying the state queryset set objects"
+    },
+    "params": []
+  },
+  {
+    "__docId__": 104,
+    "kind": "method",
+    "name": "action_selected",
+    "memberof": "src/admin.js~Admin",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/admin.js~Admin#action_selected",
+    "access": "public",
+    "description": "An event listener that listens to actions selected.",
+    "lineNumber": 630,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "action",
+        "description": "the action selected"
+      }
+    ],
+    "return": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 105,
+    "kind": "method",
+    "name": "selectPage",
+    "memberof": "src/admin.js~Admin",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/admin.js~Admin#selectPage",
+    "access": "public",
+    "description": "An event listener that listens when a page is  selected.",
+    "lineNumber": 647,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "number"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "page",
+        "description": "the page number selected"
+      }
+    ],
+    "return": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 106,
+    "kind": "method",
+    "name": "nextPage",
+    "memberof": "src/admin.js~Admin",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/admin.js~Admin#nextPage",
+    "access": "public",
+    "description": "An event listener that listens when the next page is  selected.",
+    "lineNumber": 669,
+    "params": [],
+    "return": null
+  },
+  {
+    "__docId__": 107,
+    "kind": "method",
+    "name": "prevPage",
+    "memberof": "src/admin.js~Admin",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/admin.js~Admin#prevPage",
+    "access": "public",
+    "description": "An event listener that listens when the previous page is  selected.",
+    "lineNumber": 681,
+    "params": [],
+    "return": null
+  },
+  {
+    "__docId__": 108,
+    "kind": "method",
+    "name": "_render_pagination",
+    "memberof": "src/admin.js~Admin",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/admin.js~Admin#_render_pagination",
+    "access": "private",
+    "description": "Renders the pagination UI",
+    "lineNumber": 694,
+    "return": {
+      "nullable": null,
+      "types": [
+        "*"
+      ],
+      "spread": false,
+      "description": "A component that renders the pagination controls"
+    },
+    "params": []
+  },
+  {
+    "__docId__": 109,
+    "kind": "method",
+    "name": "_render_actions",
+    "memberof": "src/admin.js~Admin",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/admin.js~Admin#_render_actions",
+    "access": "private",
+    "description": "Renders the actions select component",
+    "lineNumber": 738,
+    "return": {
+      "nullable": null,
+      "types": [
+        "*"
+      ],
+      "spread": false,
+      "description": "A component that renders a select input for all actions in the list display page"
+    },
+    "params": []
+  },
+  {
+    "__docId__": 110,
+    "kind": "method",
+    "name": "_render_back_button",
+    "memberof": "src/admin.js~Admin",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/admin.js~Admin#_render_back_button",
+    "access": "private",
+    "description": "Renders the back button component in the add/change view",
+    "lineNumber": 758,
+    "return": {
+      "nullable": null,
+      "types": [
+        "*"
+      ],
+      "spread": false,
+      "description": "A component that renders a back button"
+    },
+    "params": []
+  },
+  {
+    "__docId__": 111,
+    "kind": "method",
+    "name": "render",
+    "memberof": "src/admin.js~Admin",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/admin.js~Admin#render",
+    "access": "public",
+    "description": "Renders the admin interface component",
+    "lineNumber": 771,
+    "return": {
+      "nullable": null,
+      "types": [
+        "*"
+      ],
+      "spread": false,
+      "description": "A component that renders the admin interface"
+    },
+    "params": []
+  },
+  {
+    "__docId__": 112,
+    "kind": "file",
+    "name": "src/index.js",
+    "content": "import React from 'react';\nimport ReactDOM from 'react-dom';\n\n\nimport Example from './example.js';\n\n\n\n\nReactDOM.render(<Example/>\n    ,  document.querySelector(\"#app\"))\n\n",
+    "static": true,
+    "longname": "/home/mubarak/Dropbox/Projects/ReactAdmin/src/index.js",
+    "access": "public",
+    "description": null,
+    "lineNumber": 1
+  },
+  {
+    "kind": "index",
+    "content": "# react-crud-admin",
+    "longname": "/home/mubarak/Dropbox/Projects/ReactAdmin/README.md",
+    "name": "./README.md",
+    "static": true,
+    "access": "public"
+  },
+  {
+    "kind": "packageJSON",
+    "content": "{\n  \"name\": \"react-crud-admin\",\n  \"version\": \"1.0.4\",\n  \"description\": \"React Admin inspired by DjangoAdmin\",\n  \"main\": \"public/bundle.js\",\n  \"dependencies\": {\n    \"bootstrap\": \"\",\n    \"lodash\": \"\",\n    \"moment\": \"\",\n    \"moment-timezone\": \"\",\n    \"react\": \"\",\n    \"react-dom\": \"^16.2.0\",\n    \"react-jsonschema-form\": \"^1.0.0\",\n    \"whatwg-fetch\": \"\"\n  },\n  \"devDependencies\": {\n    \"babel-core\": \"\",\n    \"babel-loader\": \"\",\n    \"babel-plugin-transform-class-properties\": \"^6.24.1\",\n    \"babel-plugin-transform-runtime\": \"\",\n    \"babel-preset-es2015\": \"\",\n    \"babel-preset-react\": \"\",\n    \"babel-preset-stage-2\": \"\",\n    \"css-loader\": \"\",\n    \"file-loader\": \"\",\n    \"html-webpack-plugin\": \"\",\n    \"node-sass\": \"\",\n    \"resolve-url-loader\": \"\",\n    \"sass-loader\": \"\",\n    \"style-loader\": \"\",\n    \"url-loader\": \"\",\n    \"webpack\": \"\",\n    \"webpack-dev-server\": \"\"\n  },\n  \"scripts\": {\n    \"docs\": \"esdoc -c .esdoc.json\",\n    \"build\": \"webpack --config webpack.config.production.js --progress --profile --colors\",\n    \"publish\": \"webpack --config webpack.config.deployment.js --progress --profile --colors\",\n    \"start\": \"webpack-dev-server --progress --profile --colors\",\n    \"test\": \"echo \\\"Error: no test specified\\\" && exit 1\"\n  },\n  \"author\": \"Mubarak Jibril\",\n  \"license\": \"ISC\"\n}\n",
+    "longname": "/home/mubarak/Dropbox/Projects/ReactAdmin/package.json",
+    "name": "package.json",
+    "static": true,
+    "access": "public"
+  }
+]

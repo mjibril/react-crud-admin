@@ -1,6 +1,5 @@
 export default class Set {
-
-    constructor(items=[],isEqual=null)
+    constructor(items=[],isEqual=(a,b)=> a==b)
     {
 	this.items=items
 	this.isEqual=isEqual
