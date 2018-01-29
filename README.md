@@ -39,13 +39,11 @@ Create a new file `example.js` in the `\src` folder, in that file add the follow
 		this.name='Contact'; // name of the objects 
 		this.name_plural='Contacts'; // name of the objects in plural
 		this.list_display_links=['name']; // which property of the object is clickable
+		this.list_display=['name','number','address.street']// a list of properties of the object to displayed on the list display page
+
+
 	}
      }
-    get_list_display()
-    {
-    	// a list of properties of the object to displayed on the list display page
-	return ['name','number','address.street']
-    }
 
     get_queryset()
     {
@@ -78,3 +76,8 @@ ReactDOM.render(<Example/>
     ,  document.querySelector("#app"))
 
 ```
+
+The output should be
+
+
+![example1](assets/example1.png)

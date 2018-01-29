@@ -336,6 +336,13 @@ class Admin extends React.Component {
 	    return <span> {label} </span>
 	}
     }
+    set_queryset(queryset)
+    {
+	
+	this.setState({queryset : queryset,total:queryset.length})
+
+    }
+    
     _get_prop_label(label)
     {
 	let labels=label.split('.');
@@ -705,22 +712,23 @@ class Admin extends React.Component {
 	    }
 	}
 
-	return <div className="pull-right">
+	return <div className="float-right">
 	    <span className="summary">{this.list_per_page*(this.state.page_number-1)+1 }-{Math.min(this.list_per_page*(this.state.page_number-1)+this.list_per_page,this.state.total)} of {this.state.total} </span>  
 
 	<nav  aria-label="Page navigation">
 	<ul className="pagination">
-	<li>
-	<a href="#" aria-label="Previous" onClick={this.prevPage}>
+	<li className="page-item">
+	<a href="#" aria-label="Previous" onClick={this.prevPage} className="page-link">
 	<span aria-hidden="true">&laquo;</span>
 	</a>
-	</li>
+	    </li>
+	    
 	{pages.map((page)=>{
-	    return <li><a href="#" onClick={this.selectPage({page})}>{page}</a></li>
+	    return <li className="page-item"><a href="#" className="page-link"  onClick={this.selectPage({page})}>{page}</a></li>
 	})
 	}
-	<li>
-	<a href="#" onClick={this.nextPage} aria-label="Next">
+	<li className="page-item">
+	<a href="#" onClick={this.nextPage} aria-label="Next" className="page-link">
 	<span aria-hidden="true">&raquo;</span>
 	</a>
 	</li>
