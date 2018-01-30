@@ -24,7 +24,7 @@
   </span>
     <ul class="search-result"></ul>
   </div>
-</header>
+<a style="position:relative; top:3px;" href="https://github.com/mjibril/react-crud-admin.git"><img width="20px" src="./image/github.png"></a></header>
 
 <nav class="navigation" data-ice="nav"><div>
   <ul>
@@ -45,7 +45,7 @@ const displayType = {
     change : &quot;change&quot;
 };
 
-/** Admin Class extends React.Component. To implement a CRUD interface similar to Django Admin one needs to extend the Admin class. */
+/** Admin Class extends React.Component. To implement a CRUD interface similar to Django Admin you need to extend the Admin class. */
 class Admin extends React.Component {
 	
     constructor(props)
@@ -74,7 +74,10 @@ class Admin extends React.Component {
     
 	this._all_selected=false
 
-	let queryset=this.get_queryset();
+	let queryset=this.get_queryset() ? this.get_queryset() : [] ;
+	/**
+	 * Initialize the state of the component
+	*/
 	this.state = {displayType : displayType.list , total: queryset.length,  page_number : 1,object : null,queryset: queryset,selected_objects:new Set([],this.is_object_equal)}
 	
 	this._handle_search = this._handle_search.bind(this);
@@ -125,22 +128,102 @@ class Admin extends React.Component {
 	return false
 	
     }
+
+    /**
+     *Returns an object whose properties are field names corresponding to properties of any object 
+     *in the queryset and whose values are transform functions. The example below will transform each &quot;name&quot;
+     *property of objects in the queryset to upper case in the list display view.
+     *@example
+     *get_field_transforms()
+     *{
+     * return { &apos;name&apos; : function(name)
+     *                   {
+     *                       return name.toUpperCase()
+     *                   }
+     *         }
+     *
+     *}
+     *@return {object} 
+     */
+
+    get_field_transforms()
+    {
+	if(this.field_transforms)
+	{
+	    return this.field_transforms
+	}
+	return {}
+	
+    }
+
+    /**
+     *Returns an object whose properties are field names corresponding to properties of any object 
+     *in the queryset and whose values are transform functions. The example below will transform the header &quot;name&quot; to upper case in the list display view.
+     *@example
+     *get_header_transforms()
+     *{
+     * return { &apos;name&apos; : function(name)
+     *                   {
+     *                       return name.toUpperCase()
+     *                   }
+     *         }
+     *}
+     *
+     *@return {object} 
+     */
+
+    get_header_transforms()
+    {
+	if(this.header_transforms)
+	{
+	    return this.header_transforms;
+	}
+	
+	return {}
+	
+    }
+
+    /**
+     * Returns an object whose properties are extra  field names not corresponding to properties of any object 
+     * in the queryset and whose values are display functions. This will create extra fields that are not tied to objects. Extra fields have to be manually included in the `list_display` in order to appear in the list display page. The display functions take the current object being rendered in the table row and  the field name
+     *@example
+     *get_extra_fields()
+     *{
+     * return { &apos;now&apos; : function(object,label)
+     *                   {
+     *                      return moment(new Date()).format(&apos;LLL&apos;);
+      *                   }
+     *         }
+     *}
+     *
+     *@return {object} 
+     */
+
+    get_extra_fields()
+    {
+	if(this.extra_fields)
+	{
+	    return this.extra_fields;
+	}
+	
+	return {}
+	
+    }
+    
     
     /**
      * Gets an actions object whose properties are action names and values are action methods.
-     * This an be overridden by the action member variable. The default &quot;delete&quot; method is not
+     * This can be overridden by the action member variable. The default &quot;delete&quot; method is not
      * implemented.
-     *
-     * @example
-     * ```javascript
-     * actions = { &quot;delete&quot; : (selected_objects)=&gt;{ } }
-     * ```
      *
      * Each actions object property (e.g. &quot;delete&quot;) is passed an array of selected objects. One
      * can then handle those objects. Actions will appear on the list display page within a
      * dropdown. Selecting an action should have the action method applied to all currently 
      * selected objects.
+     * @example
      *
+     * actions = { &quot;delete&quot; : (selected_objects)=&gt;{ } }
+
      *@return {object} An actions object
      */
     
@@ -159,13 +242,14 @@ class Admin extends React.Component {
     /**
      *   Gets the list/array of properties of the objects in the queryset that are clickable
      *    when displayed on the list display page. It can be overwritten by the member variable
-     *   list_display_links. A property is any string that should exist in the objects within 
-     * a queryset and works with lodash&apos;s _.at function. 
+     *   `list_display_links`. A property is any string that should exist as a property in the objects within 
+     *   a queryset and works with lodash&apos;s `_.at` function. 
      *
+     *   The properties &quot;name&quot;,&quot;address.street&quot; and &quot;emails[0]&quot; are all acceptable by `_.at` in the example below
      *   @example
      *   let object={ name : &quot;any name&quot;,{ address : { street : &quot;any&quot;}},emails: [&quot;any@any.com&quot;]}
      *  
-     *   The properties &quot;name&quot;,&quot;address.street&quot; and &quot;emails[0]&quot; are all acceptable
+     * 
      *
      * @return {string[]} A list of properties of the object to be displayed
      */
@@ -274,7 +358,7 @@ class Admin extends React.Component {
 	return true
     }
     /**
-     * Grants permission to access this admin interface. 
+     * Grants permission to the this admin interface. 
      *
      *@return {boolean} Returns true if access is allowed false otherwise
      */
@@ -373,6 +457,13 @@ class Admin extends React.Component {
 	    return &lt;span&gt; {label} &lt;/span&gt;
 	}
     }
+    set_queryset(queryset)
+    {
+	
+	this.setState({queryset : queryset,total:queryset.length})
+
+    }
+    
     _get_prop_label(label)
     {
 	let labels=label.split(&apos;.&apos;);
@@ -401,9 +492,9 @@ class Admin extends React.Component {
     {
 	let label=_.at(object,item)
 	
-	if(_.has(this.field_transforms,item))
+	if(_.has(this.get_field_transforms(),item))
 	{
-	    return this.field_transforms[item](label)
+	    return this.get_field_transforms()[item](label)
 
 	}
 
@@ -742,22 +833,23 @@ class Admin extends React.Component {
 	    }
 	}
 
-	return &lt;div className=&quot;pull-right&quot;&gt;
+	return &lt;div className=&quot;float-right&quot;&gt;
 	    &lt;span className=&quot;summary&quot;&gt;{this.list_per_page*(this.state.page_number-1)+1 }-{Math.min(this.list_per_page*(this.state.page_number-1)+this.list_per_page,this.state.total)} of {this.state.total} &lt;/span&gt;  
 
 	&lt;nav  aria-label=&quot;Page navigation&quot;&gt;
 	&lt;ul className=&quot;pagination&quot;&gt;
-	&lt;li&gt;
-	&lt;a href=&quot;#&quot; aria-label=&quot;Previous&quot; onClick={this.prevPage}&gt;
+	&lt;li className=&quot;page-item&quot;&gt;
+	&lt;a href=&quot;#&quot; aria-label=&quot;Previous&quot; onClick={this.prevPage} className=&quot;page-link&quot;&gt;
 	&lt;span aria-hidden=&quot;true&quot;&gt;&amp;laquo;&lt;/span&gt;
 	&lt;/a&gt;
-	&lt;/li&gt;
+	    &lt;/li&gt;
+	    
 	{pages.map((page)=&gt;{
-	    return &lt;li&gt;&lt;a href=&quot;#&quot; onClick={this.selectPage({page})}&gt;{page}&lt;/a&gt;&lt;/li&gt;
+	    return &lt;li className=&quot;page-item&quot;&gt;&lt;a href=&quot;#&quot; className=&quot;page-link&quot;  onClick={this.selectPage({page})}&gt;{page}&lt;/a&gt;&lt;/li&gt;
 	})
 	}
-	&lt;li&gt;
-	&lt;a href=&quot;#&quot; onClick={this.nextPage} aria-label=&quot;Next&quot;&gt;
+	&lt;li className=&quot;page-item&quot;&gt;
+	&lt;a href=&quot;#&quot; onClick={this.nextPage} aria-label=&quot;Next&quot; className=&quot;page-link&quot;&gt;
 	&lt;span aria-hidden=&quot;true&quot;&gt;&amp;raquo;&lt;/span&gt;
 	&lt;/a&gt;
 	&lt;/li&gt;
@@ -807,7 +899,10 @@ class Admin extends React.Component {
 
     render()
     {
-
+	if(!this.has_module_permission())
+	{
+	    return &lt;div&gt; Permission Denied&lt;/div&gt;
+	}
 
 	if(this.state.displayType == displayType.list)
 	{

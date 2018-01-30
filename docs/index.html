@@ -24,7 +24,7 @@
   </span>
     <ul class="search-result"></ul>
   </div>
-</header>
+<a style="position:relative; top:3px;" href="https://github.com/mjibril/react-crud-admin.git"><img width="20px" src="./image/github.png"></a></header>
 
 <nav class="navigation" data-ice="nav"><div>
   <ul>
@@ -34,7 +34,115 @@
 </div>
 </nav>
 
-<div class="content" data-ice="content"><div data-ice="index" class="github-markdown"><h1 id="react-crud-admin">react-crud-admin</h1></div>
+<div class="content" data-ice="content"><div data-ice="index" class="github-markdown"><h1 id="react-crud-admin">react-crud-admin</h1><p><strong>react-crud-admin</strong> is inspired by the Django Admin Interface. In the spirit of Django admin it opts for component customization by inheritance. The create-read-update-delete pattern is something that is encountered in a lot of apps. By creating a single component that lists entries and allows adding/changing it becomes possible to implement a DRY approach.</p>
+<p>Since React is primarily a UI library and there are a litany of  backends, <strong>react-crud-admin</strong> does not implement any backend specific features but allows the developer to provide custom implementations.</p>
+<h1 id="getting-started">Getting Started</h1><h2 id="installation">Installation</h2><p>Install the library,</p>
+<pre><code><code class="source-code prettyprint">npm install react-crud-admin</code>
+</code></pre><h2 id="example">Example</h2><p>If you are starting a react project you can use <strong>create-react-app</strong> to speed up bootstrapping,</p>
+<pre><code><code class="source-code prettyprint">npm install create-react-app
+npx create-react-app example
+cd example</code>
+</code></pre><p>then within the <code>example</code> directory,</p>
+<pre><code><code class="source-code prettyprint">npm install react-crud-admin</code>
+</code></pre><p>Create a new file <code>example.js</code> in the <code>\src</code> folder, in that file add the following lines</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">    import React from &apos;react&apos;;
+    import Admin from &quot;react-crud-admin&quot;;
+
+    export default class Example extends Admin
+    {
+    constructor()
+        {
+        super()
+        this.name=&apos;Contact&apos;; // name of the objects 
+        this.name_plural=&apos;Contacts&apos;; // name of the objects in plural
+        this.list_display_links=[&apos;name&apos;]; // which property of the object is clickable
+        this.list_display=[&apos;name&apos;,&apos;number&apos;,&apos;address.street&apos;]// a list of properties of the object to displayed on the list display page
+
+
+    }
+     }
+    get_queryset()
+    {
+        // the actual array containing objects to be displayed
+    return [
+        {id: 1, name: &apos;Joe Next&apos;, number: &apos;08939303003&apos;,address:{ street: &quot;Hallmark Street&quot;}},
+            {id: 2,name: &apos;Isa Yoll&apos;, number: &apos;0908839202&apos;,address:{ street: &quot;Barbican Street&quot;}}
+    ]
+
+    }
+
+    }</code>
+</code></pre>
+<p>then in <code>index.js</code> do</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">
+import React from &apos;react&apos;;
+import ReactDOM from &apos;react-dom&apos;;
+import Example from &apos;./example.js&apos;;
+
+ReactDOM.render(&lt;Example/&gt;
+    ,  document.querySelector(&quot;#app&quot;))</code>
+</code></pre>
+<p>The output in your browser should be</p>
+<p><img src="assets/example1.png" alt="example1"></p>
+<p>This is the list display view. At this point adding and editing objects will not be possible since we have not configured the add/change view. To do that we need to import the <code>react-jsonschema-form</code> package.</p>
+<p>Edit <code>example.js</code> and add the following,</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import React from &apos;react&apos;;
+import Admin from &quot;./admin.js&quot;;
+import Form from &quot;react-jsonschema-form&quot;;
+export default class Example extends Admin
+{
+    constructor()
+    {
+    super()
+    this.name=&apos;Contact&apos;;
+    this.name_plural=&apos;Contacts&apos;;
+    this.list_display_links=[&apos;name&apos;];
+    this.list_display=[&apos;name&apos;,&apos;number&apos;,&apos;address.street&apos;]
+    }
+    get_queryset()
+    {
+    return [
+        {id: 1, name: &apos;Ken Next&apos;, number: &apos;08939303003&apos;,address:{ street: &quot;Hallmark Street&quot;}},
+            {id: 2,name: &apos;Isa Yoll&apos;, number: &apos;0908839202&apos;,address:{ street: &quot;Barbican Street&quot;}}
+    ]
+    }
+    get_form(object=null)
+    {
+        let schema = {
+        title: this.name,
+        type: &quot;object&quot;,
+        required: [&quot;name&quot;],
+        properties: {
+        id: {type: &quot;number&quot;, title: &quot;id&quot;, default: Math.floor(1000*Math.random())+1 },
+        name: {type: &quot;string&quot;, title: &quot;Name&quot;, default: &quot;&quot;},
+        number : {type: &quot;string&quot;, title: &quot;Number&quot;, default: &quot;&quot;},
+        address : {type: &quot;object&quot;, title: &quot;Address&quot;,
+               properties : {
+                      street : { type : &quot;string&quot;,title : &quot;Street&quot;}
+                }
+            }
+             }
+        };
+
+     if(!object)
+     {
+           return &lt;Form schema={schema}  /&gt;
+     }
+     else
+     {
+            return &lt;Form schema={schema}  formData={object}  /&gt;
+     }
+     }
+
+}</code>
+</code></pre>
+<p>the <code>get_form</code> method is passed the current object. The method returns a <code>react-json-schema</code> <code>Form</code> component. The <code>schema</code> object is used to define a <code>schema</code> for the Form (and to provide validation). See more on <code>react-jsonschema-form</code> at <a href="https://github.com/mozilla-services/react-jsonschema-form">react-jsonschema-form</a>. You can also read more on JSON Schema at <a href="https://spacetelescope.github.io/understanding-json-schema/">JSON Schema Tutorial</a></p>
+<p>In <code>get_form</code> we check if an object exists displaying a preloaded form if it does and an empty one if it does not.</p>
+<p>The output in your browser after clicking the Add Contact button should be</p>
+<p><img src="assets/example2-1.png" alt="example21"></p>
+<p>The output in your browser after clicking the first contact&apos;s name should be</p>
+<p><img src="assets/example2.png" alt="example2"></p>
+</div>
 </div>
 
 <footer class="footer">

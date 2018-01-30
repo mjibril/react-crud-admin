@@ -1,11 +1,11 @@
 {
-  "coverage": "60.34%",
-  "expectCount": 58,
-  "actualCount": 35,
+  "coverage": "62.9%",
+  "expectCount": 62,
+  "actualCount": 39,
   "files": {
     "src/admin.js": {
-      "expectCount": 58,
-      "actualCount": 35,
+      "expectCount": 62,
+      "actualCount": 39,
       "undocumentLines": [
         6,
         14,
@@ -22,14 +22,14 @@
         29,
         31,
         38,
-        41,
-        339,
-        344,
-        353,
-        363,
-        385,
-        390,
-        395
+        423,
+        430,
+        435,
+        444,
+        454,
+        476,
+        481,
+        486
       ]
     }
   }

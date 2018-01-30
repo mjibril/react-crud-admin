@@ -38,6 +38,9 @@ class Admin extends React.Component {
 	this._all_selected=false
 
 	let queryset=this.get_queryset() ? this.get_queryset() : [] ;
+	/**
+	 * Initialize the state of the component
+	*/
 	this.state = {displayType : displayType.list , total: queryset.length,  page_number : 1,object : null,queryset: queryset,selected_objects:new Set([],this.is_object_equal)}
 	
 	this._handle_search = this._handle_search.bind(this);
@@ -49,7 +52,8 @@ class Admin extends React.Component {
      * This function returns an array of objects that will serve as the
      * queryset for the admin interface. Typically involves an HTTP request
      * to a backend.
-     *  
+     * @param {number} page_number 
+     * @param {number} list_per_page
      * @returns {object[]} An array of objects.
      */
 
@@ -90,34 +94,100 @@ class Admin extends React.Component {
     }
 
     /**
-     * Returns a true/false value. Controls wether search is implement on live input or not.
-     * Can be overriden by the live_search member variable. Default is false.
+     *Returns an object whose properties are field names corresponding to properties of any object 
+     *in the queryset and whose values are transform functions. The example below will transform each "name"
+     *property of objects in the queryset to upper case in the list display view.
+     *@example
+     *get_field_transforms()
+     *{
+     * return { 'name' : function(name,object)
+     *                   {
+     *                       return name.toUpperCase()
+     *                   }
+     *         }
      *
-     *@return {boolean} 
+     *}
+     *@return {object} 
      */
 
     get_field_transforms()
     {
+	if(this.field_transforms)
+	{
+	    return this.field_transforms
+	}
+	return {}
 	
-	return false
+    }
+
+    /**
+     *Returns an object whose properties are field names corresponding to properties of any object 
+     *in the queryset and whose values are transform functions. The example below will transform the header "name" to upper case in the list display view.
+     *@example
+     *get_header_transforms()
+     *{
+     * return { 'name' : function(name)
+     *                   {
+     *                       return name.toUpperCase()
+     *                   }
+     *         }
+     *}
+     *
+     *@return {object} 
+     */
+
+    get_header_transforms()
+    {
+	if(this.header_transforms)
+	{
+	    return this.header_transforms;
+	}
+	
+	return {}
+	
+    }
+
+    /**
+     * Returns an object whose properties are extra  field names not corresponding to properties of any object 
+     * in the queryset and whose values are display functions. This will create extra fields that are not tied to objects. Extra fields have to be manually included in the `list_display` in order to appear in the list display page. The display functions take the current object being rendered in the table row and  the field name
+     *@example
+     *get_extra_fields()
+     *{
+     * return { 'now' : function(object,label)
+     *                   {
+     *                      return moment(new Date()).format('LLL');
+      *                   }
+     *         }
+     *}
+     *
+     *@return {object} 
+     */
+
+    get_extra_fields()
+    {
+	if(this.extra_fields)
+	{
+	    return this.extra_fields;
+	}
+	
+	return {}
 	
     }
     
+    
     /**
      * Gets an actions object whose properties are action names and values are action methods.
-     * This an be overridden by the action member variable. The default "delete" method is not
+     * This can be overridden by the action member variable. The default "delete" method is not
      * implemented.
-     *
-     * @example
-     * ```javascript
-     * actions = { "delete" : (selected_objects)=>{ } }
-     * ```
      *
      * Each actions object property (e.g. "delete") is passed an array of selected objects. One
      * can then handle those objects. Actions will appear on the list display page within a
      * dropdown. Selecting an action should have the action method applied to all currently 
      * selected objects.
+     * @example
      *
+     * actions = { "delete" : (selected_objects)=>{ } }
+
      *@return {object} An actions object
      */
     
@@ -136,13 +206,14 @@ class Admin extends React.Component {
     /**
      *   Gets the list/array of properties of the objects in the queryset that are clickable
      *    when displayed on the list display page. It can be overwritten by the member variable
-     *   list_display_links. A property is any string that should exist in the objects within 
-     * a queryset and works with lodash's _.at function. 
+     *   `list_display_links`. A property is any string that should exist as a property in the objects within 
+     *   a queryset and works with lodash's `_.at` function. 
      *
+     *   The properties "name","address.street" and "emails[0]" are all acceptable by `_.at` in the example below
      *   @example
      *   let object={ name : "any name",{ address : { street : "any"}},emails: ["any@any.com"]}
      *  
-     *   The properties "name","address.street" and "emails[0]" are all acceptable
+     * 
      *
      * @return {string[]} A list of properties of the object to be displayed
      */
@@ -161,7 +232,7 @@ class Admin extends React.Component {
      *   displayed on the list display page. It can be overwritten by the member variable
      *   list_display. A property is any string that should exist in the objects within 
      *   a queryset and works with lodash's _.at function. See more at
-     *   https://lodash.com/docs/4.17.4#at 
+     *   https://lodash.com/docs/#at 
      *
      *   @example
      *   let object={ name : "any name",{ address : { street : "any"}},emails: ["any@any.com"]}
@@ -196,7 +267,7 @@ class Admin extends React.Component {
 	if(this.sort_fields.length>0)
 	{
 	    
-	    return this.sort_by(this.sort_fields) 
+	    return this.sort_by(this.sort_fields,this.state.queryset) 
 	}
 
 	return this.state.queryset ?  this.state.queryset : [];
@@ -251,7 +322,7 @@ class Admin extends React.Component {
 	return true
     }
     /**
-     * Grants permission to access this admin interface. 
+     * Grants permission to the this admin interface. 
      *
      *@return {boolean} Returns true if access is allowed false otherwise
      */
@@ -283,7 +354,7 @@ class Admin extends React.Component {
      * This method adds up/down arrows to field headers on the list display page table
      *
      * @private 
-     * @param {strin} field -  the field/property name
+     * @param {string} field -  the field/property name
      
      
      */   
@@ -366,7 +437,7 @@ class Admin extends React.Component {
     {
 	return this.get_list_display().map((item)=>
 	{
-		return <th key={item}  onClick={this._sort_handler(item)} > { this.header_transforms[item] ? this.header_transforms[item](item): _.startCase(this._get_prop_label(item))}{    this._order_state_arrow(item)} </th>
+	    return <th key={item}  onClick={this._sort_handler(item)} > { this.get_header_transforms()[item] ? this.get_header_transforms()[item](item): _.startCase(this._get_prop_label(item))}{    this._order_state_arrow(item)} </th>
 	})
 
     }
@@ -383,20 +454,21 @@ class Admin extends React.Component {
 
     _display_field(object,item)
     {
-	let label=_.at(object,item)
 	
-	if(_.has(this.field_transforms,item))
+	let label=_.at(object,item)['0']
+	
+	if(_.has(this.get_field_transforms(),item))
 	{
-	    return this.field_transforms[item](label)
+	    return this.get_field_transforms()[item](label,object)
 
 	}
 
-	if(_.at(this.extra_fields,item))
+	if(_.at(this.get_extra_fields(),item))
 	{
 	    
-	    if(this.extra_fields[item])
+	    if(this.get_extra_fields()[item])
 	    {
-		label=this.extra_fields[item](object,item)
+		label=this.get_extra_fields()[item](object,item)
 	    }
 	    
 	}
@@ -792,7 +864,10 @@ class Admin extends React.Component {
 
     render()
     {
-
+	if(!this.has_module_permission())
+	{
+	    return <div> Permission Denied</div>
+	}
 
 	if(this.state.displayType == displayType.list)
 	{

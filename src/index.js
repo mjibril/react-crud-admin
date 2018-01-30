@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 
-import Example from './example1.js';
+import Example from './example3.js';
 
 
 

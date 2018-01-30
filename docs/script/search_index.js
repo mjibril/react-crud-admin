@@ -438,9 +438,27 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/admin.js~admin#get_extra_fields",
+    "class/src/admin.js~Admin.html#instance-method-get_extra_fields",
+    "src/admin.js~Admin#get_extra_fields",
+    "method"
+  ],
+  [
+    "src/admin.js~admin#get_field_transforms",
+    "class/src/admin.js~Admin.html#instance-method-get_field_transforms",
+    "src/admin.js~Admin#get_field_transforms",
+    "method"
+  ],
+  [
     "src/admin.js~admin#get_form",
     "class/src/admin.js~Admin.html#instance-method-get_form",
     "src/admin.js~Admin#get_form",
+    "method"
+  ],
+  [
+    "src/admin.js~admin#get_header_transforms",
+    "class/src/admin.js~Admin.html#instance-method-get_header_transforms",
+    "src/admin.js~Admin#get_header_transforms",
     "method"
   ],
   [
@@ -603,6 +621,12 @@ window.esdocSearchIndex = [
     "src/admin.js~admin#select_one",
     "class/src/admin.js~Admin.html#instance-method-select_one",
     "src/admin.js~Admin#select_one",
+    "method"
+  ],
+  [
+    "src/admin.js~admin#set_queryset",
+    "class/src/admin.js~Admin.html#instance-method-set_queryset",
+    "src/admin.js~Admin#set_queryset",
     "method"
   ],
   [

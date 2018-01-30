@@ -22,7 +22,7 @@ class Example extends Admin
 	
     }
 
-    sort_by(sort_fields)//from adminjs
+    sort_by(sort_fields,queryset)//from adminjs
     {
 
 	
@@ -33,7 +33,7 @@ class Example extends Admin
 	let field_orders=pairs.map(item => item[1]);
 	
 	
-	return  _.orderBy(this.state.queryset,field_names,field_orders);
+	return  _.orderBy(queryset,field_names,field_orders);
     }
 
     search(term)
