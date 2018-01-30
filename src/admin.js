@@ -8,7 +8,7 @@ const displayType = {
     change : "change"
 };
 
-/** Admin Class extends React.Component. To implement a CRUD interface similar to Django Admin one needs to extend the Admin class. */
+/** Admin Class extends React.Component. To implement a CRUD interface similar to Django Admin you need to extend the Admin class. */
 class Admin extends React.Component {
 	
     constructor(props)
@@ -37,7 +37,7 @@ class Admin extends React.Component {
     
 	this._all_selected=false
 
-	let queryset=this.get_queryset();
+	let queryset=this.get_queryset() ? this.get_queryset() : [] ;
 	this.state = {displayType : displayType.list , total: queryset.length,  page_number : 1,object : null,queryset: queryset,selected_objects:new Set([],this.is_object_equal)}
 	
 	this._handle_search = this._handle_search.bind(this);
@@ -85,6 +85,20 @@ class Admin extends React.Component {
 
     get_live_search()
     {
+	return false
+	
+    }
+
+    /**
+     * Returns a true/false value. Controls wether search is implement on live input or not.
+     * Can be overriden by the live_search member variable. Default is false.
+     *
+     *@return {boolean} 
+     */
+
+    get_field_transforms()
+    {
+	
 	return false
 	
     }

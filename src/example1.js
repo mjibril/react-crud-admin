@@ -1,6 +1,4 @@
 import Admin from "./admin.js";
-
-
 class Example extends Admin
 {
     constructor()

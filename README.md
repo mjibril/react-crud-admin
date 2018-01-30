@@ -30,7 +30,6 @@ Create a new file `example.js` in the `\src` folder, in that file add the follow
 ```javascript
     import Admin from "react-crud-admin";
 
-
     export default class Example extends Admin
     {
 	constructor()
@@ -44,7 +43,6 @@ Create a new file `example.js` in the `\src` folder, in that file add the follow
 
 	}
      }
-
     get_queryset()
     {
     	// the actual array containing objects to be displayed
@@ -65,19 +63,15 @@ then in `index.js` do
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-
-
 import Example from './example.js';
-
-
-
 
 ReactDOM.render(<Example/>
     ,  document.querySelector("#app"))
-
 ```
 
-The output should be
+The output in your browser should be
 
 
 ![example1](assets/example1.png)
+
+
