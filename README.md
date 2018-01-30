@@ -145,10 +145,11 @@ The output in your browser after clicking the first contact's name should be
 ![example2](assets/example2.png)
 
 
-#Guide
+# Guide
 
-##List Display View
-###Data
+## List Display View
+
+### Data
 Data is primarily injected through `get_queryset`.
 
 ```javascript
@@ -180,7 +181,49 @@ get_queryset()
     }
 ```
 
-###UI Customisation
+### UI Customisation
+#### Display
+##### List Display
+
+The `get_list_display` method gets the list/array of properties/field names of the objects in the queryset to be displayed on the list display page. It can be overridden by the member variable
+list_display. A property is any string that should exist in the objects within 
+a queryset and works with lodash's _.at function. See more at [Lodash](https://lodash.com/docs/#at)
+
+```javascript
+let object={ name : "any name",{ address : { street : "any"}},emails: ["any@any.com"]}
+```
+
+The properties "name","address.street" and "emails[0]" are all acceptable. In our example we use,
+
+```javascript
+this.list_display=['name','number','address.street']   
+```
+We can also use,
+
+```javascript
+get_list_display()
+{
+ return ['name','number','address.street']
+}
+```
+
+##### List Display Links
+
+The `get_list_display_links` method gets the list/array of properties of the objects in the queryset that are clickable when displayed on the list display page. It can be overridden by the member variable
+`list_display_links`. A property is any string that should exist as a property in the objects within 
+a queryset and works with lodash's `_.at` function. 
+
+In our example we use,
+```javascript
+this.list_display=['name']
+```
+in the constructor but we could have used,
+
+```javascript
+get_list_display(){
+return ['name']
+}
+```
 #### Header Transforms
 Table headers in the list display view are obtained from property names in `get_list_display` method by default. There are certain cases when one would like to customise these headers. `get_header_transforms` does just that. As an example
 
@@ -281,12 +324,12 @@ Don't forget to install moment with `npm install moment --save` and add `import 
 
 ![example32](assets/example3-2.png)
 
-#### 
+
 #### Pagination
-###Search
-####Live Search
-###Sorting
-###Actions
-##Add/Change View
-###Forms
-####Post Submit
+### Search
+#### Live Search
+### Sorting
+### Actions
+## Add/Change View
+### Forms
+#### Post Submit

@@ -205,7 +205,7 @@ class Admin extends React.Component {
     }
     /**
      *   Gets the list/array of properties of the objects in the queryset that are clickable
-     *    when displayed on the list display page. It can be overwritten by the member variable
+     *    when displayed on the list display page. It can be overridden by the member variable
      *   `list_display_links`. A property is any string that should exist as a property in the objects within 
      *   a queryset and works with lodash's `_.at` function. 
      *
@@ -229,7 +229,7 @@ class Admin extends React.Component {
     }
 /**
      *   Gets the list/array of properties/field names of the objects in the queryset to be
-     *   displayed on the list display page. It can be overwritten by the member variable
+     *   displayed on the list display page. It can be overridden by the member variable
      *   list_display. A property is any string that should exist in the objects within 
      *   a queryset and works with lodash's _.at function. See more at
      *   https://lodash.com/docs/#at 
