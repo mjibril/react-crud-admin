@@ -57,7 +57,7 @@ class Admin extends React.Component {
      * @returns {object[]} An array of objects.
      */
 
-    get_queryset(page_number=this.state.page_number,list_per_page=this.list_per_page)
+    get_queryset(page_number=this.state.page_number,list_per_page=this.list_per_page,queryset=this.state.queryset)
     {
     
 
@@ -173,8 +173,20 @@ class Admin extends React.Component {
 	return {}
 	
     }
-    
-    
+     /**
+	* Returns the number of items to be listed in a page. Can be overridden by `list_per_page`.
+         *@return {number} The number of objects in a page 
+     */
+
+    get_list_per_page()
+    {
+	if(this.list_per_page)
+	{
+	    return this.list_per_page
+	}
+	return 10
+    }
+	   
     /**
      * Gets an actions object whose properties are action names and values are action methods.
      * This can be overridden by the action member variable. The default "delete" method is not
@@ -281,9 +293,9 @@ class Admin extends React.Component {
      */
 
     
-    search(term)
+    search(term,queryset)
     {
-	return this.state.queryset
+	return queryset
     }
     /**
      * Grants permission to delete object. This method is not implemented and can be handled via
@@ -648,7 +660,7 @@ class Admin extends React.Component {
 	    let key= event.which || event.keyCode;
             if(this.live_search || key==13)
 	    {
-		let queryset=this.search(term);
+		let queryset=this.search(term,this.state.queryset);
 		this.setState({queryset:queryset,total:queryset.length})
 
 	    }

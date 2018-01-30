@@ -36,11 +36,11 @@ class Example extends Admin
 	return  _.orderBy(queryset,field_names,field_orders);
     }
 
-    search(term)
+    search(term,queryset)
     {
 	
 	let queryset=[];
-	for(var object of this.state.queryset)
+	for(var object of queryset)
 	{
 	    if(object.name.search(new RegExp(term,"i"))>=0)
 	    {

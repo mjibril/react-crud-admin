@@ -44,7 +44,7 @@ Create a new file `example.js` in the `\src` folder, in that file add the follow
 
 	}
      }
-    get_queryset()
+    get_queryset(page_number,list_per_page,queryset)
     {
     	// the actual array containing objects to be displayed
 	return [
@@ -93,7 +93,7 @@ export default class Example extends Admin
 	this.list_display_links=['name'];
 	this.list_display=['name','number','address.street']
     }
-    get_queryset()
+    get_queryset(page_number,list_per_page,queryset)
     {
 	return [
 	    {id: 1, name: 'Ken Next', number: '08939303003',address:{ street: "Hallmark Street"}},
@@ -153,7 +153,7 @@ The output in your browser after clicking the first contact's name should be
 Data is primarily injected through `get_queryset`.
 
 ```javascript
-get_queryset()
+get_queryset(page_number,list_per_page,queryset)
     {
 	return [
 	    {id: 1, name: 'Ken Next', number: '08939303003',address:{ street: "Hallmark Street"}},
@@ -167,7 +167,7 @@ The `get_queryset` method returns the queryset array including objects to be dis
 The example below returns the queryset in the current state object synchronously and sets a new queryset when the asynchronous call returns successfully. `set_queryset` invokes `setState` internally.
 
 ```javascript
-get_queryset()
+get_queryset(page_number,list_per_page,queryset)
     {
 	fetch("/path/to/backend",{method : 'get'}).then((response)=>{
 		if(response.ok)
@@ -177,7 +177,7 @@ get_queryset()
 	        }		
 
         })
-	return this.state.queryset;
+	return queryset;
     }
 ```
 
@@ -230,10 +230,10 @@ Table headers in the list display view are obtained from property names in `get_
 ```javascript
 get_header_transforms()
 {
-  return { 'name' : function(name)
+  return { 'name' : function(header)
   	                  {
                             
-			    return 'Contact '+name	
+			    return 'Contact '+header	
                         }
               }
 }
@@ -247,10 +247,10 @@ Should produce
 Header transforms can be defined using the instance variable `header_transforms` (which is always overridden by `get_header_transforms`).
 
 ```javascript
-this.header_transforms = { 'name' : function(name)
+this.header_transforms = { 'name' : function(header)
   	                    {
                             
-			    return 'Contact '+name	
+			    return 'Contact '+header	
                             }
                           }
 
@@ -279,6 +279,8 @@ this.field_transforms ={ 'name' : function(content,object)
                           }
                         }
 ```
+The first argument of the transform function is the content to be displayed while the second item is the current object.
+
 This produces
 
 ![example31](assets/example3-1.png)
@@ -324,11 +326,71 @@ Don't forget to install moment with `npm install moment --save` and add `import 
 
 ![example32](assets/example3-2.png)
 
-
 #### Pagination
+`get_list_per_page` method  returns the number of items to be listed in a page. Can be overridden by `list_per_page`.
+
+```javascript
+this.list_per_page=10
+```
+or
+```javascript
+get_list_per_page()
+{
+ return 10
+
+}
+```
 ### Search
-#### Live Search
+Search is not implemented by default. One has to implement the `search(term,queryset)` method.
+For our previous example, we can implement search by matching the search term with the "name" property of all objects in the queryset. The method returns the filtered queryset. Optionally, if search requires an asynchronous call to a backend, one can use `set_queryset`.
+
+```javascript
+    search(term,queryset)
+    {
+	
+	let filtered_queryset=[];
+	for(var object of queryset)
+	{
+	    if(object.name.search(new RegExp(term,"i"))>=0)
+	    {
+		filtered_queryset.push(object)
+
+	    }
+	    
+	}
+	return filtered_queryset;
+    }
+
+
+```
+or asynchronously
+
+```javascript
+    search(term,queryset)
+    {
+	fetch("/path/to/backend/search?q="+term,{method : 'get'}).then((response)=>{
+		if(response.ok)
+		{
+			this.set_queryset(response.results);
+
+	        }		
+
+        })
+	return queryset;
+
+    }
+
+
+```
+
+We can enable live search by
+
+```javascript
+this.live_search=true
+```
+
 ### Sorting
+
 ### Actions
 ## Add/Change View
 ### Forms
