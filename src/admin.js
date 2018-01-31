@@ -37,12 +37,17 @@ class Admin extends React.Component {
     
 	this._all_selected=false
 
-	let queryset=this.get_queryset() ? this.get_queryset() : [] ;
+
+
 	/**
 	 * Initialize the state of the component
 	*/
-	this.state = {displayType : displayType.list , total: queryset.length,  page_number : 1,object : null,queryset: queryset,selected_objects:new Set([],this.is_object_equal)}
+	this.state = {displayType : displayType.list ,  page_number : 1,object : null,selected_objects:new Set([],this.is_object_equal)}
+
 	
+        let queryset=this.get_queryset(this.state.page_number,this.list_per_page,this.state.queryset) ? this.get_queryset(this.state.page_number,this.list_per_page,this.state.queryset) : [] ;
+        this.state.queryset=queryset;
+	this.state.total=queryset.length;
 	this._handle_search = this._handle_search.bind(this);
 	this.select_all = this.select_all.bind(this);
 	this.select_one=this.select_one.bind(this);
@@ -52,9 +57,9 @@ class Admin extends React.Component {
      * This function returns an array of objects that will serve as the
      * queryset for the admin interface. Typically involves an HTTP request
      * to a backend.
-     * @param {number} page_number 
-     * @param {number} list_per_page
-     * @returns {object[]} An array of objects.
+     * @param {number} page_number - The current page number
+     * @param {number} list_per_page - Number items to list per page. Defaults to `list_per_page`
+     * @returns {object[]} An array of objects. - Objects to display
      */
 
     get_queryset(page_number=this.state.page_number,list_per_page=this.list_per_page,queryset=this.state.queryset)
@@ -436,9 +441,16 @@ class Admin extends React.Component {
     set_queryset(queryset)
     {
 	
-	this.setState({queryset : queryset,total:queryset.length})
+	this.setState({queryset : queryset})
 
     }
+    set_total(total)
+    {
+	
+	this.setState({total : total})
+
+    }
+    
     
     _get_prop_label(label)
     {
@@ -669,7 +681,7 @@ class Admin extends React.Component {
 	else
 	{
 	    
-	    this.setState({queryset:this.get_queryset(),total:this.get_queryset().length})
+	    this.setState({queryset:this.get_queryset(this.state.page_number,this.list_per_page,this.state.queryset),total:this.get_queryset(this.state.page_number,this.list_per_page,this.state.queryset).length})
 	}
 	
 
@@ -757,7 +769,7 @@ class Admin extends React.Component {
 	
 	    this.setState({page_number: page.page},()=>{
 
-		this.setState({queryset: this.get_queryset()})
+		this.setState({queryset: this.get_queryset(this.state.page_number,this.list_per_page,this.state.queryset)})
 
 	    });
 	    event.preventDefault();
@@ -803,20 +815,35 @@ class Admin extends React.Component {
 	if(this.state.total)
 	{
 	    let numpages=Math.ceil(this.state.total/this.list_per_page);
-	    for(var i=0;i<numpages;i++)
+
+	    if(this.state.page_number ==1)
+	    {
+		pages=[1,2,3];
+	    }
+	    else if(this.state.page_number ==numpages)
+	    {
+		pages=[numpages-2,numpages-1,numpages];
+	    }
+	    else
+	    {
+		pages=[this.state.page_number-1,this.state.page_number,this.state.page_number+1]
+	    }
+		/*
+		for(var i=0;i<numpages;i++)
 	    {
 		pages.push(i+1);
 
-	    }
+	    }*/
+	    
 	}
 
-	return <div className="float-right">
+	return <div className="pull-right">
 	    <span className="summary">{this.list_per_page*(this.state.page_number-1)+1 }-{Math.min(this.list_per_page*(this.state.page_number-1)+this.list_per_page,this.state.total)} of {this.state.total} </span>  
 
 	<nav  aria-label="Page navigation">
 	<ul className="pagination">
 	<li className="page-item">
-	<a href="#" aria-label="Previous" onClick={this.prevPage} className="page-link">
+	    <a href="#" aria-label="Previous" onClick={this.prevPage.bind(this)} className="page-link">
 	<span aria-hidden="true">&laquo;</span>
 	</a>
 	    </li>
@@ -826,7 +853,7 @@ class Admin extends React.Component {
 	})
 	}
 	<li className="page-item">
-	<a href="#" onClick={this.nextPage} aria-label="Next" className="page-link">
+	    <a href="#" onClick={this.nextPage.bind(this)} aria-label="Next" className="page-link">
 	<span aria-hidden="true">&raquo;</span>
 	</a>
 	</li>

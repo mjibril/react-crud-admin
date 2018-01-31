@@ -1,5 +1,5 @@
+@import "../node_modules/bootstrap-sass/assets/stylesheets/_bootstrap.scss";
 
-@import "../node_modules/bootstrap/scss/bootstrap.scss";
 
 .sort-active
 {
@@ -51,13 +51,13 @@ a
 {
     @extend .btn;
     @extend .btn-info;
-    @extend  .float-right;
+    @extend  .pull-right;
     margin : 10px;
     
 }
 
 .ra-action-button
 {
-    @extend  .float-right;
+    @extend  .pull-right;
     margin : 10px;
 }

@@ -19,7 +19,7 @@ const PORT = process.env.PORT || "9999";
 module.exports = {
     entry: [
 	'whatwg-fetch',
-	'./src/index.js' // Your appʼs entry point
+	'./src/admin.js' // Your appʼs entry point
 	],
 	devtool: process.env.WEBPACK_DEVTOOL || 'cheap-module-source-map',
 	output: {

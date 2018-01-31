@@ -3,10 +3,11 @@ import ReactDOM from 'react-dom';
 
 
 import Example from './example3.js';
+import {Voter} from './voter.js';
 
 
 
 
-ReactDOM.render(<Example/>
+ReactDOM.render(<Voter/>
     ,  document.querySelector("#app"))
 

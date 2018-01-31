@@ -162,7 +162,7 @@ get_queryset(page_number,list_per_page,queryset)
     }
 ```
 
-The `get_queryset` method returns the queryset array including objects to be displayed. Returning an array may not be useful when asynchronous network calls are made to a remote backend using AJAX or `window.fetch`.  A class method of the `Admin` component `set_queryset` can be used for asynchronous calls.
+The `get_queryset` method returns the queryset array including objects to be displayed in the current display page. Returning an array may not be useful when asynchronous network calls are made to a remote backend using AJAX or `window.fetch`.  A class method of the `Admin` component `set_queryset` can be used for asynchronous calls.
 
 The example below returns the queryset in the current state object synchronously and sets a new queryset when the asynchronous call returns successfully. `set_queryset` invokes `setState` internally.
 
@@ -180,12 +180,62 @@ get_queryset(page_number,list_per_page,queryset)
 	return queryset;
     }
 ```
+It is important to note that `get_queryset` returns only items to be listed in the current display view/page.  It is necessary to use the arguments `page_number` and `list_per_page` for fetching data from the backend. This allows us to implement pagination.
+
+```javascript
+    get_queryset(page_number,list_per_page,queryset)
+    {
+
+        let backend='/path/to/backend';
+	let path=backend+'&limit='+list_per_page+\
+	        '&skip='+((page_number-1) * list_per_page);
+	fetch(path,{
+	    method : 'get',
+	}).then((response)=>{
+	    if(response.ok)
+	    {
+		response.json().then((results)=>
+		{
+		 
+		    this.set_queryset(results.data)
+		    this.set_total(results.total);
+		    
+		});
+	    }
+	});
+	
+	
+	return queryset;
+    }
+
+
+
+```
+`set_total` is used to set the total number of items available. For example if `list_per_page` is 10
+and there are a total 100 records in the backend `results.data` will have 10 items and `results.total` is 10. Please note that it is the responsibility of the backend to return these values in whatever format.
+
+`set_queryset` is just,
+```javascript
+set_queryset(queryset)
+{
+	this.setState({queryset:queryset})
+
+}
+```
+and `set_total` is ,
+```javascript
+set_total(total)
+{
+	this.setState({total:total})
+
+}
+```
 
 ### UI Customisation
 #### Display
 ##### List Display
 
-The `get_list_display` method gets the list/array of properties/field names of the objects in the queryset to be displayed on the list display page. It can be overridden by the member variable
+The `get_list_display` method returns a list/array of properties/field names of the objects in the queryset to be displayed on the list display page. It can be overridden by the member variable
 list_display. A property is any string that should exist in the objects within 
 a queryset and works with lodash's _.at function. See more at [Lodash](https://lodash.com/docs/#at)
 
@@ -209,19 +259,21 @@ get_list_display()
 
 ##### List Display Links
 
-The `get_list_display_links` method gets the list/array of properties of the objects in the queryset that are clickable when displayed on the list display page. It can be overridden by the member variable
+The `get_list_display_links` method returns the list/array of properties of the objects in the queryset that are clickable (and redirect to the add/change view) when displayed on the list display page. It can be overridden by the member variable
 `list_display_links`. A property is any string that should exist as a property in the objects within 
 a queryset and works with lodash's `_.at` function. 
 
 In our example we use,
 ```javascript
-this.list_display=['name']
+this.list_display_links=['name']
 ```
 in the constructor but we could have used,
 
 ```javascript
-get_list_display(){
-return ['name']
+get_list_display_links(){
+
+      return ['name']
+      
 }
 ```
 #### Header Transforms
@@ -279,7 +331,7 @@ this.field_transforms ={ 'name' : function(content,object)
                           }
                         }
 ```
-The first argument of the transform function is the content to be displayed while the second item is the current object.
+The first argument of the transform function is the content to be displayed while the second argument is the current object.
 
 This produces
 
@@ -316,7 +368,7 @@ this.extra_fields ={
 
 The `get_extra_fields` method returns an object whose properties are extra field names not corresponding to properties of any object in the queryset and whose values are display functions. This will create extra fields that are not tied to objects. Extra fields have to be manually included in the `get_list_display` in order to appear in the list display page.
 
-Adding the `get_extra_fields` method is not enough to display the newly created field. We must add the field to `get_list_display`.
+Adding the `get_extra_fields` method is not enough to display the newly created field. We must add the field to `list_display` .
 
 ```javascript
 this.list_display=['name','number','address.street','now']	
@@ -340,9 +392,10 @@ get_list_per_page()
 
 }
 ```
-### Search
+When using `get_queryset` to fetch data, it may not be efficient to fetch all the data from the backend. `get_queryset` 
+#### Search
 Search is not implemented by default. One has to implement the `search(term,queryset)` method.
-For our previous example, we can implement search by matching the search term with the "name" property of all objects in the queryset. The method returns the filtered queryset. Optionally, if search requires an asynchronous call to a backend, one can use `set_queryset`.
+From our previous example, we can implement search by matching the search term with the "name" property of all objects in the queryset. The method returns a filtered queryset. Optionally, if search requires an asynchronous call to a backend, one can use `set_queryset`.
 
 ```javascript
     search(term,queryset)
@@ -376,22 +429,79 @@ or asynchronously
 	        }		
 
         })
-	return queryset;
+	return queryset;//remember to return queryset synchronously
 
     }
 
 
 ```
-
 We can enable live search by
 
 ```javascript
 this.live_search=true
 ```
+default is `false`.
 
-### Sorting
+#### Sorting
+Sorting is not implemented by default. Sorting can be achieved by implementing the `sort_by` method,
 
-### Actions
+```javascript
+sort_by(sort_fields,queryset)
+{
+
+}
+```
+`sort_fields` is an array containing objects whose properties are properties of objects in the queryset and whose values are either "asc" or "desc". As an example, for a queryset
+
+```javascript
+[
+{id: 1, name: 'Joe Next', number: '08939303003',address:{ street: "Hallmark Street"}},
+{id: 2,name: 'Isa Yoll', number: '0908839202',address:{ street: "Barbican Street"}}
+]
+```
+we can have `sort_fields` equal to
+
+```javascript
+[ {"name" : "asc"}, {"number" :"desc"},{"address" :"asc"}]
+
+```
+For our example, we implement `sort_by` using,
+
+```javascript
+    sort_by(sort_fields,queryset)//from adminjs
+    {
+
+	
+	let item =sort_fields[sort_fields.length-1];
+	
+	let pairs=_.toPairs(item);
+	let field_names=pairs.map(item => item[0]);
+	let field_orders=pairs.map(item => item[1]);
+	
+	
+       return  _.orderBy(queryset,field_names,field_orders);
+    }
+```
+
+We use the `lodash` library to sort the current queryset and return an updated one. We only use the latest sort order by examining the last item of the `sort_fields` array. In a practical application,
+a backend will perform the sort operations and we will use `set_queryset`.
+
+```javascript
+    sort_by(sort_fields,queryset)//from adminjs
+    {
+	fetch('/path/to/backend/sort',{
+	     'method': 'post',
+	     'body'': JSON.stringify(sort_fields)}).then((response)
+	     {
+
+
+	     })
+	     
+      return  queryset;
+    }
+```
+
+#### Actions
 ## Add/Change View
 ### Forms
 #### Post Submit
