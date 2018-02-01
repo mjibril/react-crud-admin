@@ -678,3 +678,7 @@ Property | Default Value  | Description
 
 ### Progress Indicator
 `show_progress` and `hide_progress` can be used in the both the list display and add/change view to display and hide a progress indicator. `render_progress` can be used to override the default progress indicator component to be rendered. `render_progress` should return a component.
+
+### ESDOC API Documentation.
+
+The API documentation generated with `esdoc.js` is available [here](https://mjibril.github.io/react-crud-admin/).
