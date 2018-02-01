@@ -3,7 +3,7 @@ import _ from 'lodash';
 import Set from './set.js';
 import './admin.scss';
 
-const displayType = {
+export const displayType = {
     list : "list",
     change : "change"
 };
@@ -399,10 +399,10 @@ class Admin extends React.Component {
      *  an object. Change the state displayType to "list", object to "null" and refresh the quer         *  yset.
      */   
     
-    response_add(options)
+    response_add()
     {
 	
-	this.setState({displayType :displayType.list, object :null,queryset: this.get_queryset()  });
+	this.setState({displayType :displayType.list, object :null,queryset: this.get_queryset(this.state.page_number,this.list_per_page,this.state.queryset)  });
 
 	return true
     }
@@ -411,9 +411,9 @@ class Admin extends React.Component {
      *  an object. Change the state displayType to "list", object to "null" and refresh the quer         *  yset.
      */   
 
-    response_change(options)
+    response_change()
     {
-	this.setState({displayType :displayType.list, object :null,queryset: this.get_queryset()  });
+	this.setState({displayType :displayType.list, object :null,queryset: this.get_queryset(this.state.page_number,this.list_per_page,this.state.queryset)  });
 	
 	return true
     }
@@ -939,7 +939,11 @@ class Admin extends React.Component {
 
 	
     }
-    
+    show_list_view()
+    {
+	this.setState({displayType : displayType.list})
+
+    }
 }
 
 

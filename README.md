@@ -67,7 +67,7 @@ import ReactDOM from 'react-dom';
 import Example from './example.js';
 
 ReactDOM.render(<Example/>
-    ,  document.querySelector("#app"))
+    ,  document.getElementbyId("root"))
 ```
 
 The output in your browser should be
@@ -487,21 +487,45 @@ We use the `lodash` library to sort the current queryset and return an updated o
 a backend will perform the sort operations and we will use `set_queryset`.
 
 ```javascript
-    sort_by(sort_fields,queryset)//from adminjs
+    sort_by(sort_fields,queryset)
     {
 	fetch('/path/to/backend/sort',{
 	     'method': 'post',
 	     'body'': JSON.stringify(sort_fields)}).then((response)
 	     {
+	         if(response.ok}
+	          {
+			response.json().then((results)=>
+			{
 
+			this.set_queryset(results.data);
 
+			})
+
+                   }	      
 	     })
 	     
       return  queryset;
     }
 ```
+It is also important to define the member variable `is_object_equal` which defines equality between objects in a queryset. This variable is used to test if an object has been previously selected  using the radio buttons in the display view. By default,`is_object_equal` is
 
+```javascript
+this.is_object_equal = function(a,b){
+		     return a==b ;
+		     }
+```
+
+This may not be sufficient for some applications. For example we might want to use the object's `id` property to check equality.
+
+```javascript
+this.is_object_equal = function(a,b){
+		     return a.id==b.id ;
+		     }
+```
 #### Actions
+
+
 ## Add/Change View
 ### Forms
 #### Post Submit
