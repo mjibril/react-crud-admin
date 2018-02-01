@@ -744,14 +744,15 @@ class Admin extends React.Component {
      */
 
 
-    action_selected(action)
+    action_selected(event)
     {
+	
+	let action=event.target.value;
 
-	return (event)=>{
+	console.log(this.state.selected_objects.getItems())
+	this.get_actions()[action](this.state.selected_objects.getItems());
+	this.get_queryset(this.state.page_number,this.list_per_page);
 
-	    this.actions[action](this.state.selected_objects.getItems());
-	    this.get_queryset(this.state.page_number,this.list_per_page);
-	}
 	
 
     }
@@ -872,10 +873,10 @@ class Admin extends React.Component {
     {
 
 	    
-	return <select className="ra-action-button">
+	return <select className="ra-action-button" onChange={this.action_selected.bind(this)}>
 	<option value="" disabled selected>Choose an action</option>
 	{ _.keys(this.actions).map((action)=>{
-	    return <option value={action} onChange={this.action_selected(action)}>{_.startCase(action)}</option> 
+	    return <option value={action}> {_.startCase(action)}</option> 
 
 	    })}
 	</select>

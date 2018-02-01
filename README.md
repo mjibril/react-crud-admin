@@ -491,7 +491,7 @@ a backend will perform the sort operations and we will use `set_queryset`.
     {
 	fetch('/path/to/backend/sort',{
 	     'method': 'post',
-	     'body'': JSON.stringify(sort_fields)}).then((response)
+	     'body': JSON.stringify(sort_fields)}).then((response)
 	     {
 	         if(response.ok}
 	          {
@@ -502,12 +502,13 @@ a backend will perform the sort operations and we will use `set_queryset`.
 
 			})
 
-                   }	      
+                   }    
 	     })
 	     
       return  queryset;
     }
 ```
+
 It is also important to define the member variable `is_object_equal` which defines equality between objects in a queryset. This variable is used to test if an object has been previously selected  using the radio buttons in the display view. By default,`is_object_equal` is
 
 ```javascript
@@ -523,9 +524,60 @@ this.is_object_equal = function(a,b){
 		     return a.id==b.id ;
 		     }
 ```
+
+
 #### Actions
 
+`get_actions` returns an actions object whose properties are action names and values are action methods. `get_actions` can be overridden by the `actions` member variable.
+
+Each actions object property (e.g. "delete") is passed an array of selected objects. One
+can then handle those objects. Actions will appear on the list display page within a
+dropdown.  The default "delete" action method is not implemented.
+
+We can implement the delete action for our previous example,
+
+```javascript
+import React from 'react';
+import Admin from "react-crud-admin";
+import Form from "react-jsonschema-form";
+import moment from "moment";
+var data=[
+	    {id: 1, name: 'Ken Next', number: '08939303003',address:{ street: "Hallmark Street"}},
+            {id: 2,name: 'Isa Yoll', number: '0908839202',address:{ street: "Barbican Street"}}
+];
+export default class Example extends Admin
+{
+	......
+	......
+	......
+	get_queryset()
+	{
+		return data
+        }
+
+	get_actions()
+		{
+   	     	return { "delete" : (selected_objects)=>{
+   	       	                   let total=data.length;
+                                   for(let object of selected_objects)
+   				    {
+      				       data.splice(data.indexOf(object),1);
+      
+                                   }
+				   this.set_queryset(data);
+				   this.set_total(total-selected_objects.length);	
+			  }
+		  }
+
+	}
+
+}
+
+```
+
+Action methods can also make asynchronous network calls and use `set_queryset` when necessary.
 
 ## Add/Change View
 ### Forms
+
 #### Post Submit

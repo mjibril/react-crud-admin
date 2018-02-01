@@ -8,6 +8,6 @@ import {Voter} from './voter.js';
 
 
 
-ReactDOM.render(<Voter/>
+ReactDOM.render(<Example/>
     ,  document.querySelector("#app"))
 
