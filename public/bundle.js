@@ -62,7 +62,7 @@ module.exports =
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "b9ee7bd0df5e5405b7e4"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "d0f7651cba836c1f5587"; // eslint-disable-line no-unused-vars
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule; // eslint-disable-line no-unused-vars
@@ -1232,6 +1232,7 @@ module.exports = __webpack_require__(4);
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.displayType = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -1257,7 +1258,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var displayType = {
+var displayType = exports.displayType = {
   list: "list",
   change: "change"
 };
@@ -1660,9 +1661,9 @@ var Admin = function (_React$Component) {
 
   }, {
     key: 'response_add',
-    value: function response_add(options) {
+    value: function response_add() {
 
-      this.setState({ displayType: displayType.list, object: null, queryset: this.get_queryset() });
+      this.setState({ displayType: displayType.list, object: null, queryset: this.get_queryset(this.state.page_number, this.list_per_page, this.state.queryset) });
 
       return true;
     }
@@ -1673,8 +1674,8 @@ var Admin = function (_React$Component) {
 
   }, {
     key: 'response_change',
-    value: function response_change(options) {
-      this.setState({ displayType: displayType.list, object: null, queryset: this.get_queryset() });
+    value: function response_change() {
+      this.setState({ displayType: displayType.list, object: null, queryset: this.get_queryset(this.state.page_number, this.list_per_page, this.state.queryset) });
 
       return true;
     }
@@ -2038,14 +2039,13 @@ var Admin = function (_React$Component) {
 
   }, {
     key: 'action_selected',
-    value: function action_selected(action) {
-      var _this7 = this;
+    value: function action_selected(event) {
 
-      return function (event) {
+      var action = event.target.value;
 
-        _this7.actions[action](_this7.state.selected_objects.getItems());
-        _this7.get_queryset(_this7.state.page_number, _this7.list_per_page);
-      };
+      console.log(this.state.selected_objects.getItems());
+      this.get_actions()[action](this.state.selected_objects.getItems());
+      this.get_queryset(this.state.page_number, this.list_per_page);
     }
     /**
      * An event listener that listens when a page is  selected.
@@ -2056,13 +2056,13 @@ var Admin = function (_React$Component) {
   }, {
     key: 'selectPage',
     value: function selectPage(page) {
-      var _this8 = this;
+      var _this7 = this;
 
       return function (event) {
 
-        _this8.setState({ page_number: page.page }, function () {
+        _this7.setState({ page_number: page.page }, function () {
 
-          _this8.setState({ queryset: _this8.get_queryset(_this8.state.page_number, _this8.list_per_page, _this8.state.queryset) });
+          _this7.setState({ queryset: _this7.get_queryset(_this7.state.page_number, _this7.list_per_page, _this7.state.queryset) });
         });
         event.preventDefault();
       };
@@ -2098,7 +2098,7 @@ var Admin = function (_React$Component) {
   }, {
     key: '_render_pagination',
     value: function _render_pagination() {
-      var _this9 = this;
+      var _this8 = this;
 
       var pages = [];
       if (this.state.total) {
@@ -2156,7 +2156,7 @@ var Admin = function (_React$Component) {
                 { className: 'page-item' },
                 _react2.default.createElement(
                   'a',
-                  { href: '#', className: 'page-link', onClick: _this9.selectPage({ page: page }) },
+                  { href: '#', className: 'page-link', onClick: _this8.selectPage({ page: page }) },
                   page
                 )
               );
@@ -2187,11 +2187,10 @@ var Admin = function (_React$Component) {
   }, {
     key: '_render_actions',
     value: function _render_actions() {
-      var _this10 = this;
 
       return _react2.default.createElement(
         'select',
-        { className: 'ra-action-button' },
+        { className: 'ra-action-button', onChange: this.action_selected.bind(this) },
         _react2.default.createElement(
           'option',
           { value: '', disabled: true, selected: true },
@@ -2200,7 +2199,8 @@ var Admin = function (_React$Component) {
         _lodash2.default.keys(this.actions).map(function (action) {
           return _react2.default.createElement(
             'option',
-            { value: action, onChange: _this10.action_selected(action) },
+            { value: action },
+            ' ',
             _lodash2.default.startCase(action)
           );
         })
@@ -2215,7 +2215,7 @@ var Admin = function (_React$Component) {
   }, {
     key: '_render_back_button',
     value: function _render_back_button() {
-      var _this11 = this;
+      var _this9 = this;
 
       return _react2.default.createElement(
         'div',
@@ -2223,7 +2223,7 @@ var Admin = function (_React$Component) {
         _react2.default.createElement(
           'button',
           { className: "ra-back-button", onClick: function onClick() {
-              _this11.setState({ displayType: displayType.list, object: null });
+              _this9.setState({ displayType: displayType.list, object: null });
             } },
           ' Back '
         )
@@ -2267,6 +2267,11 @@ var Admin = function (_React$Component) {
           this.get_form(this.state.object)
         );
       }
+    }
+  }, {
+    key: 'show_list_view',
+    value: function show_list_view() {
+      this.setState({ displayType: displayType.list });
     }
   }]);
 

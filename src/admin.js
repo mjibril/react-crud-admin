@@ -27,7 +27,7 @@ class Admin extends React.Component {
 	this.list_per_page=10
 	this.sort_fields=[]
 	this.is_object_equal=(a,b)=> a==b
-	
+	this.pages_in_pagination = 3
 	this.actions={
 	    "delete" : (selected_objects)=>{
 		
@@ -816,17 +816,26 @@ class Admin extends React.Component {
 	if(this.state.total)
 	{
 	    let numpages=Math.ceil(this.state.total/this.list_per_page);
-
+	    let pages_in_pagination= numpages < this.pages_in_pagination ? numpages : this.pages_in_pagination;
 	    if(this.state.page_number ==1)
 	    {
-		pages=[1,2,3];
+		for(let i=0;i<pages_in_pagination;i++)
+		{
+		    pages=pages.push(i+1);
+		}
 	    }
 	    else if(this.state.page_number ==numpages)
 	    {
-		pages=[numpages-2,numpages-1,numpages];
+		for(let i=0;i<pages_in_pagination;i++)
+		{
+		    pages=pages.push(numpages-i);
+		}
+
+
 	    }
 	    else
 	    {
+		let middle_ground=null;
 		pages=[this.state.page_number-1,this.state.page_number,this.state.page_number+1]
 	    }
 		/*
