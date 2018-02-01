@@ -6,6 +6,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "react-crud-admin/src/set.js~set",
+    "class/src/set.js~Set.html",
+    "<span>Set</span> <span class=\"search-result-import-path\">react-crud-admin/src/set.js</span>",
+    "class"
+  ],
+  [
     "react-crud-admin/src/admin.js~display_type",
     "variable/index.html#static-variable-display_type",
     "<span>display_type</span> <span class=\"search-result-import-path\">react-crud-admin/src/admin.js</span>",
@@ -688,5 +694,53 @@ window.esdocSearchIndex = [
     "file/src/index.js.html",
     "src/index.js",
     "file"
+  ],
+  [
+    "src/set.js",
+    "file/src/set.js.html",
+    "src/set.js",
+    "file"
+  ],
+  [
+    "src/set.js~set#add",
+    "class/src/set.js~Set.html#instance-method-add",
+    "src/set.js~Set#add",
+    "method"
+  ],
+  [
+    "src/set.js~set#constructor",
+    "class/src/set.js~Set.html#instance-constructor-constructor",
+    "src/set.js~Set#constructor",
+    "method"
+  ],
+  [
+    "src/set.js~set#contains",
+    "class/src/set.js~Set.html#instance-method-contains",
+    "src/set.js~Set#contains",
+    "method"
+  ],
+  [
+    "src/set.js~set#getitems",
+    "class/src/set.js~Set.html#instance-method-getItems",
+    "src/set.js~Set#getItems",
+    "method"
+  ],
+  [
+    "src/set.js~set#isequal",
+    "class/src/set.js~Set.html#instance-member-isEqual",
+    "src/set.js~Set#isEqual",
+    "member"
+  ],
+  [
+    "src/set.js~set#items",
+    "class/src/set.js~Set.html#instance-member-items",
+    "src/set.js~Set#items",
+    "member"
+  ],
+  [
+    "src/set.js~set#remove",
+    "class/src/set.js~Set.html#instance-method-remove",
+    "src/set.js~Set#remove",
+    "method"
   ]
 ]

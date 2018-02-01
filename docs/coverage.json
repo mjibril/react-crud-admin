@@ -1,6 +1,6 @@
 {
-  "coverage": "60.6%",
-  "expectCount": 66,
+  "coverage": "54.05%",
+  "expectCount": 74,
   "actualCount": 40,
   "files": {
     "src/admin.js": {
@@ -33,6 +33,20 @@
         509,
         514,
         960
+      ]
+    },
+    "src/set.js": {
+      "expectCount": 8,
+      "actualCount": 0,
+      "undocumentLines": [
+        1,
+        2,
+        4,
+        5,
+        7,
+        19,
+        60,
+        71
       ]
     }
   }

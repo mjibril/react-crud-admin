@@ -662,6 +662,17 @@ function()
 
 This sets the display type to "list", changes the object to `null` and invokes `get_queryset` to fetch the latest data.
 
+## Permissions
+
+`has_add_permission` , `has_change_permission` and `has_module_permission` methods are used to control access.
+
+The `has_add_permission`  method takes no arguments and should return a boolean that signifies wether the user can add a new object. It simply hides the Add button.
+
+The `has_change_permission`  method takes no arguments and should return a boolean that signifies wether the user can edit an object. It simply disables all `list_display_links`.
+
+The `has_module_permission`  method takes no arguments and should return a boolean that signifies wether the user should load the component. It simply shows an error message after an unauthorized access attempt.
+
+
 ## Miscellany
 ### `state` object
 

@@ -62,7 +62,7 @@ module.exports =
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "d0f7651cba836c1f5587"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "8f623789dd411698b759"; // eslint-disable-line no-unused-vars
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule; // eslint-disable-line no-unused-vars
@@ -1232,7 +1232,7 @@ module.exports = __webpack_require__(4);
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.displayType = undefined;
+exports.display_type = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -1258,7 +1258,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var displayType = exports.displayType = {
+var display_type = exports.display_type = {
   list: "list",
   change: "change"
 };
@@ -1286,7 +1286,7 @@ var Admin = function (_React$Component) {
     _this.is_object_equal = function (a, b) {
       return a == b;
     };
-
+    _this.pages_in_pagination = 3;
     _this.actions = {
       "delete": function _delete(selected_objects) {}
     };
@@ -1296,7 +1296,7 @@ var Admin = function (_React$Component) {
     /**
      * Initialize the state of the component
     */
-    _this.state = { displayType: displayType.list, page_number: 1, object: null, selected_objects: new _set2.default([], _this.is_object_equal) };
+    _this.state = { display_type: display_type.list, page_number: 1, object: null, selected_objects: new _set2.default([], _this.is_object_equal), total: 1 };
 
     var queryset = _this.get_queryset(_this.state.page_number, _this.list_per_page, _this.state.queryset) ? _this.get_queryset(_this.state.page_number, _this.list_per_page, _this.state.queryset) : [];
     _this.state.queryset = queryset;
@@ -1313,6 +1313,7 @@ var Admin = function (_React$Component) {
   * to a backend.
   * @param {number} page_number - The current page number
   * @param {number} list_per_page - Number items to list per page. Defaults to `list_per_page`
+  * @param {object[]} queryset - The current queryset
   * @returns {object[]} An array of objects. - Objects to display
   */
 
@@ -1544,6 +1545,7 @@ var Admin = function (_React$Component) {
      * Implements search. This method should be overridden to implement a custom search
      *
      *@param {string} term - the search term
+     *@param {object[]} queryset - the current queryset
      *@return {object[]} the queryset as a result of the search
      */
 
@@ -1656,26 +1658,26 @@ var Admin = function (_React$Component) {
     }
     /**
      *  This method  should be overriden and called after saving an object in the add/change view.       *  This method is not called at all here but provides hints on what to do after saving
-     *  an object. Change the state displayType to "list", object to "null" and refresh the quer         *  yset.
+     *  an object. Change the state display_type to "list", object to "null" and refresh the quer         *  yset.
      */
 
   }, {
     key: 'response_add',
     value: function response_add() {
 
-      this.setState({ displayType: displayType.list, object: null, queryset: this.get_queryset(this.state.page_number, this.list_per_page, this.state.queryset) });
+      this.setState({ display_type: display_type.list, object: null, queryset: this.get_queryset(this.state.page_number, this.list_per_page, this.state.queryset) });
 
       return true;
     }
     /**
      *  This method should be overriden and called after saving an object in the add/change view.         *  This method is not called at all here but provides hints on what to do after saving
-     *  an object. Change the state displayType to "list", object to "null" and refresh the quer         *  yset.
+     *  an object. Change the state display_type to "list", object to "null" and refresh the quer         *  yset.
      */
 
   }, {
     key: 'response_change',
     value: function response_change() {
-      this.setState({ displayType: displayType.list, object: null, queryset: this.get_queryset(this.state.page_number, this.list_per_page, this.state.queryset) });
+      this.setState({ display_type: display_type.list, object: null, queryset: this.get_queryset(this.state.page_number, this.list_per_page, this.state.queryset) });
 
       return true;
     }
@@ -1750,7 +1752,7 @@ var Admin = function (_React$Component) {
       var _this3 = this;
 
       return function (event) {
-        _this3.setState({ displayType: displayType.change, object: object });
+        _this3.setState({ display_type: display_type.change, object: object });
         event.preventDefault();
       };
     }
@@ -2034,7 +2036,7 @@ var Admin = function (_React$Component) {
     /**
      * An event listener that listens to actions selected.
      * 
-     *@param {string} action -  the action selected
+     *@param {object} event -  the DOM on-change event
      */
 
   }, {
@@ -2103,13 +2105,21 @@ var Admin = function (_React$Component) {
       var pages = [];
       if (this.state.total) {
         var numpages = Math.ceil(this.state.total / this.list_per_page);
+        var pages_in_pagination = numpages < this.pages_in_pagination ? numpages : this.pages_in_pagination;
 
         if (this.state.page_number == 1) {
-          pages = [1, 2, 3];
+          for (var i = 0; i < pages_in_pagination; i++) {
+            pages.push(i + 1);
+          }
         } else if (this.state.page_number == numpages) {
-          pages = [numpages - 2, numpages - 1, numpages];
+          for (var _i = 0; _i < pages_in_pagination; _i++) {
+            pages.push(numpages - _i);
+          }
         } else {
-          pages = [this.state.page_number - 1, this.state.page_number, this.state.page_number + 1];
+
+          for (var _i2 = 0; _i2 < pages_in_pagination; _i2++) {
+            pages.push(this.state.page_number + _i2);
+          }
         }
         /*
         for(var i=0;i<numpages;i++)
@@ -2223,7 +2233,7 @@ var Admin = function (_React$Component) {
         _react2.default.createElement(
           'button',
           { className: "ra-back-button", onClick: function onClick() {
-              _this9.setState({ displayType: displayType.list, object: null });
+              _this9.setState({ display_type: display_type.list, object: null });
             } },
           ' Back '
         )
@@ -2246,7 +2256,7 @@ var Admin = function (_React$Component) {
         );
       }
 
-      if (this.state.displayType == displayType.list) {
+      if (this.state.display_type == display_type.list) {
 
         return _react2.default.createElement(
           'div',
@@ -2271,7 +2281,7 @@ var Admin = function (_React$Component) {
   }, {
     key: 'show_list_view',
     value: function show_list_view() {
-      this.setState({ displayType: displayType.list });
+      this.setState({ display_type: display_type.list });
     }
   }]);
 

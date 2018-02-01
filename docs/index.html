@@ -30,6 +30,7 @@
   <ul>
     
   <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/admin.js~Admin.html">Admin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/set.js~Set.html">Set</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-display_type">display_type</a></span></span></li>
 </ul>
 </div>
@@ -531,6 +532,10 @@ export default class Example extends Admin
 }</code>
 </code></pre>
 <p>This sets the display type to &quot;list&quot;, changes the object to <code>null</code> and invokes <code>get_queryset</code> to fetch the latest data.</p>
+<h2 id="permissions">Permissions</h2><p><code>has_add_permission</code> , <code>has_change_permission</code> and <code>has_module_permission</code> methods are used to control access.</p>
+<p>The <code>has_add_permission</code>  method takes no arguments and should return a boolean that signifies wether the user can add a new object. It simply hides the Add button.</p>
+<p>The <code>has_change_permission</code>  method takes no arguments and should return a boolean that signifies wether the user can edit an object. It simply disables all <code>list_display_links</code>.</p>
+<p>The <code>has_module_permission</code>  method takes no arguments and should return a boolean that signifies wether the user should load the component. It simply shows an error message after an unauthorized access attempt.</p>
 <h2 id="miscellany">Miscellany</h2><h3 id="-code-state--code--object"><code>state</code> object</h3><p>The default <code>state</code> object has the following properties,</p>
 <table>
 <thead>
