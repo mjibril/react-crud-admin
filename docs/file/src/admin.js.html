@@ -30,6 +30,7 @@
   <ul>
     
   <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/admin.js~Admin.html">Admin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-display_type">display_type</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -40,7 +41,7 @@ import _ from &apos;lodash&apos;;
 import Set from &apos;./set.js&apos;;
 import &apos;./admin.scss&apos;;
 
-const displayType = {
+export const display_type = {
     list : &quot;list&quot;,
     change : &quot;change&quot;
 };
@@ -64,7 +65,7 @@ class Admin extends React.Component {
 	this.list_per_page=10
 	this.sort_fields=[]
 	this.is_object_equal=(a,b)=&gt; a==b
-	
+	this.pages_in_pagination = 3
 	this.actions={
 	    &quot;delete&quot; : (selected_objects)=&gt;{
 		
@@ -74,12 +75,17 @@ class Admin extends React.Component {
     
 	this._all_selected=false
 
-	let queryset=this.get_queryset() ? this.get_queryset() : [] ;
+
+
 	/**
 	 * Initialize the state of the component
 	*/
-	this.state = {displayType : displayType.list , total: queryset.length,  page_number : 1,object : null,queryset: queryset,selected_objects:new Set([],this.is_object_equal)}
+	this.state = {display_type : display_type.list ,  page_number : 1,object : null,selected_objects:new Set([],this.is_object_equal),total:1}
+
 	
+        let queryset=this.get_queryset(this.state.page_number,this.list_per_page,this.state.queryset) ? this.get_queryset(this.state.page_number,this.list_per_page,this.state.queryset) : [] ;
+        this.state.queryset=queryset;
+	this.state.total=queryset.length;
 	this._handle_search = this._handle_search.bind(this);
 	this.select_all = this.select_all.bind(this);
 	this.select_one=this.select_one.bind(this);
@@ -89,11 +95,13 @@ class Admin extends React.Component {
      * This function returns an array of objects that will serve as the
      * queryset for the admin interface. Typically involves an HTTP request
      * to a backend.
-     *  
-     * @returns {object[]} An array of objects.
+     * @param {number} page_number - The current page number
+     * @param {number} list_per_page - Number items to list per page. Defaults to `list_per_page`
+     * @param {object[]} queryset - The current queryset
+     * @returns {object[]} An array of objects. - Objects to display
      */
 
-    get_queryset(page_number=this.state.page_number,list_per_page=this.list_per_page)
+    get_queryset(page_number=this.state.page_number,list_per_page=this.list_per_page,queryset=this.state.queryset)
     {
     
 
@@ -136,7 +144,7 @@ class Admin extends React.Component {
      *@example
      *get_field_transforms()
      *{
-     * return { &apos;name&apos; : function(name)
+     * return { &apos;name&apos; : function(name,object)
      *                   {
      *                       return name.toUpperCase()
      *                   }
@@ -209,8 +217,20 @@ class Admin extends React.Component {
 	return {}
 	
     }
-    
-    
+     /**
+	* Returns the number of items to be listed in a page. Can be overridden by `list_per_page`.
+         *@return {number} The number of objects in a page 
+     */
+
+    get_list_per_page()
+    {
+	if(this.list_per_page)
+	{
+	    return this.list_per_page
+	}
+	return 10
+    }
+	   
     /**
      * Gets an actions object whose properties are action names and values are action methods.
      * This can be overridden by the action member variable. The default &quot;delete&quot; method is not
@@ -241,7 +261,7 @@ class Admin extends React.Component {
     }
     /**
      *   Gets the list/array of properties of the objects in the queryset that are clickable
-     *    when displayed on the list display page. It can be overwritten by the member variable
+     *    when displayed on the list display page. It can be overridden by the member variable
      *   `list_display_links`. A property is any string that should exist as a property in the objects within 
      *   a queryset and works with lodash&apos;s `_.at` function. 
      *
@@ -265,10 +285,10 @@ class Admin extends React.Component {
     }
 /**
      *   Gets the list/array of properties/field names of the objects in the queryset to be
-     *   displayed on the list display page. It can be overwritten by the member variable
+     *   displayed on the list display page. It can be overridden by the member variable
      *   list_display. A property is any string that should exist in the objects within 
      *   a queryset and works with lodash&apos;s _.at function. See more at
-     *   https://lodash.com/docs/4.17.4#at 
+     *   https://lodash.com/docs/#at 
      *
      *   @example
      *   let object={ name : &quot;any name&quot;,{ address : { street : &quot;any&quot;}},emails: [&quot;any@any.com&quot;]}
@@ -303,7 +323,7 @@ class Admin extends React.Component {
 	if(this.sort_fields.length&gt;0)
 	{
 	    
-	    return this.sort_by(this.sort_fields) 
+	    return this.sort_by(this.sort_fields,this.state.queryset) 
 	}
 
 	return this.state.queryset ?  this.state.queryset : [];
@@ -313,13 +333,14 @@ class Admin extends React.Component {
      * Implements search. This method should be overridden to implement a custom search
      *
      *@param {string} term - the search term
+     *@param {object[]} queryset - the current queryset
      *@return {object[]} the queryset as a result of the search
      */
 
     
-    search(term)
+    search(term,queryset)
     {
-	return this.state.queryset
+	return queryset
     }
     /**
      * Grants permission to delete object. This method is not implemented and can be handled via
@@ -390,7 +411,7 @@ class Admin extends React.Component {
      * This method adds up/down arrows to field headers on the list display page table
      *
      * @private 
-     * @param {strin} field -  the field/property name
+     * @param {string} field -  the field/property name
      
      
      */   
@@ -415,24 +436,24 @@ class Admin extends React.Component {
     }
     /**
      *  This method  should be overriden and called after saving an object in the add/change view.       *  This method is not called at all here but provides hints on what to do after saving
-     *  an object. Change the state displayType to &quot;list&quot;, object to &quot;null&quot; and refresh the quer         *  yset.
+     *  an object. Change the state display_type to &quot;list&quot;, object to &quot;null&quot; and refresh the quer         *  yset.
      */   
     
-    response_add(options)
+    response_add()
     {
 	
-	this.setState({displayType :displayType.list, object :null,queryset: this.get_queryset()  });
+	this.setState({display_type :display_type.list, object :null,queryset: this.get_queryset(this.state.page_number,this.list_per_page,this.state.queryset)  });
 
 	return true
     }
     /**
      *  This method should be overriden and called after saving an object in the add/change view.         *  This method is not called at all here but provides hints on what to do after saving
-     *  an object. Change the state displayType to &quot;list&quot;, object to &quot;null&quot; and refresh the quer         *  yset.
+     *  an object. Change the state display_type to &quot;list&quot;, object to &quot;null&quot; and refresh the quer         *  yset.
      */   
 
-    response_change(options)
+    response_change()
     {
-	this.setState({displayType :displayType.list, object :null,queryset: this.get_queryset()  });
+	this.setState({display_type :display_type.list, object :null,queryset: this.get_queryset(this.state.page_number,this.list_per_page,this.state.queryset)  });
 	
 	return true
     }
@@ -460,9 +481,16 @@ class Admin extends React.Component {
     set_queryset(queryset)
     {
 	
-	this.setState({queryset : queryset,total:queryset.length})
+	this.setState({queryset : queryset})
 
     }
+    set_total(total)
+    {
+	
+	this.setState({total : total})
+
+    }
+    
     
     _get_prop_label(label)
     {
@@ -473,7 +501,7 @@ class Admin extends React.Component {
     {
 	return this.get_list_display().map((item)=&gt;
 	{
-		return &lt;th key={item}  onClick={this._sort_handler(item)} &gt; { this.header_transforms[item] ? this.header_transforms[item](item): _.startCase(this._get_prop_label(item))}{    this._order_state_arrow(item)} &lt;/th&gt;
+	    return &lt;th key={item}  onClick={this._sort_handler(item)} &gt; { this.get_header_transforms()[item] ? this.get_header_transforms()[item](item): _.startCase(this._get_prop_label(item))}{    this._order_state_arrow(item)} &lt;/th&gt;
 	})
 
     }
@@ -483,27 +511,28 @@ class Admin extends React.Component {
 	
 	return (event)=&gt;
 	{
-	    this.setState({displayType :displayType.change, object :object  });
+	    this.setState({display_type :display_type.change, object :object  });
 	    event.preventDefault();
 	}
     }
 
     _display_field(object,item)
     {
-	let label=_.at(object,item)
+	
+	let label=_.at(object,item)[&apos;0&apos;]
 	
 	if(_.has(this.get_field_transforms(),item))
 	{
-	    return this.get_field_transforms()[item](label)
+	    return this.get_field_transforms()[item](label,object)
 
 	}
 
-	if(_.at(this.extra_fields,item))
+	if(_.at(this.get_extra_fields(),item))
 	{
 	    
-	    if(this.extra_fields[item])
+	    if(this.get_extra_fields()[item])
 	    {
-		label=this.extra_fields[item](object,item)
+		label=this.get_extra_fields()[item](object,item)
 	    }
 	    
 	}
@@ -683,7 +712,7 @@ class Admin extends React.Component {
 	    let key= event.which || event.keyCode;
             if(this.live_search || key==13)
 	    {
-		let queryset=this.search(term);
+		let queryset=this.search(term,this.state.queryset);
 		this.setState({queryset:queryset,total:queryset.length})
 
 	    }
@@ -692,7 +721,7 @@ class Admin extends React.Component {
 	else
 	{
 	    
-	    this.setState({queryset:this.get_queryset(),total:this.get_queryset().length})
+	    this.setState({queryset:this.get_queryset(this.state.page_number,this.list_per_page,this.state.queryset),total:this.get_queryset(this.state.page_number,this.list_per_page,this.state.queryset).length})
 	}
 	
 
@@ -751,18 +780,19 @@ class Admin extends React.Component {
     /**
      * An event listener that listens to actions selected.
      * 
-     *@param {string} action -  the action selected
+     *@param {object} event -  the DOM on-change event
      */
 
 
-    action_selected(action)
+    action_selected(event)
     {
+	
+	let action=event.target.value;
 
-	return (event)=&gt;{
+	console.log(this.state.selected_objects.getItems())
+	this.get_actions()[action](this.state.selected_objects.getItems());
+	this.get_queryset(this.state.page_number,this.list_per_page);
 
-	    this.actions[action](this.state.selected_objects.getItems());
-	    this.get_queryset(this.state.page_number,this.list_per_page);
-	}
 	
 
     }
@@ -780,7 +810,7 @@ class Admin extends React.Component {
 	
 	    this.setState({page_number: page.page},()=&gt;{
 
-		this.setState({queryset: this.get_queryset()})
+		this.setState({queryset: this.get_queryset(this.state.page_number,this.list_per_page,this.state.queryset)})
 
 	    });
 	    event.preventDefault();
@@ -826,20 +856,50 @@ class Admin extends React.Component {
 	if(this.state.total)
 	{
 	    let numpages=Math.ceil(this.state.total/this.list_per_page);
-	    for(var i=0;i&lt;numpages;i++)
+	    let pages_in_pagination= numpages &lt; this.pages_in_pagination ? numpages : this.pages_in_pagination;
+	    
+	    if(this.state.page_number ==1)
+	    {
+		for(let i=0;i&lt;pages_in_pagination;i++)
+		{
+		    pages.push(i+1);
+		}
+	    }
+	    else if(this.state.page_number ==numpages)
+	    {
+		for(let i=0;i&lt;pages_in_pagination;i++)
+		{
+		    pages.push(numpages-i);
+		}
+
+
+	    }
+	    else
+	    {
+
+		
+		for(let i=0;i&lt;pages_in_pagination;i++)
+		{
+		    pages.push(this.state.page_number+i);
+		}
+
+	    }
+		/*
+		for(var i=0;i&lt;numpages;i++)
 	    {
 		pages.push(i+1);
 
-	    }
+	    }*/
+	    
 	}
 
-	return &lt;div className=&quot;float-right&quot;&gt;
+	return &lt;div className=&quot;pull-right&quot;&gt;
 	    &lt;span className=&quot;summary&quot;&gt;{this.list_per_page*(this.state.page_number-1)+1 }-{Math.min(this.list_per_page*(this.state.page_number-1)+this.list_per_page,this.state.total)} of {this.state.total} &lt;/span&gt;  
 
 	&lt;nav  aria-label=&quot;Page navigation&quot;&gt;
 	&lt;ul className=&quot;pagination&quot;&gt;
 	&lt;li className=&quot;page-item&quot;&gt;
-	&lt;a href=&quot;#&quot; aria-label=&quot;Previous&quot; onClick={this.prevPage} className=&quot;page-link&quot;&gt;
+	    &lt;a href=&quot;#&quot; aria-label=&quot;Previous&quot; onClick={this.prevPage.bind(this)} className=&quot;page-link&quot;&gt;
 	&lt;span aria-hidden=&quot;true&quot;&gt;&amp;laquo;&lt;/span&gt;
 	&lt;/a&gt;
 	    &lt;/li&gt;
@@ -849,7 +909,7 @@ class Admin extends React.Component {
 	})
 	}
 	&lt;li className=&quot;page-item&quot;&gt;
-	&lt;a href=&quot;#&quot; onClick={this.nextPage} aria-label=&quot;Next&quot; className=&quot;page-link&quot;&gt;
+	    &lt;a href=&quot;#&quot; onClick={this.nextPage.bind(this)} aria-label=&quot;Next&quot; className=&quot;page-link&quot;&gt;
 	&lt;span aria-hidden=&quot;true&quot;&gt;&amp;raquo;&lt;/span&gt;
 	&lt;/a&gt;
 	&lt;/li&gt;
@@ -868,10 +928,10 @@ class Admin extends React.Component {
     {
 
 	    
-	return &lt;select className=&quot;ra-action-button&quot;&gt;
+	return &lt;select className=&quot;ra-action-button&quot; onChange={this.action_selected.bind(this)}&gt;
 	&lt;option value=&quot;&quot; disabled selected&gt;Choose an action&lt;/option&gt;
 	{ _.keys(this.actions).map((action)=&gt;{
-	    return &lt;option value={action} onChange={this.action_selected(action)}&gt;{_.startCase(action)}&lt;/option&gt; 
+	    return &lt;option value={action}&gt; {_.startCase(action)}&lt;/option&gt; 
 
 	    })}
 	&lt;/select&gt;
@@ -887,7 +947,7 @@ class Admin extends React.Component {
     _render_back_button()
     {
 	
-	return &lt;div&gt;&lt;button className={&quot;ra-back-button&quot;} onClick={()=&gt;{this.setState({displayType : displayType.list,object: null })}}&gt; Back &lt;/button&gt;&lt;/div&gt;
+	return &lt;div&gt;&lt;button className={&quot;ra-back-button&quot;} onClick={()=&gt;{this.setState({display_type : display_type.list,object: null })}}&gt; Back &lt;/button&gt;&lt;/div&gt;
 	
 
     }
@@ -904,7 +964,7 @@ class Admin extends React.Component {
 	    return &lt;div&gt; Permission Denied&lt;/div&gt;
 	}
 
-	if(this.state.displayType == displayType.list)
+	if(this.state.display_type == display_type.list)
 	{
 
 	    return (
@@ -935,7 +995,11 @@ class Admin extends React.Component {
 
 	
     }
-    
+    show_list_view()
+    {
+	this.setState({display_type : display_type.list})
+
+    }
 }
 
 

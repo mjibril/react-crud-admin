@@ -30,6 +30,7 @@
   <ul>
     
   <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/admin.js~Admin.html">Admin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-display_type">display_type</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -437,6 +438,34 @@
           
           
           
+          <span class="code" data-ice="name"><span><a href="class/src/admin.js~Admin.html#instance-member-pages_in_pagination">pages_in_pagination</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
           <span class="code" data-ice="name"><span><a href="class/src/admin.js~Admin.html#instance-member-sort_fields">sort_fields</a></span></span><span class="code" data-ice="signature">: <span><span>*</span><span>[]</span></span></span>
         </p>
       </div>
@@ -465,7 +494,7 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/admin.js~Admin.html#instance-member-state">state</a></span></span><span class="code" data-ice="signature">: {&quot;displayType&quot;: <span>*</span>, &quot;total&quot;: <span>*</span>, &quot;page_number&quot;: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>, &quot;object&quot;: <span>*</span>, &quot;queryset&quot;: <span>*</span>, &quot;selected_objects&quot;: <span>*</span>}</span>
+          <span class="code" data-ice="name"><span><a href="class/src/admin.js~Admin.html#instance-member-state">state</a></span></span><span class="code" data-ice="signature">: {&quot;display_type&quot;: <span>*</span>, &quot;page_number&quot;: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>, &quot;object&quot;: <span>*</span>, &quot;selected_objects&quot;: <span>*</span>, &quot;total&quot;: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>}</span>
         </p>
       </div>
       <div>
@@ -535,7 +564,7 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/admin.js~Admin.html#instance-method-action_selected">action_selected</a></span></span><span class="code" data-ice="signature">(action: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>): <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/admin.js~Admin.html#instance-method-action_selected">action_selected</a></span></span><span class="code" data-ice="signature">(event: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span>)</span>
         </p>
       </div>
       <div>
@@ -773,6 +802,35 @@ in the queryset and whose values are transform functions.</p>
           
           
           
+          <span class="code" data-ice="name"><span><a href="class/src/admin.js~Admin.html#instance-method-get_list_per_page">get_list_per_page</a></span></span><span class="code" data-ice="signature">(): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Returns the number of items to be listed in a page.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
           <span class="code" data-ice="name"><span><a href="class/src/admin.js~Admin.html#instance-method-get_live_search">get_live_search</a></span></span><span class="code" data-ice="signature">(): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></span>
         </p>
       </div>
@@ -802,7 +860,7 @@ in the queryset and whose values are transform functions.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/admin.js~Admin.html#instance-method-get_queryset">get_queryset</a></span></span><span class="code" data-ice="signature">(page_number: <span>*</span>, list_per_page: <span>*</span>): <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span><span>[]</span></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/admin.js~Admin.html#instance-method-get_queryset">get_queryset</a></span></span><span class="code" data-ice="signature">(page_number: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>, list_per_page: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>, queryset: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span><span>[]</span></span>): <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span><span>[]</span></span></span>
         </p>
       </div>
       <div>
@@ -1093,7 +1151,7 @@ queryset for the admin interface.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/admin.js~Admin.html#instance-method-response_add">response_add</a></span></span><span class="code" data-ice="signature">(options: <span>*</span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/admin.js~Admin.html#instance-method-response_add">response_add</a></span></span><span class="code" data-ice="signature">(): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></span>
         </p>
       </div>
       <div>
@@ -1122,7 +1180,7 @@ queryset for the admin interface.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/admin.js~Admin.html#instance-method-response_change">response_change</a></span></span><span class="code" data-ice="signature">(options: <span>*</span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/admin.js~Admin.html#instance-method-response_change">response_change</a></span></span><span class="code" data-ice="signature">(): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></span>
         </p>
       </div>
       <div>
@@ -1151,7 +1209,7 @@ queryset for the admin interface.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/admin.js~Admin.html#instance-method-search">search</a></span></span><span class="code" data-ice="signature">(term: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>): <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span><span>[]</span></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/admin.js~Admin.html#instance-method-search">search</a></span></span><span class="code" data-ice="signature">(term: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>, queryset: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span><span>[]</span></span>): <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span><span>[]</span></span></span>
         </p>
       </div>
       <div>
@@ -1270,6 +1328,62 @@ displayed is selected</p>
           
           
           <span class="code" data-ice="name"><span><a href="class/src/admin.js~Admin.html#instance-method-set_queryset">set_queryset</a></span></span><span class="code" data-ice="signature">(queryset: <span>*</span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/admin.js~Admin.html#instance-method-set_total">set_total</a></span></span><span class="code" data-ice="signature">(total: <span>*</span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/admin.js~Admin.html#instance-method-show_list_view">show_list_view</a></span></span><span class="code" data-ice="signature">()</span>
         </p>
       </div>
       <div>
@@ -1588,7 +1702,7 @@ displayed is selected</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/admin.js~Admin.html#instance-method-_order_state_arrow">_order_state_arrow</a></span></span><span class="code" data-ice="signature">(field: <span>strin</span>): <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/admin.js~Admin.html#instance-method-_order_state_arrow">_order_state_arrow</a></span></span><span class="code" data-ice="signature">(field: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>): <span>*</span></span>
         </p>
       </div>
       <div>
@@ -2363,6 +2477,49 @@ displayed is selected</p>
   
 </div>
 <div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-pages_in_pagination">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">pages_in_pagination</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber30">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-member-sort_fields">
     <span class="access" data-ice="access">public</span>
     
@@ -2413,11 +2570,11 @@ displayed is selected</p>
     
     
     
-    <span class="code" data-ice="name">state</span><span class="code" data-ice="signature">: {&quot;displayType&quot;: <span>*</span>, &quot;total&quot;: <span>*</span>, &quot;page_number&quot;: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>, &quot;object&quot;: <span>*</span>, &quot;queryset&quot;: <span>*</span>, &quot;selected_objects&quot;: <span>*</span>}</span>
+    <span class="code" data-ice="name">state</span><span class="code" data-ice="signature">: {&quot;display_type&quot;: <span>*</span>, &quot;page_number&quot;: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>, &quot;object&quot;: <span>*</span>, &quot;selected_objects&quot;: <span>*</span>, &quot;total&quot;: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>}</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber44">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber45">source</a></span></span>
     </span>
   </h3>
 
@@ -2505,11 +2662,11 @@ displayed is selected</p>
     
     
     
-    <span class="code" data-ice="name">action_selected</span><span class="code" data-ice="signature">(action: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>): <span>*</span></span>
+    <span class="code" data-ice="name">action_selected</span><span class="code" data-ice="signature">(event: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber721">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber749">source</a></span></span>
     </span>
   </h3>
 
@@ -2530,10 +2687,10 @@ displayed is selected</p>
     <tbody>
     
     <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">action</td>
-      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></td>
+      <td data-ice="name" class="code" data-depth="0">event</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"><p>the action selected</p>
+      <td data-ice="description"><p>the DOM on-change event</p>
 </td>
     </tr>
 </tbody>
@@ -2541,19 +2698,7 @@ displayed is selected</p>
 </div>
 </div>
 
-  <div class="return-params" data-ice="returnParams">
-    <h4>Return:</h4>
-    <table>
-      <tbody>
-        <tr>
-          <td class="return-type code" data-ice="returnType"><span>*</span></td>
-          
-        </tr>
-      </tbody>
-    </table>
-    <div data-ice="returnProperties">
-</div>
-  </div>
+  
 
   
 
@@ -2582,7 +2727,7 @@ displayed is selected</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber193">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber212">source</a></span></span>
     </span>
   </h3>
 
@@ -2653,7 +2798,7 @@ actions = { &quot;delete&quot; : (selected_objects)=&gt;{ } }</code></pre>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber165">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber172">source</a></span></span>
     </span>
   </h3>
 
@@ -2724,7 +2869,7 @@ return { &apos;now&apos; : function(object,label)
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber112">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber119">source</a></span></span>
     </span>
   </h3>
 
@@ -2770,7 +2915,7 @@ property of objects in the queryset to upper case in the list display view.</p>
       
       <pre class="prettyprint source-code"><code data-ice="exampleCode">get_field_transforms()
 {
-return { &apos;name&apos; : function(name)
+return { &apos;name&apos; : function(name,object)
                   {
                       return name.toUpperCase()
                   }
@@ -2797,7 +2942,7 @@ return { &apos;name&apos; : function(name)
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber77">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber84">source</a></span></span>
     </span>
   </h3>
 
@@ -2875,7 +3020,7 @@ and JSON Schema from <a href="https://spacetelescope.github.io/understanding-jso
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber138">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber145">source</a></span></span>
     </span>
   </h3>
 
@@ -2946,7 +3091,7 @@ return { &apos;name&apos; : function(name)
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber244">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber263">source</a></span></span>
     </span>
   </h3>
 
@@ -2954,10 +3099,10 @@ return { &apos;name&apos; : function(name)
   
   
   <div data-ice="description"><p>  Gets the list/array of properties/field names of the objects in the queryset to be
-  displayed on the list display page. It can be overwritten by the member variable
+  displayed on the list display page. It can be overridden by the member variable
   list<em>display. A property is any string that should exist in the objects within 
   a queryset and works with lodash&apos;s </em>.at function. See more at
-  <a href="https://lodash.com/docs/4.17.4#at">https://lodash.com/docs/4.17.4#at</a> </p>
+  <a href="https://lodash.com/docs/#at">https://lodash.com/docs/#at</a> </p>
 </div>
 
   
@@ -3016,7 +3161,7 @@ return { &apos;name&apos; : function(name)
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber220">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber239">source</a></span></span>
     </span>
   </h3>
 
@@ -3024,7 +3169,7 @@ return { &apos;name&apos; : function(name)
   
   
   <div data-ice="description"><p>  Gets the list/array of properties of the objects in the queryset that are clickable
-   when displayed on the list display page. It can be overwritten by the member variable
+   when displayed on the list display page. It can be overridden by the member variable
   <code>list_display_links</code>. A property is any string that should exist as a property in the objects within 
   a queryset and works with lodash&apos;s <code>_.at</code> function. </p>
 <p>  The properties &quot;name&quot;,&quot;address.street&quot; and &quot;emails[0]&quot; are all acceptable by <code>_.at</code> in the example below</p>
@@ -3074,6 +3219,63 @@ return { &apos;name&apos; : function(name)
   
 </div>
 <div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-get_list_per_page">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">get_list_per_page</span><span class="code" data-ice="signature">(): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber187">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Returns the number of items to be listed in a page. Can be overridden by <code>list_per_page</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>The number of objects in a page</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-method-get_live_search">
     <span class="access" data-ice="access">public</span>
     
@@ -3085,7 +3287,7 @@ return { &apos;name&apos; : function(name)
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber89">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber96">source</a></span></span>
     </span>
   </h3>
 
@@ -3138,11 +3340,11 @@ Can be overriden by the live_search member variable. Default is false.</p>
     
     
     
-    <span class="code" data-ice="name">get_queryset</span><span class="code" data-ice="signature">(page_number: <span>*</span>, list_per_page: <span>*</span>): <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span><span>[]</span></span></span>
+    <span class="code" data-ice="name">get_queryset</span><span class="code" data-ice="signature">(page_number: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>, list_per_page: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>, queryset: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span><span>[]</span></span>): <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span><span>[]</span></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber59">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber66">source</a></span></span>
     </span>
   </h3>
 
@@ -3166,15 +3368,24 @@ to a backend.</p>
     
     <tr data-ice="property" data-depth="0">
       <td data-ice="name" class="code" data-depth="0">page_number</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"><ul><li>optional</li></ul></td>
-      <td data-ice="description"></td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>The current page number</p>
+</td>
     </tr>
 <tr data-ice="property" data-depth="0">
       <td data-ice="name" class="code" data-depth="0">list_per_page</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"><ul><li>optional</li></ul></td>
-      <td data-ice="description"></td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>Number items to list per page. Defaults to <code>list_per_page</code></p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">queryset</td>
+      <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span><span>[]</span></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>The current queryset</p>
+</td>
     </tr>
 </tbody>
   </table>
@@ -3187,7 +3398,7 @@ to a backend.</p>
       <tbody>
         <tr>
           <td class="return-type code" data-ice="returnType"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span><span>[]</span></span></td>
-          <td class="return-desc" data-ice="returnDescription"><p>An array of objects.</p>
+          <td class="return-desc" data-ice="returnDescription"><p>An array of objects. - Objects to display</p>
 </td>
         </tr>
       </tbody>
@@ -3223,7 +3434,7 @@ to a backend.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber308">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber328">source</a></span></span>
     </span>
   </h3>
 
@@ -3281,7 +3492,7 @@ button</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber319">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber339">source</a></span></span>
     </span>
   </h3>
 
@@ -3356,7 +3567,7 @@ enabled</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber295">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber315">source</a></span></span>
     </span>
   </h3>
 
@@ -3430,7 +3641,7 @@ enabled</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber329">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber349">source</a></span></span>
     </span>
   </h3>
 
@@ -3487,7 +3698,7 @@ enabled</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber612">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber640">source</a></span></span>
     </span>
   </h3>
 
@@ -3532,7 +3743,7 @@ progress indicator by inspecting the &quot;loading&quot; property of the state o
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber760">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber789">source</a></span></span>
     </span>
   </h3>
 
@@ -3576,7 +3787,7 @@ progress indicator by inspecting the &quot;loading&quot; property of the state o
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber772">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber801">source</a></span></span>
     </span>
   </h3>
 
@@ -3620,7 +3831,7 @@ progress indicator by inspecting the &quot;loading&quot; property of the state o
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber863">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber922">source</a></span></span>
     </span>
   </h3>
 
@@ -3677,7 +3888,7 @@ progress indicator by inspecting the &quot;loading&quot; property of the state o
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber622">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber650">source</a></span></span>
     </span>
   </h3>
 
@@ -3730,11 +3941,11 @@ progress indicator by inspecting the &quot;loading&quot; property of the state o
     
     
     
-    <span class="code" data-ice="name">response_add</span><span class="code" data-ice="signature">(options: <span>*</span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></span>
+    <span class="code" data-ice="name">response_add</span><span class="code" data-ice="signature">(): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber384">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber404">source</a></span></span>
     </span>
   </h3>
 
@@ -3742,28 +3953,12 @@ progress indicator by inspecting the &quot;loading&quot; property of the state o
   
   
   <div data-ice="description"><p> This method  should be overriden and called after saving an object in the add/change view.       <em>  This method is not called at all here but provides hints on what to do after saving
- an object. Change the state displayType to &quot;list&quot;, object to &quot;null&quot; and refresh the quer         </em>  yset.</p>
+ an object. Change the state display_type to &quot;list&quot;, object to &quot;null&quot; and refresh the quer         </em>  yset.</p>
 </div>
 
   
 
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Params:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">options</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
+  <div data-ice="properties">
 </div>
 
   <div class="return-params" data-ice="returnParams">
@@ -3803,11 +3998,11 @@ progress indicator by inspecting the &quot;loading&quot; property of the state o
     
     
     
-    <span class="code" data-ice="name">response_change</span><span class="code" data-ice="signature">(options: <span>*</span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></span>
+    <span class="code" data-ice="name">response_change</span><span class="code" data-ice="signature">(): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber396">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber416">source</a></span></span>
     </span>
   </h3>
 
@@ -3815,28 +4010,12 @@ progress indicator by inspecting the &quot;loading&quot; property of the state o
   
   
   <div data-ice="description"><p> This method should be overriden and called after saving an object in the add/change view.         <em>  This method is not called at all here but provides hints on what to do after saving
- an object. Change the state displayType to &quot;list&quot;, object to &quot;null&quot; and refresh the quer         </em>  yset.</p>
+ an object. Change the state display_type to &quot;list&quot;, object to &quot;null&quot; and refresh the quer         </em>  yset.</p>
 </div>
 
   
 
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Params:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">options</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
+  <div data-ice="properties">
 </div>
 
   <div class="return-params" data-ice="returnParams">
@@ -3876,11 +4055,11 @@ progress indicator by inspecting the &quot;loading&quot; property of the state o
     
     
     
-    <span class="code" data-ice="name">search</span><span class="code" data-ice="signature">(term: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>): <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span><span>[]</span></span></span>
+    <span class="code" data-ice="name">search</span><span class="code" data-ice="signature">(term: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>, queryset: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span><span>[]</span></span>): <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span><span>[]</span></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber283">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber303">source</a></span></span>
     </span>
   </h3>
 
@@ -3905,6 +4084,13 @@ progress indicator by inspecting the &quot;loading&quot; property of the state o
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></td>
       <td data-ice="appendix"></td>
       <td data-ice="description"><p>the search term</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">queryset</td>
+      <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span><span>[]</span></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>the current queryset</p>
 </td>
     </tr>
 </tbody>
@@ -3954,7 +4140,7 @@ progress indicator by inspecting the &quot;loading&quot; property of the state o
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber738">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber767">source</a></span></span>
     </span>
   </h3>
 
@@ -4027,7 +4213,7 @@ progress indicator by inspecting the &quot;loading&quot; property of the state o
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber527">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber555">source</a></span></span>
     </span>
   </h3>
 
@@ -4088,7 +4274,7 @@ displayed within a single display page are selected</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber550">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber578">source</a></span></span>
     </span>
   </h3>
 
@@ -4161,7 +4347,7 @@ displayed is selected</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber423">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber443">source</a></span></span>
     </span>
   </h3>
 
@@ -4209,6 +4395,108 @@ displayed is selected</p>
   
 </div>
 <div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-set_total">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">set_total</span><span class="code" data-ice="signature">(total: <span>*</span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber449">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">total</td>
+      <td data-ice="type" class="code"><span>*</span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"></td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-show_list_view">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">show_list_view</span><span class="code" data-ice="signature">()</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber960">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-method-show_progress">
     <span class="access" data-ice="access">public</span>
     
@@ -4220,7 +4508,7 @@ displayed is selected</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber601">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber629">source</a></span></span>
     </span>
   </h3>
 
@@ -4265,7 +4553,7 @@ progress indicator.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber481">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber509">source</a></span></span>
     </span>
   </h3>
 
@@ -4338,7 +4626,7 @@ progress indicator.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber412">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber432">source</a></span></span>
     </span>
   </h3>
 
@@ -4420,7 +4708,7 @@ entry in the display page</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber454">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber481">source</a></span></span>
     </span>
   </h3>
 
@@ -4497,7 +4785,7 @@ entry in the display page</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber263">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber282">source</a></span></span>
     </span>
   </h3>
 
@@ -4555,7 +4843,7 @@ the current queryset based on the sort order. </p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber430">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber457">source</a></span></span>
     </span>
   </h3>
 
@@ -4626,7 +4914,7 @@ the current queryset based on the sort order. </p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber579">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber607">source</a></span></span>
     </span>
   </h3>
 
@@ -4683,7 +4971,7 @@ the current queryset based on the sort order. </p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber435">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber462">source</a></span></span>
     </span>
   </h3>
 
@@ -4738,7 +5026,7 @@ the current queryset based on the sort order. </p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber640">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber668">source</a></span></span>
     </span>
   </h3>
 
@@ -4801,7 +5089,7 @@ search or not.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber444">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber471">source</a></span></span>
     </span>
   </h3>
 
@@ -4868,11 +5156,11 @@ search or not.</p>
     
     
     
-    <span class="code" data-ice="name">_order_state_arrow</span><span class="code" data-ice="signature">(field: <span>strin</span>): <span>*</span></span>
+    <span class="code" data-ice="name">_order_state_arrow</span><span class="code" data-ice="signature">(field: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>): <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber362">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber382">source</a></span></span>
     </span>
   </h3>
 
@@ -4894,7 +5182,7 @@ search or not.</p>
     
     <tr data-ice="property" data-depth="0">
       <td data-ice="name" class="code" data-depth="0">field</td>
-      <td data-ice="type" class="code"><span>strin</span></td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></td>
       <td data-ice="appendix"></td>
       <td data-ice="description"><p>the field/property name</p>
 </td>
@@ -4945,7 +5233,7 @@ search or not.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber476">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber504">source</a></span></span>
     </span>
   </h3>
 
@@ -5004,7 +5292,7 @@ search or not.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber830">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber889">source</a></span></span>
     </span>
   </h3>
 
@@ -5061,7 +5349,7 @@ search or not.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber682">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber710">source</a></span></span>
     </span>
   </h3>
 
@@ -5118,7 +5406,7 @@ search or not.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber850">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber909">source</a></span></span>
     </span>
   </h3>
 
@@ -5175,7 +5463,7 @@ search or not.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber785">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber814">source</a></span></span>
     </span>
   </h3>
 
@@ -5232,7 +5520,7 @@ search or not.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber669">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber697">source</a></span></span>
     </span>
   </h3>
 
@@ -5289,7 +5577,7 @@ search or not.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber696">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber724">source</a></span></span>
     </span>
   </h3>
 
@@ -5346,7 +5634,7 @@ search or not.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber486">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber514">source</a></span></span>
     </span>
   </h3>
 

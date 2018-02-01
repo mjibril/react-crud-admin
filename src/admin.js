@@ -59,6 +59,7 @@ class Admin extends React.Component {
      * to a backend.
      * @param {number} page_number - The current page number
      * @param {number} list_per_page - Number items to list per page. Defaults to `list_per_page`
+     * @param {object[]} queryset - The current queryset
      * @returns {object[]} An array of objects. - Objects to display
      */
 
@@ -294,6 +295,7 @@ class Admin extends React.Component {
      * Implements search. This method should be overridden to implement a custom search
      *
      *@param {string} term - the search term
+     *@param {object[]} queryset - the current queryset
      *@return {object[]} the queryset as a result of the search
      */
 
@@ -740,7 +742,7 @@ class Admin extends React.Component {
     /**
      * An event listener that listens to actions selected.
      * 
-     *@param {string} action -  the action selected
+     *@param {object} event -  the DOM on-change event
      */
 
 

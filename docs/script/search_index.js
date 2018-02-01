@@ -6,6 +6,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "react-crud-admin/src/admin.js~display_type",
+    "variable/index.html#static-variable-display_type",
+    "<span>display_type</span> <span class=\"search-result-import-path\">react-crud-admin/src/admin.js</span>",
+    "variable"
+  ],
+  [
     "src/.external-ecmascript.js~array",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array",
     "src/.external-ecmascript.js~Array",
@@ -474,6 +480,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/admin.js~admin#get_list_per_page",
+    "class/src/admin.js~Admin.html#instance-method-get_list_per_page",
+    "src/admin.js~Admin#get_list_per_page",
+    "method"
+  ],
+  [
     "src/admin.js~admin#get_live_search",
     "class/src/admin.js~Admin.html#instance-method-get_live_search",
     "src/admin.js~Admin#get_live_search",
@@ -570,6 +582,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/admin.js~admin#pages_in_pagination",
+    "class/src/admin.js~Admin.html#instance-member-pages_in_pagination",
+    "src/admin.js~Admin#pages_in_pagination",
+    "member"
+  ],
+  [
     "src/admin.js~admin#prevpage",
     "class/src/admin.js~Admin.html#instance-method-prevPage",
     "src/admin.js~Admin#prevPage",
@@ -627,6 +645,18 @@ window.esdocSearchIndex = [
     "src/admin.js~admin#set_queryset",
     "class/src/admin.js~Admin.html#instance-method-set_queryset",
     "src/admin.js~Admin#set_queryset",
+    "method"
+  ],
+  [
+    "src/admin.js~admin#set_total",
+    "class/src/admin.js~Admin.html#instance-method-set_total",
+    "src/admin.js~Admin#set_total",
+    "method"
+  ],
+  [
+    "src/admin.js~admin#show_list_view",
+    "class/src/admin.js~Admin.html#instance-method-show_list_view",
+    "src/admin.js~Admin#show_list_view",
     "method"
   ],
   [

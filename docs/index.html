@@ -30,6 +30,7 @@
   <ul>
     
   <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/admin.js~Admin.html">Admin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-display_type">display_type</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -61,7 +62,7 @@ cd example</code>
 
     }
      }
-    get_queryset()
+    get_queryset(page_number,list_per_page,queryset)
     {
         // the actual array containing objects to be displayed
     return [
@@ -80,7 +81,7 @@ import ReactDOM from &apos;react-dom&apos;;
 import Example from &apos;./example.js&apos;;
 
 ReactDOM.render(&lt;Example/&gt;
-    ,  document.querySelector(&quot;#app&quot;))</code>
+    ,  document.getElementbyId(&quot;root&quot;))</code>
 </code></pre>
 <p>The output in your browser should be</p>
 <p><img src="assets/example1.png" alt="example1"></p>
@@ -99,7 +100,7 @@ export default class Example extends Admin
     this.list_display_links=[&apos;name&apos;];
     this.list_display=[&apos;name&apos;,&apos;number&apos;,&apos;address.street&apos;]
     }
-    get_queryset()
+    get_queryset(page_number,list_per_page,queryset)
     {
     return [
         {id: 1, name: &apos;Ken Next&apos;, number: &apos;08939303003&apos;,address:{ street: &quot;Hallmark Street&quot;}},
@@ -142,6 +143,438 @@ export default class Example extends Admin
 <p><img src="assets/example2-1.png" alt="example21"></p>
 <p>The output in your browser after clicking the first contact&apos;s name should be</p>
 <p><img src="assets/example2.png" alt="example2"></p>
+<h1 id="guide">Guide</h1><h2 id="list-display-view">List Display View</h2><h3 id="data">Data</h3><p>Data is primarily injected through <code>get_queryset</code>.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">get_queryset(page_number,list_per_page,queryset)
+    {
+    return [
+        {id: 1, name: &apos;Ken Next&apos;, number: &apos;08939303003&apos;,address:{ street: &quot;Hallmark Street&quot;}},
+            {id: 2,name: &apos;Isa Yoll&apos;, number: &apos;0908839202&apos;,address:{ street: &quot;Barbican Street&quot;}}
+    ]
+    }</code>
+</code></pre>
+<p>The <code>get_queryset</code> method returns the queryset array including objects to be displayed in the current display page. Returning an array may not be useful when asynchronous network calls are made to a remote backend using AJAX or <code>window.fetch</code>.  A class method of the <code>Admin</code> component <code>set_queryset</code> can be used for asynchronous calls.</p>
+<p>The example below returns the queryset in the current state object synchronously and sets a new queryset when the asynchronous call returns successfully. <code>set_queryset</code> invokes <code>setState</code> internally.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">get_queryset(page_number,list_per_page,queryset)
+    {
+    fetch(&quot;/path/to/backend&quot;,{method : &apos;get&apos;}).then((response)=&gt;{
+        if(response.ok)
+        {
+            this.set_queryset(response.results);
+
+            }        
+
+        })
+    return queryset;
+    }</code>
+</code></pre>
+<p>It is important to note that <code>get_queryset</code> returns only items to be listed in the current display view/page.  It is necessary to use the arguments <code>page_number</code> and <code>list_per_page</code> for fetching data from the backend. This allows us to implement pagination.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">    get_queryset(page_number,list_per_page,queryset)
+    {
+
+        let backend=&apos;/path/to/backend&apos;;
+    let path=backend+&apos;&amp;limit=&apos;+list_per_page+\
+            &apos;&amp;skip=&apos;+((page_number-1) * list_per_page);
+    fetch(path,{
+        method : &apos;get&apos;,
+    }).then((response)=&gt;{
+        if(response.ok)
+        {
+        response.json().then((results)=&gt;
+        {
+
+            this.set_queryset(results.data)
+            this.set_total(results.total);
+
+        });
+        }
+    });
+
+
+    return queryset;
+    }</code>
+</code></pre>
+<p><code>set_total</code> is used to set the total number of items available. For example if <code>list_per_page</code> is 10
+and there are a total 100 records in the backend <code>results.data</code> will have 10 items and <code>results.total</code> is 10. Please note that it is the responsibility of the backend to return these values in whatever format.</p>
+<p><code>set_queryset</code> is just,</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">set_queryset(queryset)
+{
+    this.setState({queryset:queryset})
+
+}</code>
+</code></pre>
+<p>and <code>set_total</code> is ,</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">set_total(total)
+{
+    this.setState({total:total})
+
+}</code>
+</code></pre>
+<h3 id="ui-customisation">UI Customisation</h3><h4 id="display">Display</h4><h5 id="list-display">List Display</h5><p>The <code>get_list_display</code> method returns a list/array of properties/field names of the objects in the queryset to be displayed on the list display page. It can be overridden by the member variable
+list<em>display. A property is any string that should exist in the objects within 
+a queryset and works with lodash&apos;s </em>.at function. See more at <a href="https://lodash.com/docs/#at">Lodash</a></p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">let object={ name : &quot;any name&quot;,{ address : { street : &quot;any&quot;}},emails: [&quot;any@any.com&quot;]}</code>
+</code></pre>
+<p>The properties &quot;name&quot;,&quot;address.street&quot; and &quot;emails[0]&quot; are all acceptable. In our example we use,</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">this.list_display=[&apos;name&apos;,&apos;number&apos;,&apos;address.street&apos;]</code>
+</code></pre>
+<p>We can also use,</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">get_list_display()
+{
+ return [&apos;name&apos;,&apos;number&apos;,&apos;address.street&apos;]
+}</code>
+</code></pre>
+<h5 id="list-display-links">List Display Links</h5><p>The <code>get_list_display_links</code> method returns the list/array of properties of the objects in the queryset that are clickable (and redirect to the add/change view) when displayed on the list display page. It can be overridden by the member variable
+<code>list_display_links</code>. A property is any string that should exist as a property in the objects within 
+a queryset and works with lodash&apos;s <code>_.at</code> function. </p>
+<p>In our example we use,</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">this.list_display_links=[&apos;name&apos;]</code>
+</code></pre>
+<p>in the constructor but we could have used,</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">get_list_display_links(){
+
+      return [&apos;name&apos;]
+
+}</code>
+</code></pre>
+<h4 id="header-transforms">Header Transforms</h4><p>Table headers in the list display view are obtained from property names in <code>get_list_display</code> method by default. There are certain cases when one would like to customise these headers. <code>get_header_transforms</code> does just that. As an example</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">get_header_transforms()
+{
+  return { &apos;name&apos; : function(header)
+                        {
+
+                return &apos;Contact &apos;+header    
+                        }
+              }
+}</code>
+</code></pre>
+<p>Should produce</p>
+<p><img src="assets/example3.png" alt="example3"></p>
+<p>Header transforms can be defined using the instance variable <code>header_transforms</code> (which is always overridden by <code>get_header_transforms</code>).</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">this.header_transforms = { &apos;name&apos; : function(header)
+                          {
+
+                return &apos;Contact &apos;+header    
+                            }
+                          }</code>
+</code></pre>
+<p>In summary <code>get_header_transforms</code> returns an object whose properties are field names corresponding to properties of any object in the queryset and whose values are transform functions.</p>
+<h4 id="field-transforms">Field Transforms</h4><p>Field transforms return an object whose properties are field names corresponding to properties of any object in the queryset and whose values are transform functions. They are used to transform the values of objects within the queryset. For example to transform every &quot;name&quot; property of all the objects in the queryset to lower case we use,</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">get_field_transforms()
+{
+    return { &apos;name&apos; : function(content,object)
+                        {
+                              return content.toLowerCase()
+                          }
+               }
+    }</code>
+</code></pre>
+<p>or</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">this.field_transforms ={ &apos;name&apos; : function(content,object)
+                        {
+                              return content.toLowerCase()
+                          }
+                        }</code>
+</code></pre>
+<p>The first argument of the transform function is the content to be displayed while the second argument is the current object.</p>
+<p>This produces</p>
+<p><img src="assets/example3-1.png" alt="example31"></p>
+<p>All the contact names have been turned to lower case. Field transforms apply to full columns on the data table in the display view.</p>
+<h4 id="extra-fields">Extra Fields</h4><p>It is sometimes desirable to create new fields that are not properties in any of the objects in the queryset. As an example, we create a new field that displays the current time using the <code>moment</code> library.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">
+get_extra_fields()
+     {
+      return { &apos;now&apos; : function(object,label)
+                        {
+                           return moment(new Date()).format(&apos;LLL&apos;);
+                         }
+              }
+     }</code>
+</code></pre>
+<p>or somewhere in the constructor,</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">
+this.extra_fields ={
+            &apos;now&apos; : function(object,label)
+                            {
+                                 return moment(new Date()).format(&apos;LLL&apos;);
+                         }
+                      }</code>
+</code></pre>
+<p>The <code>get_extra_fields</code> method returns an object whose properties are extra field names not corresponding to properties of any object in the queryset and whose values are display functions. This will create extra fields that are not tied to objects. Extra fields have to be manually included in the <code>get_list_display</code> in order to appear in the list display page.</p>
+<p>Adding the <code>get_extra_fields</code> method is not enough to display the newly created field. We must add the field to <code>list_display</code> .</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">this.list_display=[&apos;name&apos;,&apos;number&apos;,&apos;address.street&apos;,&apos;now&apos;]</code>
+</code></pre>
+<p>Don&apos;t forget to install moment with <code>npm install moment --save</code> and add <code>import moment from &quot;moment&quot;</code> at the top of the file. The output is,</p>
+<p><img src="assets/example3-2.png" alt="example32"></p>
+<h4 id="pagination">Pagination</h4><p><code>get_list_per_page</code> method  returns the number of items to be listed in a page. Can be overridden by <code>list_per_page</code>.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">this.list_per_page=10</code>
+</code></pre>
+<p>or</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">get_list_per_page()
+{
+ return 10
+
+}</code>
+</code></pre>
+<p>When using <code>get_queryset</code> to fetch data, it may not be efficient to fetch all the data from the backend. <code>get_queryset</code> </p>
+<h4 id="search">Search</h4><p>Search is not implemented by default. One has to implement the <code>search(term,queryset)</code> method.
+From our previous example, we can implement search by matching the search term with the &quot;name&quot; property of all objects in the queryset. The method returns a filtered queryset. Optionally, if search requires an asynchronous call to a backend, one can use <code>set_queryset</code>.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">    search(term,queryset)
+    {
+
+    let filtered_queryset=[];
+    for(var object of queryset)
+    {
+        if(object.name.search(new RegExp(term,&quot;i&quot;))&gt;=0)
+        {
+        filtered_queryset.push(object)
+
+        }
+
+    }
+    return filtered_queryset;
+    }</code>
+</code></pre>
+<p>or asynchronously</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">    search(term,queryset)
+    {
+    fetch(&quot;/path/to/backend/search?q=&quot;+term,{method : &apos;get&apos;}).then((response)=&gt;{
+        if(response.ok)
+        {
+            this.set_queryset(response.results);
+
+            }        
+
+        })
+    return queryset;//remember to return queryset synchronously
+
+    }</code>
+</code></pre>
+<p>We can enable live search by</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">this.live_search=true</code>
+</code></pre>
+<p>default is <code>false</code>.</p>
+<h4 id="sorting">Sorting</h4><p>Sorting is not implemented by default. Sorting can be achieved by implementing the <code>sort_by</code> method,</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">sort_by(sort_fields,queryset)
+{
+
+}</code>
+</code></pre>
+<p><code>sort_fields</code> is an array containing objects whose properties are properties of objects in the queryset and whose values are either &quot;asc&quot; or &quot;desc&quot;. As an example, for a queryset</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">[
+{id: 1, name: &apos;Joe Next&apos;, number: &apos;08939303003&apos;,address:{ street: &quot;Hallmark Street&quot;}},
+{id: 2,name: &apos;Isa Yoll&apos;, number: &apos;0908839202&apos;,address:{ street: &quot;Barbican Street&quot;}}
+]</code>
+</code></pre>
+<p>we can have <code>sort_fields</code> equal to</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">[ {&quot;name&quot; : &quot;asc&quot;}, {&quot;number&quot; :&quot;desc&quot;},{&quot;address&quot; :&quot;asc&quot;}]</code>
+</code></pre>
+<p>For our example, we implement <code>sort_by</code> using,</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">    sort_by(sort_fields,queryset)//from adminjs
+    {
+
+
+    let item =sort_fields[sort_fields.length-1];
+
+    let pairs=_.toPairs(item);
+    let field_names=pairs.map(item =&gt; item[0]);
+    let field_orders=pairs.map(item =&gt; item[1]);
+
+
+       return  _.orderBy(queryset,field_names,field_orders);
+    }</code>
+</code></pre>
+<p>We use the <code>lodash</code> library to sort the current queryset and return an updated one. We only use the latest sort order by examining the last item of the <code>sort_fields</code> array. In a practical application,
+a backend will perform the sort operations and we will use <code>set_queryset</code>.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">    sort_by(sort_fields,queryset)
+    {
+    fetch(&apos;/path/to/backend/sort&apos;,{
+         &apos;method&apos;: &apos;post&apos;,
+         &apos;body&apos;: JSON.stringify(sort_fields)}).then((response)
+         {
+             if(response.ok}
+              {
+            response.json().then((results)=&gt;
+            {
+
+            this.set_queryset(results.data);
+
+            })
+
+                   }    
+         })
+
+      return  queryset;
+    }</code>
+</code></pre>
+<p>It is also important to define the member variable <code>is_object_equal</code> which defines equality between objects in a queryset. This variable is used to test if an object has been previously selected  using the radio buttons in the display view. By default,<code>is_object_equal</code> is</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">this.is_object_equal = function(a,b){
+             return a==b ;
+             }</code>
+</code></pre>
+<p>This may not be sufficient for some applications. For example we might want to use the object&apos;s <code>id</code> property to check equality.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">this.is_object_equal = function(a,b){
+             return a.id==b.id ;
+             }</code>
+</code></pre>
+<h4 id="actions">Actions</h4><p><code>get_actions</code> returns an actions object whose properties are action names and values are action methods. <code>get_actions</code> can be overridden by the <code>actions</code> member variable.</p>
+<p>Each actions object property (e.g. &quot;delete&quot;) is passed an array of selected objects. One
+can then handle those objects. Actions will appear on the list display page within a
+dropdown.  The default &quot;delete&quot; action method is not implemented.</p>
+<p>We can implement the delete action for our previous example,</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import React from &apos;react&apos;;
+import Admin from &quot;react-crud-admin&quot;;
+import Form from &quot;react-jsonschema-form&quot;;
+import moment from &quot;moment&quot;;
+var data=[
+        {id: 1, name: &apos;Ken Next&apos;, number: &apos;08939303003&apos;,address:{ street: &quot;Hallmark Street&quot;}},
+            {id: 2,name: &apos;Isa Yoll&apos;, number: &apos;0908839202&apos;,address:{ street: &quot;Barbican Street&quot;}}
+];
+export default class Example extends Admin
+{
+    ......
+    ......
+    ......
+    get_queryset()
+    {
+        return data
+        }
+
+    get_actions()
+        {
+                return { &quot;delete&quot; : (selected_objects)=&gt;{
+                                     let total=data.length;
+                                   for(let object of selected_objects)
+                       {
+                             data.splice(data.indexOf(object),1);
+
+                                   }
+                   this.set_queryset(data);
+                   this.set_total(total-selected_objects.length);    
+              }
+          }
+
+    }
+
+}</code>
+</code></pre>
+<p>Action methods can also make asynchronous network calls and use <code>set_queryset</code> when necessary.</p>
+<h2 id="add-change-view">Add/Change View</h2><h3 id="forms">Forms</h3><p>We can add submit handlers for the form in our example,</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">....
+....
+....
+export default class Example extends Admin
+{
+
+.....
+.....
+.....
+
+ get_form(object=null)
+    {
+        let schema = {
+        title: this.name,
+        type: &quot;object&quot;,
+        required: [&quot;name&quot;],
+        properties: {
+        id: {type: &quot;number&quot;, title: &quot;id&quot;, default: Math.floor(1000*Math.random())+1 },
+        name: {type: &quot;string&quot;, title: &quot;Name&quot;, default: &quot;&quot;},
+        number : {type: &quot;string&quot;, title: &quot;Number&quot;, default: &quot;&quot;},
+        address : {type: &quot;object&quot;, title: &quot;Address&quot;,
+               properties : {
+                      street : { type : &quot;string&quot;,title : &quot;Street&quot;}
+                }
+            }
+             }
+        };
+
+     if(!object)
+     {
+           return &lt;Form schema={schema} onSubmit={this.form_submit.bind(this) /&gt;
+     }
+     else
+     {
+            return &lt;Form schema={schema}  formData={object} onSubmit={this.form_submit.bind(this) /&gt;
+     }
+     }
+....
+....
+....
+    form_submit(form)
+    {
+    let contact=form.formData;
+
+    if(form.edit)
+    {
+
+        this.state.queryset.splice(this.state.queryset.indexOf(this.state.object),1,contact);
+        this.response_change();
+    }
+    else
+    {
+        this.state.queryset.push(contact);
+        this.response_add();
+    }
+    }
+
+......
+......
+......</code>
+</code></pre>
+<p>The submit handler checks to see if an object is being edited and replaces it with the edited object. If the object is being added, the method appends it to the <code>state.queryset</code> object.</p>
+<h4 id="post-submit">Post Submit</h4><p><code>response_add</code> or <code>response_change</code> can be called after a new object is created or edited respectively. These functions should implement behaviour after a successful form submission. By default these functions are both defined as,</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">function()
+{    
+  this.setState({display_type :display_type.list,
+                 object :null,
+                 queryset: this.get_queryset(this.state.page_number,this.list_per_page,this.state.queryset)
+           });
+}</code>
+</code></pre>
+<p>This sets the display type to &quot;list&quot;, changes the object to <code>null</code> and invokes <code>get_queryset</code> to fetch the latest data.</p>
+<h2 id="miscellany">Miscellany</h2><h3 id="-code-state--code--object"><code>state</code> object</h3><p>The default <code>state</code> object has the following properties,</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Default Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>queryset</code></td>
+<td><code>[]</code></td>
+<td>Can be set with <code>set_queryset</code></td>
+</tr>
+<tr>
+<td><code>page_number</code></td>
+<td><code>1</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>total</code></td>
+<td><code>0</code></td>
+<td>Total number of pages. Can be set with <code>set_total</code>.</td>
+</tr>
+<tr>
+<td><code>display_type</code></td>
+<td><code>&quot;list&quot;</code></td>
+<td>Current display. Can be <code>&quot;list&quot;</code> or <code>&quot;change&quot;</code> for add/change view</td>
+</tr>
+<tr>
+<td><code>object</code></td>
+<td><code>null</code></td>
+<td>Current object to be edited (or created) in the add/change view</td>
+</tr>
+<tr>
+<td><code>selected_objects</code></td>
+<td>Empty set</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="progress-indicator">Progress Indicator</h3><p><code>show_progress</code> and <code>hide_progress</code> can be used in the both the list display and add/change view to display and hide a progress indicator. <code>render_progress</code> can be used to override the default progress indicator component to be rendered. <code>render_progress</code> should return a component.</p>
+<h3 id="esdoc-api-documentation-">ESDOC API Documentation.</h3><p>The API documentation generated with <code>esdoc.js</code> is available <a href="https://mjibril.github.io/react-crud-admin/">here</a>.</p>
 </div>
 </div>
 
