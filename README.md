@@ -579,5 +579,88 @@ Action methods can also make asynchronous network calls and use `set_queryset` w
 
 ## Add/Change View
 ### Forms
+We can add submit handlers for the form in our example,
 
+```javascript
+ get_form(object=null)
+    {
+    	let schema = {
+	    title: this.name,
+	    type: "object",
+	    required: ["name"],
+	    properties: {
+		id: {type: "number", title: "id", default: Math.floor(1000*Math.random())+1 },
+		name: {type: "string", title: "Name", default: ""},
+		number : {type: "string", title: "Number", default: ""},
+		address : {type: "object", title: "Address",
+		       properties : {
+		              street : { type : "string",title : "Street"}
+		        }
+		    }
+	    	 }
+	    };
+	    
+	 if(!object)
+	 {
+		   return <Form schema={schema} onSubmit={this.form_submit.bind(this) />
+	 }
+	 else
+	 {
+	        return <Form schema={schema}  formData={object} onSubmit={this.form_submit.bind(this) />
+	 }
+     }
+
+    form_submit(form)
+    {
+	let contact=form.formData;
+
+	if(form.edit)
+	{
+	    
+	    this.state.queryset.splice(this.state.queryset.indexOf(this.state.object),1,contact);
+	    this.response_change();
+	}
+	else
+	{
+	    this.state.queryset.push(contact);
+	    this.response_add();
+	}
+    }
+
+}
+
+```
+
+The submit handler checks to see if an object is being edited and replaces it with the edited object. If the object is being added, the method appends it to the `state.queryset` object.
 #### Post Submit
+`response_add` or `response_change` can be called after a new object is created or edited respectively. These functions should implement behaviour after a successful form submission. By default these functions are both defined as,
+
+```javascript
+function()
+{	
+  this.setState({display_type :display_type.list,
+                 object :null,
+                 queryset: this.get_queryset(this.state.page_number,this.list_per_page,this.state.queryset)
+	       });
+}
+
+```
+
+This sets the display type to "list", changes the object to `null` and invokes `get_queryset` to fetch the latest data.
+
+## Miscellany
+### `state` object
+
+The default `state` object has the following properties,
+
+Property | Default Value  | Description
+------------ | -------------|----------
+`queryset` | `[]` | Can be set with `set_queryset`
+`page_number` | `1` | 
+`total` | `0` | Total number of pages. Can be set with `set_total`.
+`display_type` | `"list"` | Current display. Can be `"list"` or `"change"` for add/change view
+`object` | `null` | Current object to be edited (or created) in the add/change view
+`selected_objects` |  Empty set |  
+
+### Progress Indicator
+`show_progress` and `hide_progress` can be used in the both the list display and add/change view to display and hide a progress indicator. `render_progress` can be used to override the default progress indicator component to be rendered. `render_progress` should return a component.

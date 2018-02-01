@@ -3,7 +3,7 @@ import _ from 'lodash';
 import Set from './set.js';
 import './admin.scss';
 
-export const displayType = {
+export const display_type = {
     list : "list",
     change : "change"
 };
@@ -42,7 +42,7 @@ class Admin extends React.Component {
 	/**
 	 * Initialize the state of the component
 	*/
-	this.state = {displayType : displayType.list ,  page_number : 1,object : null,selected_objects:new Set([],this.is_object_equal)}
+	this.state = {display_type : display_type.list ,  page_number : 1,object : null,selected_objects:new Set([],this.is_object_equal),total:1}
 
 	
         let queryset=this.get_queryset(this.state.page_number,this.list_per_page,this.state.queryset) ? this.get_queryset(this.state.page_number,this.list_per_page,this.state.queryset) : [] ;
@@ -396,24 +396,24 @@ class Admin extends React.Component {
     }
     /**
      *  This method  should be overriden and called after saving an object in the add/change view.       *  This method is not called at all here but provides hints on what to do after saving
-     *  an object. Change the state displayType to "list", object to "null" and refresh the quer         *  yset.
+     *  an object. Change the state display_type to "list", object to "null" and refresh the quer         *  yset.
      */   
     
     response_add()
     {
 	
-	this.setState({displayType :displayType.list, object :null,queryset: this.get_queryset(this.state.page_number,this.list_per_page,this.state.queryset)  });
+	this.setState({display_type :display_type.list, object :null,queryset: this.get_queryset(this.state.page_number,this.list_per_page,this.state.queryset)  });
 
 	return true
     }
     /**
      *  This method should be overriden and called after saving an object in the add/change view.         *  This method is not called at all here but provides hints on what to do after saving
-     *  an object. Change the state displayType to "list", object to "null" and refresh the quer         *  yset.
+     *  an object. Change the state display_type to "list", object to "null" and refresh the quer         *  yset.
      */   
 
     response_change()
     {
-	this.setState({displayType :displayType.list, object :null,queryset: this.get_queryset(this.state.page_number,this.list_per_page,this.state.queryset)  });
+	this.setState({display_type :display_type.list, object :null,queryset: this.get_queryset(this.state.page_number,this.list_per_page,this.state.queryset)  });
 	
 	return true
     }
@@ -471,7 +471,7 @@ class Admin extends React.Component {
 	
 	return (event)=>
 	{
-	    this.setState({displayType :displayType.change, object :object  });
+	    this.setState({display_type :display_type.change, object :object  });
 	    event.preventDefault();
 	}
     }
@@ -817,26 +817,32 @@ class Admin extends React.Component {
 	{
 	    let numpages=Math.ceil(this.state.total/this.list_per_page);
 	    let pages_in_pagination= numpages < this.pages_in_pagination ? numpages : this.pages_in_pagination;
+	    
 	    if(this.state.page_number ==1)
 	    {
 		for(let i=0;i<pages_in_pagination;i++)
 		{
-		    pages=pages.push(i+1);
+		    pages.push(i+1);
 		}
 	    }
 	    else if(this.state.page_number ==numpages)
 	    {
 		for(let i=0;i<pages_in_pagination;i++)
 		{
-		    pages=pages.push(numpages-i);
+		    pages.push(numpages-i);
 		}
 
 
 	    }
 	    else
 	    {
-		let middle_ground=null;
-		pages=[this.state.page_number-1,this.state.page_number,this.state.page_number+1]
+
+		
+		for(let i=0;i<pages_in_pagination;i++)
+		{
+		    pages.push(this.state.page_number+i);
+		}
+
 	    }
 		/*
 		for(var i=0;i<numpages;i++)
@@ -901,7 +907,7 @@ class Admin extends React.Component {
     _render_back_button()
     {
 	
-	return <div><button className={"ra-back-button"} onClick={()=>{this.setState({displayType : displayType.list,object: null })}}> Back </button></div>
+	return <div><button className={"ra-back-button"} onClick={()=>{this.setState({display_type : display_type.list,object: null })}}> Back </button></div>
 	
 
     }
@@ -918,7 +924,7 @@ class Admin extends React.Component {
 	    return <div> Permission Denied</div>
 	}
 
-	if(this.state.displayType == displayType.list)
+	if(this.state.display_type == display_type.list)
 	{
 
 	    return (
@@ -951,7 +957,7 @@ class Admin extends React.Component {
     }
     show_list_view()
     {
-	this.setState({displayType : displayType.list})
+	this.setState({display_type : display_type.list})
 
     }
 }
