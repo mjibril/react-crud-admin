@@ -693,3 +693,7 @@ Property | Default Value  | Description
 ### ESDOC API Documentation.
 
 The API documentation generated with `esdoc.js` is available [here](https://mjibril.github.io/react-crud-admin/).
+
+### Example
+
+The file containing the example used here is available 
