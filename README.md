@@ -696,4 +696,4 @@ The API documentation generated with `esdoc.js` is available [here](https://mjib
 
 ### Example
 
-The file containing the example used here is available 
+The file containing the example used here is available at [link](https://github.com/mjibril/react-crud-admin/blob/master/doc_example.js)
