@@ -81,7 +81,7 @@ Edit `example.js` and add the following,
 
 ```javascript
 import React from 'react';
-import Admin from "./admin.js";
+import Admin from "react-crud-admin";
 import Form from "react-jsonschema-form";
 export default class Example extends Admin
 {
@@ -264,9 +264,11 @@ The `get_list_display_links` method returns the list/array of properties of the 
 a queryset and works with lodash's `_.at` function. 
 
 In our example we use,
+
 ```javascript
 this.list_display_links=['name']
 ```
+
 in the constructor but we could have used,
 
 ```javascript
@@ -276,6 +278,7 @@ get_list_display_links(){
       
 }
 ```
+
 #### Header Transforms
 Table headers in the list display view are obtained from property names in `get_list_display` method by default. There are certain cases when one would like to customise these headers. `get_header_transforms` does just that. As an example
 
@@ -289,9 +292,9 @@ get_header_transforms()
                         }
               }
 }
-     
 
 ```
+
 Should produce
 
 ![example3](assets/example3.png)
@@ -374,7 +377,7 @@ Adding the `get_extra_fields` method is not enough to display the newly created 
 this.list_display=['name','number','address.street','now']	
 ```
 
-Don't forget to install moment with `npm install moment --save` and add `import moment from "moment"` at the top of the file. The output is,
+Don't forget to add `import moment from "moment";` at the top of the file. The output is,
 
 ![example32](assets/example3-2.png)
 
@@ -392,7 +395,7 @@ get_list_per_page()
 
 }
 ```
-When using `get_queryset` to fetch data, it may not be efficient to fetch all the data from the backend. `get_queryset` 
+
 #### Search
 Search is not implemented by default. One has to implement the `search(term,queryset)` method.
 From our previous example, we can implement search by matching the search term with the "name" property of all objects in the queryset. The method returns a filtered queryset. Optionally, if search requires an asynchronous call to a backend, one can use `set_queryset`.
@@ -612,11 +615,11 @@ export default class Example extends Admin
 	    
 	 if(!object)
 	 {
-		   return <Form schema={schema} onSubmit={this.form_submit.bind(this) />
+		   return <Form schema={schema} onSubmit={this.form_submit.bind(this)} />
 	 }
 	 else
 	 {
-	        return <Form schema={schema}  formData={object} onSubmit={this.form_submit.bind(this) />
+	        return <Form schema={schema}  formData={object} onSubmit={this.form_submit.bind(this)} />
 	 }
      }
 ....
@@ -642,7 +645,7 @@ export default class Example extends Admin
 ......
 ......
 ......
-
+}
 ```
 
 The submit handler checks to see if an object is being edited and replaces it with the edited object. If the object is being added, the method appends it to the `state.queryset` object.
@@ -668,7 +671,7 @@ This sets the display type to "list", changes the object to `null` and invokes `
 
 The `has_add_permission`  method takes no arguments and should return a boolean that signifies wether the user can add a new object. It simply hides the Add button.
 
-The `has_change_permission`  method takes no arguments and should return a boolean that signifies wether the user can edit an object. It simply disables all `list_display_links`.
+The `has_change_permission`  method takes the current object being edited, `state.object`, as an argument and should return a boolean that signifies wether the user can edit an object. It simply disables all `list_display_links`.
 
 The `has_module_permission`  method takes no arguments and should return a boolean that signifies wether the user should load the component. It simply shows an error message after an unauthorized access attempt.
 
@@ -682,10 +685,10 @@ Property | Default Value  | Description
 ------------ | -------------|----------
 `queryset` | `[]` | Can be set with `set_queryset`
 `page_number` | `1` | 
-`total` | `0` | Total number of pages. Can be set with `set_total`.
+`total` | `0` | Total number of items. Can be set with `set_total`.
 `display_type` | `"list"` | Current display. Can be `"list"` or `"change"` for add/change view
 `object` | `null` | Current object to be edited (or created) in the add/change view
-`selected_objects` |  Empty set |  
+`selected_objects` |  Empty set | The `Set` class a wrapper around `array` that implements set  
 
 ### Progress Indicator
 `show_progress` and `hide_progress` can be used in the both the list display and add/change view to display and hide a progress indicator. `render_progress` can be used to override the default progress indicator component to be rendered. `render_progress` should return a component.
