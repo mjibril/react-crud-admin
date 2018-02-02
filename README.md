@@ -446,7 +446,7 @@ this.live_search=true
 default is `false`.
 
 #### Sorting
-Sorting is not implemented by default. Sorting can be achieved by implementing the `sort_by` method,
+Sorting is not implemented by default. Sorting can be achieved by implementing the `sort_by` method, 
 
 ```javascript
 sort_by(sort_fields,queryset)
@@ -522,6 +522,7 @@ this.is_object_equal = function(a,b){
 
 This may not be sufficient for some applications. For example we might want to use the object's `id` property to check equality.
 
+Sorting can achieved in the list display view by clicking on the table headers corresponding to property names. 
 ```javascript
 this.is_object_equal = function(a,b){
 		     return a.id==b.id ;
