@@ -4,8 +4,12 @@ import Form from "react-jsonschema-form";
 import moment from "moment";
 var data=[
 	    {id: 1, name: 'Ken Next', number: '08939303003',address:{ street: "Hallmark Street"}},
-            {id: 2,name: 'Isa Yoll', number: '0908839202',address:{ street: "Barbican Street"}}
+    {id: 2,name: 'Isa Yoll', number: '0908839202',address:{ street: "Barbican Street"}},
+     {id: 3, name: 'Jon Snow', number: '078890089',address:{ street: "Hallmark Street"}},
+    {id: 4,name: 'Tom East', number: '07839030300',address:{ street: "Barbican Street"}}
 ];
+    
+
 export default class Example extends Admin
 {
     constructor()
@@ -14,12 +18,28 @@ export default class Example extends Admin
 	this.name='Contact';
 	this.name_plural='Contacts';
 	this.list_display_links=['name'];
-	this.list_display=['name','number','address.street','now']
+	this.list_display=['id','name','number','address.street','now']
     }
     get_queryset()
     {
 	return data
     }
+    search(term,queryset)
+    {
+	
+	let filtered_queryset=[];
+	for(var object of queryset)
+	{
+	    if(object.name.search(new RegExp(term,"i"))>=0)
+	    {
+		filtered_queryset.push(object)
+
+	    }
+	    
+	}
+	return filtered_queryset;
+    }
+
     get_form(object=null)
     {
 	let schema = {
@@ -99,20 +119,48 @@ export default class Example extends Admin
 	    this.response_add();
 	}
     }
-    has_add_permission()
+    get_filters()
     {
-	return true;
-    }
-    has_change_permission(object)
-    {
-	return true;
-	
-	   
-    }
-    has_module_permission()
-    {
+      return 	{
+	"by_street_name" : { "options" : [
+            { value: 'Hallmark Street', label: 'Hallmark Street' },
+	    { value: 'Barbican Street', label: 'Barbican Street' },
 
-	return true;
+		
+	    ],
+	     "filter_function" : (option,queryset)=>
+	     {
+
+		 let grouped= _.groupBy(queryset,'address.street');
+
+		 return _.has(grouped,option.value) ? grouped[option.value] : [] ;
+	     }
+			   },
+
+		"by_id" : {
+			      "options" : [
+                      { value: 'even', label: 'even' },
+	              { value: 'odd', label: 'odd' },
+
+		
+	              ],	
+	       "filter_function" : (option,queryset)=>
+	             {
+
+		        let grouped= _.groupBy(queryset,(contact)=>{
+			    return contact.id % 2 ==0 ? "even" : "odd" ;
+                        });
+
+		         return _.has(grouped,option.value) ? grouped[option.value] : [] ;
+	              }
+	     }
+					
+
+      }
+
+
     }
+
+
 }
 
