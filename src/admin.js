@@ -506,7 +506,7 @@ class Admin extends React.Component {
     
     set_filter_options(filter_name,options)
     {
-	this.state.setState({ filter_options :  _.assign(this.state.filter_options,{filter_name : options.map((option)=>{ option.filter = filter_name; return option; })})}    )
+	this.setState({ filter_options :  _.assign(this.state.filter_options,{filter_name : options.map((option)=>{ option.filter = filter_name; return option; })})}    )
     }
     
     get_filter_values()
