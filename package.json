@@ -9,8 +9,11 @@
     "moment": "",
     "moment-timezone": "",
     "react": "",
+    "react-addons-css-transition-group": "^15.6.0",
+    "react-addons-shallow-compare": "^15.6.0",
     "react-dom": "^16.2.0",
     "react-jsonschema-form": "^1.0.0",
+    "react-select": "^1.2.1",
     "whatwg-fetch": ""
   },
   "devDependencies": {

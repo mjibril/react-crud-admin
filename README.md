@@ -579,7 +579,68 @@ export default class Example extends Admin
 
 ```
 
-Action methods can also make asynchronous network calls and use `set_queryset` when necessary.
+#### Filters
+
+`get_filters` can be used to implement filters for the queryset. 
+
+
+```javascript
+
+get_filters()
+    {
+      return 	{
+	"by_street_name" : {
+	      "options" : [
+                      { value: 'Hallmark Street', label: 'Hallmark Street' },
+	              { value: 'Barbican Street', label: 'Barbican Street' },
+
+		
+	              ],
+	       "filter_function" : (option,queryset)=>
+	             {
+
+		        let grouped= _.groupBy(queryset,'address.street');
+
+		         return _.has(grouped,option.value) ? grouped[option.value] : [] ;
+	              }
+	     },
+	"by_id" : {
+			      "options" : [
+                      { value: 'even', label: 'even' },
+	              { value: 'odd', label: 'odd' },
+
+		
+	              ],	
+	       "filter_function" : (option,queryset)=>
+	             {
+
+		        let grouped= _.groupBy(queryset,(contact)=>{
+			                      return contact.id % 2 ==0 ? "even" : "odd" ;
+                                          });
+
+		         return _.has(grouped,option.value) ? grouped[option.value] : [] ;
+	              }
+	     }
+					
+	     
+      }
+
+
+    }
+
+
+
+```
+The `get_filters` method returns an object whose properties are filter names. The example above returns 2 filters. The first is a filter `"by_street_names"` that filters based on the street addresses of the contacts. Each filter object has two properties : `"options"` and `"filter_function"`. `"options"` is an array of options objects which have a `"value"` and `"label"` properties. The `"label"` will appear in the UI while the `"value"` is used for processing. This is similar to the `select` HTML tag. For asynchronous operations, a method to set the options of a filter is provided. `set_filter_options` takes two arguments,
+
+```javascript
+ set_filter_options(filter_name,options)
+```
+the name of the filter and the options array of the filter. 
+
+The `"filter_function"` is a function that performs filtering. It has two arguments,  `"option"` which is the selected `"option"` and the current queryset. It must return a queryset. For asynchronous cases, `set_queryset` and `set_total` methods can be used to set the queryset after backend filtering.
+
+The second filter `"by_id"` filters the queryset by even and odd `id` property.
 
 ## Add/Change View
 ### Forms
@@ -700,4 +761,4 @@ The API documentation generated with `esdoc.js` is available [here](https://mjib
 
 ### Example
 
-The file containing the example used here is available at [link](https://github.com/mjibril/react-crud-admin/blob/master/doc_example.js)
+The file containing the example used here is available at [link](https://github.com/mjibril/react-crud-admin/blob/master/doc_example.js).

@@ -2,6 +2,8 @@ import React from 'react';
 import _ from 'lodash';
 import Set from './set.js';
 import './admin.scss';
+import Select from 'react-select';
+import 'react-select/dist/react-select.css';
 
 export const display_type = {
     list : "list",
@@ -42,7 +44,7 @@ class Admin extends React.Component {
 	/**
 	 * Initialize the state of the component
 	*/
-	this.state = {display_type : display_type.list ,  page_number : 1,object : null,selected_objects:new Set([],this.is_object_equal),total:1}
+	this.state = {display_type : display_type.list ,  page_number : 1,object : null,selected_objects:new Set([],this.is_object_equal),total:1,filter_options:{},filter_values:[]}
 
 	
         let queryset=this.get_queryset(this.state.page_number,this.list_per_page,this.state.queryset) ? this.get_queryset(this.state.page_number,this.list_per_page,this.state.queryset) : [] ;
@@ -501,10 +503,103 @@ class Admin extends React.Component {
 
 	return label;
     }
-    _refresh_queryset(queryset)
+    
+    set_filter_options(filter_name,options)
     {
-	this.setState({queryset : queryset});
+	this.state.setState({ filter_options :  _.assign(this.state.filter_options,{filter_name : options.map((option)=>{ option.filter = filter_name; return option; })})}    )
+    }
+    
+    get_filter_values()
+    {
+	return this.state.filter_values;
+    }
+    get_filters()
+    {
+	
+	return {
 
+	    "by_id" : { "options" : [
+			    { value: 'one', label: 'One' },
+	    { value: 'two', label: 'Two' },
+
+		
+	    ],
+	     "filter_function" : (option,queryset)=>
+	     {
+
+
+		 return queryset;
+	     }
+           }
+	    
+	}
+    }
+    _handle_filter_change(values)
+    {
+	
+	this.setState({ filter_values : values || [] });
+	
+	if(values.length<=0)
+	{
+	    this.set_queryset(this.get_queryset(this.state.page_number,this.list_per_page,this.state.queryset));
+	    return
+	}
+
+	let filters=this.get_filters();
+	for(let value of values)
+	{
+	    let queryset=filters[value.filter].filter_function(value,this.state.queryset)
+	    this.setState({queryset:queryset});
+	}
+    }
+    _render_filters()
+    {
+
+	let options=[];
+	let filters=this.get_filters();
+	for(let filter of _.keys(filters))
+	{
+
+	    options.push({label: _.startCase(filter),
+			  value: filter,
+			  disabled: true,
+			  filter: null})
+	    
+	    if(filters[filter].options.length >0)
+	    {
+		for(let option of  filters[filter].options)
+		{
+		    option.filter=filter;
+		    options.push(option)
+		}
+	    }
+	    if(this.state.filter_options[filter])
+	    {
+		for(let option of  this.state.filter_options[filter])
+		{
+		    option.filter=filter;
+		    options.push(option);
+		}
+	    }
+	    
+	}
+    
+	    
+	return <div style={{marginLeft:"10px",width:"100%"}}>
+
+	    
+	    <Select
+	name="filter-form"
+	multi={true}
+	onChange={this._handle_filter_change.bind(this)}
+	closeOnSelect={false}
+	value ={this.state.filter_values}
+	removeSelected = {true}
+	placeholder = {"Select a filter"}
+	options={options}
+	    />
+
+	</div>
     }
     sort_by(sort_fields)
     {
@@ -696,8 +791,8 @@ class Admin extends React.Component {
 
     _render_search_field()
     {
-	return 	<div className="search-field">
-	<input name="search" type="text" className="form-control" placeholder="Search" onChange={this._handle_search}   onKeyUp={this._handle_search}/>
+	return 	<div >
+	<input name="search" type="text" className="ra-search-field" placeholder="Search" onChange={this._handle_search}   onKeyUp={this._handle_search}/>
 	</div>
 
     }
@@ -909,7 +1004,7 @@ class Admin extends React.Component {
     _render_back_button()
     {
 	
-	return <div><button className={"ra-back-button"} onClick={()=>{this.setState({display_type : display_type.list,object: null })}}> Back </button></div>
+	return <div><button className={"ra-back-button"} onClick={()=>{this.setState({display_type : display_type.list,object: null });this.get_queryset(this.state.page_number,this.list_per_page,this.state.queryset); }}> Back </button></div>
 	
 
     }
@@ -923,21 +1018,31 @@ class Admin extends React.Component {
     {
 	if(!this.has_module_permission())
 	{
-	    return <div> Permission Denied</div>
+	    return <div> <h1> Permission Denied </h1></div>
 	}
 
 	if(this.state.display_type == display_type.list)
 	{
 
 	    return (
-		<div className="list">
-
-		{this._render_add_button()}
-		{this._render_search_field()}
-		{this._render_actions()}
-		{this._render_table()}
-		{this.state.loading ? this.render_progress() : null} 
-		{this._render_pagination()}
+	       <div >
+		
+		    {this._render_add_button()}
+		
+		    {this._render_search_field()}
+		
+		    {this._render_actions()}
+		
+		    {this._render_filters()}
+		
+		
+		    {this._render_table()}
+		
+		    {this.state.loading ? this.render_progress() : null}
+		
+		
+		    {this._render_pagination()}
+		
 		</div>
 	    )
 	    

@@ -56,8 +56,16 @@ a
     
 }
 
+.ra-search-field
+{
+
+    @extend  .form-control;
+    margin : 10px;
+}
 .ra-action-button
 {
-    @extend  .pull-right;
+    @extend  .form-control;
+
+    
     margin : 10px;
 }

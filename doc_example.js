@@ -99,7 +99,20 @@ export default class Example extends Admin
 	    this.response_add();
 	}
     }
+    has_add_permission()
+    {
+	return true;
+    }
+    has_change_permission(object)
+    {
+	return true;
+	
+	   
+    }
+    has_module_permission()
+    {
 
-
+	return true;
+    }
 }
 
