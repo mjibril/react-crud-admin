@@ -1,7 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
 import Set from './set.js';
-import './admin.scss';
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 
@@ -97,7 +96,8 @@ class Admin extends React.Component {
 
     get_live_search()
     {
-	return false
+
+	return this.live_search;
 	
     }
 
@@ -767,7 +767,8 @@ class Admin extends React.Component {
 	if(term)
 	{
 	    let key= event.which || event.keyCode;
-            if(this.live_search || key==13)
+	   
+            if(this.live_search || key===13)
 	    {
 		let queryset=this.search(term,this.state.queryset);
 		this.setState({queryset:queryset,total:queryset.length})

@@ -20,6 +20,7 @@ export default class Example extends Admin
 	this.name_plural='Contacts';
 	this.list_display_links=['name'];
 	this.list_display=['id','name','number','address.street','now']
+	this.live_search=true
     }
     get_queryset()
     {

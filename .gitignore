@@ -3,6 +3,5 @@
 node_modules/
 testbed/
 voter.*
-public/
 package-lock.json
 src/example*.js
