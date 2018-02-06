@@ -3,6 +3,7 @@ import Admin from "react-crud-admin";
 import Form from "react-jsonschema-form";
 import moment from "moment";
 import _ from 'lodash';
+import "../node_modules/react-crud-admin/public/main.css";
 var data=[
 	    {id: 1, name: 'Ken Next', number: '08939303003',address:{ street: "Hallmark Street"}},
     {id: 2,name: 'Isa Yoll', number: '0908839202',address:{ street: "Barbican Street"}},
@@ -20,7 +21,6 @@ export default class Example extends Admin
 	this.name_plural='Contacts';
 	this.list_display_links=['name'];
 	this.list_display=['id','name','number','address.street','now']
-	this.live_search=true
     }
     get_queryset()
     {

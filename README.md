@@ -30,7 +30,7 @@ Create a new file `example.js` in the `\src` folder, in that file add the follow
 ```javascript
     import React from 'react';
     import Admin from "react-crud-admin";
-    import "node_modules/react-crud-admin/public/main.css";
+    import "../node_modules/react-crud-admin/public/main.css";
     
     export default class Example extends Admin
     {
@@ -84,7 +84,7 @@ Edit `example.js` and add the following,
 import React from 'react';
 import Admin from "react-crud-admin";
 import Form from "react-jsonschema-form";
-import "node_modules/react-crud-admin/public/main.css";
+import "../node_modules/react-crud-admin/public/main.css";
 
 export default class Example extends Admin
 {
@@ -548,7 +548,7 @@ import React from 'react';
 import Admin from "react-crud-admin";
 import Form from "react-jsonschema-form";
 import moment from "moment";
-import "node_modules/react-crud-admin/public/main.css";
+import "../node_modules/react-crud-admin/public/main.css";
 var data=[
 	    {id: 1, name: 'Ken Next', number: '08939303003',address:{ street: "Hallmark Street"}},
             {id: 2,name: 'Isa Yoll', number: '0908839202',address:{ street: "Barbican Street"}}
