@@ -62,7 +62,7 @@ module.exports =
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "260c6ad3eb24dbf1d806"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "7cf625321c3182b0f1da"; // eslint-disable-line no-unused-vars
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule; // eslint-disable-line no-unused-vars
@@ -2691,7 +2691,7 @@ var Admin = function (_React$Component) {
 	}, {
 		key: 'set_filter_options',
 		value: function set_filter_options(filter_name, options) {
-			this.state.setState({ filter_options: _lodash2.default.assign(this.state.filter_options, { filter_name: options.map(function (option) {
+			this.setState({ filter_options: _lodash2.default.assign(this.state.filter_options, { filter_name: options.map(function (option) {
 						option.filter = filter_name;return option;
 					}) }) });
 		}

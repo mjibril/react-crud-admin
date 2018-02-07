@@ -3,6 +3,7 @@ import _ from 'lodash';
 import Set from './set.js';
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
+const uuidv1 = require('uuid/v1');
 
 export const display_type = {
     list : "list",
@@ -37,7 +38,7 @@ class Admin extends React.Component {
 	
     
 	this._all_selected=false
-
+	this.register_listener()
 
 
 	/**
@@ -506,7 +507,11 @@ class Admin extends React.Component {
     
     set_filter_options(filter_name,options)
     {
-	this.setState({ filter_options :  _.assign(this.state.filter_options,{filter_name : options.map((option)=>{ option.filter = filter_name; return option; })})}    )
+	
+	let t={}
+	t[filter_name]= options.map((option)=>{ option.filter = filter_name; return option; });
+	this.setState({ filter_options :  _.assign(this.state.filter_options,t)}    )
+
     }
     
     get_filter_values()
@@ -1053,6 +1058,8 @@ class Admin extends React.Component {
 	    
 	    
 	    return (
+		this._change_uuid=uuidv1();
+		history.pushState({}, "Change View", "#/change/"+this._change_uuid);	    
 		
 		<div className="change-form">
 		{this._render_back_button()}
@@ -1068,6 +1075,32 @@ class Admin extends React.Component {
 	this.setState({display_type : display_type.list})
 
     }
+
+    register_listener()
+    {
+	this._hash_change_listener=(event)=> {
+	    
+
+	    if(this && this.state.display_type!=display_type.list && !_.endsWith(window.location.hash,this._change_uuid))
+	    {
+		this.setState({display_type : display_type.list});
+	    }
+
+	    
+
+	   
+	}
+	window.addEventListener("hashchange",this._hash_change_listener );
+	
+
+    }
+
+    componentWillUnmount()
+    {
+	if(this._hash_change_listener){
+	    window.removeEventListener("hashchange",this._hash_change_listener,true );}
+    }
+
 }
 
 
