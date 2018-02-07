@@ -40,7 +40,9 @@
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import React from &apos;react&apos;;
 import _ from &apos;lodash&apos;;
 import Set from &apos;./set.js&apos;;
-import &apos;./admin.scss&apos;;
+import Select from &apos;react-select&apos;;
+import &apos;react-select/dist/react-select.css&apos;;
+const uuidv1 = require(&apos;uuid/v1&apos;);
 
 export const display_type = {
     list : &quot;list&quot;,
@@ -75,13 +77,13 @@ class Admin extends React.Component {
 	
     
 	this._all_selected=false
-
+	this.register_listener()
 
 
 	/**
 	 * Initialize the state of the component
 	*/
-	this.state = {display_type : display_type.list ,  page_number : 1,object : null,selected_objects:new Set([],this.is_object_equal),total:1}
+	this.state = {display_type : display_type.list ,  page_number : 1,object : null,selected_objects:new Set([],this.is_object_equal),total:1,filter_options:{},filter_values:[]}
 
 	
         let queryset=this.get_queryset(this.state.page_number,this.list_per_page,this.state.queryset) ? this.get_queryset(this.state.page_number,this.list_per_page,this.state.queryset) : [] ;
@@ -134,7 +136,8 @@ class Admin extends React.Component {
 
     get_live_search()
     {
-	return false
+
+	return this.live_search;
 	
     }
 
@@ -540,10 +543,107 @@ class Admin extends React.Component {
 
 	return label;
     }
-    _refresh_queryset(queryset)
+    
+    set_filter_options(filter_name,options)
     {
-	this.setState({queryset : queryset});
+	
+	let t={}
+	t[filter_name]= options.map((option)=&gt;{ option.filter = filter_name; return option; });
+	this.setState({ filter_options :  _.assign(this.state.filter_options,t)}    )
 
+    }
+    
+    get_filter_values()
+    {
+	return this.state.filter_values;
+    }
+    get_filters()
+    {
+	
+	return {
+
+	    &quot;by_id&quot; : { &quot;options&quot; : [
+			    { value: &apos;one&apos;, label: &apos;One&apos; },
+	    { value: &apos;two&apos;, label: &apos;Two&apos; },
+
+		
+	    ],
+	     &quot;filter_function&quot; : (option,queryset)=&gt;
+	     {
+
+
+		 return queryset;
+	     }
+           }
+	    
+	}
+    }
+    _handle_filter_change(values)
+    {
+	
+	this.setState({ filter_values : values || [] });
+	
+	if(values.length&lt;=0)
+	{
+	    this.set_queryset(this.get_queryset(this.state.page_number,this.list_per_page,this.state.queryset));
+	    return
+	}
+
+	let filters=this.get_filters();
+	for(let value of values)
+	{
+	    let queryset=filters[value.filter].filter_function(value,this.state.queryset)
+	    this.setState({queryset:queryset});
+	}
+    }
+    _render_filters()
+    {
+
+	let options=[];
+	let filters=this.get_filters();
+	for(let filter of _.keys(filters))
+	{
+
+	    options.push({label: _.startCase(filter),
+			  value: filter,
+			  disabled: true,
+			  filter: null})
+	    
+	    if(filters[filter].options.length &gt;0)
+	    {
+		for(let option of  filters[filter].options)
+		{
+		    option.filter=filter;
+		    options.push(option)
+		}
+	    }
+	    if(this.state.filter_options[filter])
+	    {
+		for(let option of  this.state.filter_options[filter])
+		{
+		    option.filter=filter;
+		    options.push(option);
+		}
+	    }
+	    
+	}
+    
+	    
+	return &lt;div style={{marginLeft:&quot;10px&quot;,width:&quot;100%&quot;}}&gt;
+
+	    
+	    &lt;Select
+	name=&quot;filter-form&quot;
+	multi={true}
+	onChange={this._handle_filter_change.bind(this)}
+	closeOnSelect={false}
+	value ={this.state.filter_values}
+	removeSelected = {true}
+	placeholder = {&quot;Select a filter&quot;}
+	options={options}
+	    /&gt;
+
+	&lt;/div&gt;
     }
     sort_by(sort_fields)
     {
@@ -711,7 +811,8 @@ class Admin extends React.Component {
 	if(term)
 	{
 	    let key= event.which || event.keyCode;
-            if(this.live_search || key==13)
+	   
+            if(this.live_search || key===13)
 	    {
 		let queryset=this.search(term,this.state.queryset);
 		this.setState({queryset:queryset,total:queryset.length})
@@ -735,8 +836,8 @@ class Admin extends React.Component {
 
     _render_search_field()
     {
-	return 	&lt;div className=&quot;search-field&quot;&gt;
-	&lt;input name=&quot;search&quot; type=&quot;text&quot; className=&quot;form-control&quot; placeholder=&quot;Search&quot; onChange={this._handle_search}   onKeyUp={this._handle_search}/&gt;
+	return 	&lt;div &gt;
+	&lt;input name=&quot;search&quot; type=&quot;text&quot; className=&quot;ra-search-field&quot; placeholder=&quot;Search&quot; onChange={this._handle_search}   onKeyUp={this._handle_search}/&gt;
 	&lt;/div&gt;
 
     }
@@ -948,7 +1049,7 @@ class Admin extends React.Component {
     _render_back_button()
     {
 	
-	return &lt;div&gt;&lt;button className={&quot;ra-back-button&quot;} onClick={()=&gt;{this.setState({display_type : display_type.list,object: null })}}&gt; Back &lt;/button&gt;&lt;/div&gt;
+	return &lt;div&gt;&lt;button className={&quot;ra-back-button&quot;} onClick={()=&gt;{this.setState({display_type : display_type.list,object: null });this.get_queryset(this.state.page_number,this.list_per_page,this.state.queryset); }}&gt; Back &lt;/button&gt;&lt;/div&gt;
 	
 
     }
@@ -962,21 +1063,31 @@ class Admin extends React.Component {
     {
 	if(!this.has_module_permission())
 	{
-	    return &lt;div&gt; Permission Denied&lt;/div&gt;
+	    return &lt;div&gt; &lt;h1&gt; Permission Denied &lt;/h1&gt;&lt;/div&gt;
 	}
 
 	if(this.state.display_type == display_type.list)
 	{
 
 	    return (
-		&lt;div className=&quot;list&quot;&gt;
-
-		{this._render_add_button()}
-		{this._render_search_field()}
-		{this._render_actions()}
-		{this._render_table()}
-		{this.state.loading ? this.render_progress() : null} 
-		{this._render_pagination()}
+	       &lt;div &gt;
+		
+		    {this._render_add_button()}
+		
+		    {this._render_search_field()}
+		
+		    {this._render_actions()}
+		
+		    {this._render_filters()}
+		
+		
+		    {this._render_table()}
+		
+		    {this.state.loading ? this.render_progress() : null}
+		
+		
+		    {this._render_pagination()}
+		
 		&lt;/div&gt;
 	    )
 	    
@@ -984,9 +1095,11 @@ class Admin extends React.Component {
 	else
 	{
 	    
+		this._change_uuid=uuidv1();
+		history.pushState({}, &quot;Change View&quot;, &quot;#/change/&quot;+this._change_uuid);	    
+		
 	    
 	    return (
-		
 		&lt;div className=&quot;change-form&quot;&gt;
 		{this._render_back_button()}
 		{this.get_form(this.state.object)}
@@ -1001,6 +1114,32 @@ class Admin extends React.Component {
 	this.setState({display_type : display_type.list})
 
     }
+
+    register_listener()
+    {
+	this._hash_change_listener=(event)=&gt; {
+	    
+
+	    if(this &amp;&amp; this.state.display_type!=display_type.list &amp;&amp; !_.endsWith(window.location.hash,this._change_uuid))
+	    {
+		this.setState({display_type : display_type.list});
+	    }
+
+	    
+
+	   
+	}
+	window.addEventListener(&quot;hashchange&quot;,this._hash_change_listener );
+	
+
+    }
+
+    componentWillUnmount()
+    {
+	if(this._hash_change_listener){
+	    window.removeEventListener(&quot;hashchange&quot;,this._hash_change_listener,true );}
+    }
+
 }
 
 

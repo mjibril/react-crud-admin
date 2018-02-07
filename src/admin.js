@@ -1056,11 +1056,11 @@ class Admin extends React.Component {
 	else
 	{
 	    
-	    
-	    return (
 		this._change_uuid=uuidv1();
 		history.pushState({}, "Change View", "#/change/"+this._change_uuid);	    
 		
+	    
+	    return (
 		<div className="change-form">
 		{this._render_back_button()}
 		{this.get_form(this.state.object)}

@@ -49,6 +49,7 @@ cd example</code>
 </code></pre><p>Create a new file <code>example.js</code> in the <code>\src</code> folder, in that file add the following lines</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">    import React from &apos;react&apos;;
     import Admin from &quot;react-crud-admin&quot;;
+    import &quot;../node_modules/react-crud-admin/public/main.css&quot;;
 
     export default class Example extends Admin
     {
@@ -89,8 +90,10 @@ ReactDOM.render(&lt;Example/&gt;
 <p>This is the list display view. At this point adding and editing objects will not be possible since we have not configured the add/change view. To do that we need to import the <code>react-jsonschema-form</code> package.</p>
 <p>Edit <code>example.js</code> and add the following,</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">import React from &apos;react&apos;;
-import Admin from &quot;./admin.js&quot;;
+import Admin from &quot;react-crud-admin&quot;;
 import Form from &quot;react-jsonschema-form&quot;;
+import &quot;../node_modules/react-crud-admin/public/main.css&quot;;
+
 export default class Example extends Admin
 {
     constructor()
@@ -304,7 +307,7 @@ this.extra_fields ={
 <p>Adding the <code>get_extra_fields</code> method is not enough to display the newly created field. We must add the field to <code>list_display</code> .</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">this.list_display=[&apos;name&apos;,&apos;number&apos;,&apos;address.street&apos;,&apos;now&apos;]</code>
 </code></pre>
-<p>Don&apos;t forget to install moment with <code>npm install moment --save</code> and add <code>import moment from &quot;moment&quot;</code> at the top of the file. The output is,</p>
+<p>Don&apos;t forget to add <code>import moment from &quot;moment&quot;;</code> at the top of the file. The output is,</p>
 <p><img src="assets/example3-2.png" alt="example32"></p>
 <h4 id="pagination">Pagination</h4><p><code>get_list_per_page</code> method  returns the number of items to be listed in a page. Can be overridden by <code>list_per_page</code>.</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">this.list_per_page=10</code>
@@ -316,7 +319,6 @@ this.extra_fields ={
 
 }</code>
 </code></pre>
-<p>When using <code>get_queryset</code> to fetch data, it may not be efficient to fetch all the data from the backend. <code>get_queryset</code> </p>
 <h4 id="search">Search</h4><p>Search is not implemented by default. One has to implement the <code>search(term,queryset)</code> method.
 From our previous example, we can implement search by matching the search term with the &quot;name&quot; property of all objects in the queryset. The method returns a filtered queryset. Optionally, if search requires an asynchronous call to a backend, one can use <code>set_queryset</code>.</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">    search(term,queryset)
@@ -354,7 +356,7 @@ From our previous example, we can implement search by matching the search term w
 <pre><code class="lang-javascript"><code class="source-code prettyprint">this.live_search=true</code>
 </code></pre>
 <p>default is <code>false</code>.</p>
-<h4 id="sorting">Sorting</h4><p>Sorting is not implemented by default. Sorting can be achieved by implementing the <code>sort_by</code> method,</p>
+<h4 id="sorting">Sorting</h4><p>Sorting is not implemented by default. Sorting can be achieved by implementing the <code>sort_by</code> method, </p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">sort_by(sort_fields,queryset)
 {
 
@@ -413,6 +415,7 @@ a backend will perform the sort operations and we will use <code>set_queryset</c
              }</code>
 </code></pre>
 <p>This may not be sufficient for some applications. For example we might want to use the object&apos;s <code>id</code> property to check equality.</p>
+<p>Sorting can achieved in the list display view by clicking on the table headers corresponding to property names. </p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">this.is_object_equal = function(a,b){
              return a.id==b.id ;
              }</code>
@@ -426,6 +429,7 @@ dropdown.  The default &quot;delete&quot; action method is not implemented.</p>
 import Admin from &quot;react-crud-admin&quot;;
 import Form from &quot;react-jsonschema-form&quot;;
 import moment from &quot;moment&quot;;
+import &quot;../node_modules/react-crud-admin/public/main.css&quot;;
 var data=[
         {id: 1, name: &apos;Ken Next&apos;, number: &apos;08939303003&apos;,address:{ street: &quot;Hallmark Street&quot;}},
             {id: 2,name: &apos;Isa Yoll&apos;, number: &apos;0908839202&apos;,address:{ street: &quot;Barbican Street&quot;}}
@@ -458,7 +462,56 @@ export default class Example extends Admin
 
 }</code>
 </code></pre>
-<p>Action methods can also make asynchronous network calls and use <code>set_queryset</code> when necessary.</p>
+<h4 id="filters">Filters</h4><p><code>get_filters</code> can be used to implement filters for the queryset. </p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">
+get_filters()
+    {
+      return     {
+    &quot;by_street_name&quot; : {
+          &quot;options&quot; : [
+                      { value: &apos;Hallmark Street&apos;, label: &apos;Hallmark Street&apos; },
+                  { value: &apos;Barbican Street&apos;, label: &apos;Barbican Street&apos; },
+
+
+                  ],
+           &quot;filter_function&quot; : (option,queryset)=&gt;
+                 {
+
+                let grouped= _.groupBy(queryset,&apos;address.street&apos;);
+
+                 return _.has(grouped,option.value) ? grouped[option.value] : [] ;
+                  }
+         },
+    &quot;by_id&quot; : {
+                  &quot;options&quot; : [
+                      { value: &apos;even&apos;, label: &apos;even&apos; },
+                  { value: &apos;odd&apos;, label: &apos;odd&apos; },
+
+
+                  ],    
+           &quot;filter_function&quot; : (option,queryset)=&gt;
+                 {
+
+                let grouped= _.groupBy(queryset,(contact)=&gt;{
+                                  return contact.id % 2 ==0 ? &quot;even&quot; : &quot;odd&quot; ;
+                                          });
+
+                 return _.has(grouped,option.value) ? grouped[option.value] : [] ;
+                  }
+         }
+
+
+      }
+
+
+    }</code>
+</code></pre>
+<p>The <code>get_filters</code> method returns an object whose properties are filter names. The example above returns 2 filters. The first is a filter <code>&quot;by_street_names&quot;</code> that filters based on the street addresses of the contacts. Each filter object has two properties : <code>&quot;options&quot;</code> and <code>&quot;filter_function&quot;</code>. <code>&quot;options&quot;</code> is an array of options objects which have a <code>&quot;value&quot;</code> and <code>&quot;label&quot;</code> properties. The <code>&quot;label&quot;</code> will appear in the UI while the <code>&quot;value&quot;</code> is used for processing. This is similar to the <code>select</code> HTML tag. For asynchronous operations, a method to set the options of a filter is provided. <code>set_filter_options</code> takes two arguments,</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint"> set_filter_options(filter_name,options)</code>
+</code></pre>
+<p>the name of the filter and the options array of the filter. </p>
+<p>The <code>&quot;filter_function&quot;</code> is a function that performs filtering. It has two arguments,  <code>&quot;option&quot;</code> which is the selected <code>&quot;option&quot;</code> and the current queryset. It must return a queryset. For asynchronous cases, <code>set_queryset</code> and <code>set_total</code> methods can be used to set the queryset after backend filtering.</p>
+<p>The second filter <code>&quot;by_id&quot;</code> filters the queryset by even and odd <code>id</code> property.</p>
 <h2 id="add-change-view">Add/Change View</h2><h3 id="forms">Forms</h3><p>We can add submit handlers for the form in our example,</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">....
 ....
@@ -490,11 +543,11 @@ export default class Example extends Admin
 
      if(!object)
      {
-           return &lt;Form schema={schema} onSubmit={this.form_submit.bind(this) /&gt;
+           return &lt;Form schema={schema} onSubmit={this.form_submit.bind(this)} /&gt;
      }
      else
      {
-            return &lt;Form schema={schema}  formData={object} onSubmit={this.form_submit.bind(this) /&gt;
+            return &lt;Form schema={schema}  formData={object} onSubmit={this.form_submit.bind(this)} /&gt;
      }
      }
 ....
@@ -519,7 +572,8 @@ export default class Example extends Admin
 
 ......
 ......
-......</code>
+......
+}</code>
 </code></pre>
 <p>The submit handler checks to see if an object is being edited and replaces it with the edited object. If the object is being added, the method appends it to the <code>state.queryset</code> object.</p>
 <h4 id="post-submit">Post Submit</h4><p><code>response_add</code> or <code>response_change</code> can be called after a new object is created or edited respectively. These functions should implement behaviour after a successful form submission. By default these functions are both defined as,</p>
@@ -534,7 +588,7 @@ export default class Example extends Admin
 <p>This sets the display type to &quot;list&quot;, changes the object to <code>null</code> and invokes <code>get_queryset</code> to fetch the latest data.</p>
 <h2 id="permissions">Permissions</h2><p><code>has_add_permission</code> , <code>has_change_permission</code> and <code>has_module_permission</code> methods are used to control access.</p>
 <p>The <code>has_add_permission</code>  method takes no arguments and should return a boolean that signifies wether the user can add a new object. It simply hides the Add button.</p>
-<p>The <code>has_change_permission</code>  method takes no arguments and should return a boolean that signifies wether the user can edit an object. It simply disables all <code>list_display_links</code>.</p>
+<p>The <code>has_change_permission</code>  method takes the current object being edited, <code>state.object</code>, as an argument and should return a boolean that signifies wether the user can edit an object. It simply disables all <code>list_display_links</code>.</p>
 <p>The <code>has_module_permission</code>  method takes no arguments and should return a boolean that signifies wether the user should load the component. It simply shows an error message after an unauthorized access attempt.</p>
 <h2 id="miscellany">Miscellany</h2><h3 id="-code-state--code--object"><code>state</code> object</h3><p>The default <code>state</code> object has the following properties,</p>
 <table>
@@ -559,7 +613,7 @@ export default class Example extends Admin
 <tr>
 <td><code>total</code></td>
 <td><code>0</code></td>
-<td>Total number of pages. Can be set with <code>set_total</code>.</td>
+<td>Total number of items. Can be set with <code>set_total</code>.</td>
 </tr>
 <tr>
 <td><code>display_type</code></td>
@@ -574,12 +628,13 @@ export default class Example extends Admin
 <tr>
 <td><code>selected_objects</code></td>
 <td>Empty set</td>
-<td></td>
+<td>The <code>Set</code> class a wrapper around <code>array</code> that implements set  </td>
 </tr>
 </tbody>
 </table>
 <h3 id="progress-indicator">Progress Indicator</h3><p><code>show_progress</code> and <code>hide_progress</code> can be used in the both the list display and add/change view to display and hide a progress indicator. <code>render_progress</code> can be used to override the default progress indicator component to be rendered. <code>render_progress</code> should return a component.</p>
 <h3 id="esdoc-api-documentation-">ESDOC API Documentation.</h3><p>The API documentation generated with <code>esdoc.js</code> is available <a href="https://mjibril.github.io/react-crud-admin/">here</a>.</p>
+<h3 id="example">Example</h3><p>The file containing the example used here is available at <a href="https://github.com/mjibril/react-crud-admin/blob/master/doc_example.js">link</a>.</p>
 </div>
 </div>
 

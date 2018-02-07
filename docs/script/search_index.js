@@ -312,6 +312,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/admin.js~admin#_change_uuid",
+    "class/src/admin.js~Admin.html#instance-member-_change_uuid",
+    "src/admin.js~Admin#_change_uuid",
+    "member"
+  ],
+  [
     "src/admin.js~admin#_create_object_link",
     "class/src/admin.js~Admin.html#instance-method-_create_object_link",
     "src/admin.js~Admin#_create_object_link",
@@ -348,10 +354,22 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/admin.js~admin#_handle_filter_change",
+    "class/src/admin.js~Admin.html#instance-method-_handle_filter_change",
+    "src/admin.js~Admin#_handle_filter_change",
+    "method"
+  ],
+  [
     "src/admin.js~admin#_handle_search",
     "class/src/admin.js~Admin.html#instance-method-_handle_search",
     "src/admin.js~Admin#_handle_search",
     "method"
+  ],
+  [
+    "src/admin.js~admin#_hash_change_listener",
+    "class/src/admin.js~Admin.html#instance-member-_hash_change_listener",
+    "src/admin.js~Admin#_hash_change_listener",
+    "member"
   ],
   [
     "src/admin.js~admin#_object_link_clicked",
@@ -363,12 +381,6 @@ window.esdocSearchIndex = [
     "src/admin.js~admin#_order_state_arrow",
     "class/src/admin.js~Admin.html#instance-method-_order_state_arrow",
     "src/admin.js~Admin#_order_state_arrow",
-    "method"
-  ],
-  [
-    "src/admin.js~admin#_refresh_queryset",
-    "class/src/admin.js~Admin.html#instance-method-_refresh_queryset",
-    "src/admin.js~Admin#_refresh_queryset",
     "method"
   ],
   [
@@ -387,6 +399,12 @@ window.esdocSearchIndex = [
     "src/admin.js~admin#_render_back_button",
     "class/src/admin.js~Admin.html#instance-method-_render_back_button",
     "src/admin.js~Admin#_render_back_button",
+    "method"
+  ],
+  [
+    "src/admin.js~admin#_render_filters",
+    "class/src/admin.js~Admin.html#instance-method-_render_filters",
+    "src/admin.js~Admin#_render_filters",
     "method"
   ],
   [
@@ -426,6 +444,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/admin.js~admin#componentwillunmount",
+    "class/src/admin.js~Admin.html#instance-method-componentWillUnmount",
+    "src/admin.js~Admin#componentWillUnmount",
+    "method"
+  ],
+  [
     "src/admin.js~admin#constructor",
     "class/src/admin.js~Admin.html#instance-constructor-constructor",
     "src/admin.js~Admin#constructor",
@@ -459,6 +483,18 @@ window.esdocSearchIndex = [
     "src/admin.js~admin#get_field_transforms",
     "class/src/admin.js~Admin.html#instance-method-get_field_transforms",
     "src/admin.js~Admin#get_field_transforms",
+    "method"
+  ],
+  [
+    "src/admin.js~admin#get_filter_values",
+    "class/src/admin.js~Admin.html#instance-method-get_filter_values",
+    "src/admin.js~Admin#get_filter_values",
+    "method"
+  ],
+  [
+    "src/admin.js~admin#get_filters",
+    "class/src/admin.js~Admin.html#instance-method-get_filters",
+    "src/admin.js~Admin#get_filters",
     "method"
   ],
   [
@@ -600,6 +636,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/admin.js~admin#register_listener",
+    "class/src/admin.js~Admin.html#instance-method-register_listener",
+    "src/admin.js~Admin#register_listener",
+    "method"
+  ],
+  [
     "src/admin.js~admin#render",
     "class/src/admin.js~Admin.html#instance-method-render",
     "src/admin.js~Admin#render",
@@ -645,6 +687,12 @@ window.esdocSearchIndex = [
     "src/admin.js~admin#select_one",
     "class/src/admin.js~Admin.html#instance-method-select_one",
     "src/admin.js~Admin#select_one",
+    "method"
+  ],
+  [
+    "src/admin.js~admin#set_filter_options",
+    "class/src/admin.js~Admin.html#instance-method-set_filter_options",
+    "src/admin.js~Admin#set_filter_options",
     "method"
   ],
   [

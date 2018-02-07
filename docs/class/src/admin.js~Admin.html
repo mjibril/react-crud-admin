@@ -37,13 +37,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import Admin from &apos;<span><a href="file/src/admin.js.html#lineNumber12">react-crud-admin/src/admin.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import Admin from &apos;<span><a href="file/src/admin.js.html#lineNumber14">react-crud-admin/src/admin.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/admin.js.html#lineNumber12">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/admin.js.html#lineNumber14">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -495,7 +495,7 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/admin.js~Admin.html#instance-member-state">state</a></span></span><span class="code" data-ice="signature">: {&quot;display_type&quot;: <span>*</span>, &quot;page_number&quot;: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>, &quot;object&quot;: <span>*</span>, &quot;selected_objects&quot;: <span>*</span>, &quot;total&quot;: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>}</span>
+          <span class="code" data-ice="name"><span><a href="class/src/admin.js~Admin.html#instance-member-state">state</a></span></span><span class="code" data-ice="signature">: {&quot;display_type&quot;: <span>*</span>, &quot;page_number&quot;: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>, &quot;object&quot;: <span>*</span>, &quot;selected_objects&quot;: <span>*</span>, &quot;total&quot;: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>, &quot;filter_options&quot;: <span>*</span>, &quot;filter_values&quot;: <span>*</span>}</span>
         </p>
       </div>
       <div>
@@ -544,6 +544,62 @@
       
     </td>
   </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">private</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/admin.js~Admin.html#instance-member-_change_uuid">_change_uuid</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">private</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/admin.js~Admin.html#instance-member-_hash_change_listener">_hash_change_listener</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
 </tbody>
 </table>
 </div>
@@ -573,6 +629,34 @@
         
         <div data-ice="description"><p>An event listener that listens to actions selected.</p>
 </div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/admin.js~Admin.html#instance-method-componentWillUnmount">componentWillUnmount</a></span></span><span class="code" data-ice="signature">()</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
       </div>
     </td>
     <td>
@@ -662,6 +746,62 @@ in the queryset and whose values are display functions.</p>
         <div data-ice="description"><p>Returns an object whose properties are field names corresponding to properties of any object 
 in the queryset and whose values are transform functions.</p>
 </div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/admin.js~Admin.html#instance-method-get_filter_values">get_filter_values</a></span></span><span class="code" data-ice="signature">(): <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/admin.js~Admin.html#instance-method-get_filters">get_filters</a></span></span><span class="code" data-ice="signature">(): {&quot;by_id&quot;: <span>*</span>}</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
       </div>
     </td>
     <td>
@@ -1094,6 +1234,34 @@ queryset for the admin interface.</p>
           
           
           
+          <span class="code" data-ice="name"><span><a href="class/src/admin.js~Admin.html#instance-method-register_listener">register_listener</a></span></span><span class="code" data-ice="signature">()</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
           <span class="code" data-ice="name"><span><a href="class/src/admin.js~Admin.html#instance-method-render">render</a></span></span><span class="code" data-ice="signature">(): <span>*</span></span>
         </p>
       </div>
@@ -1307,6 +1475,34 @@ displayed within a single display page are selected</p>
         <div data-ice="description"><p>This method is an event handler that listens when a single objects of the queryset
 displayed is selected</p>
 </div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/admin.js~Admin.html#instance-method-set_filter_options">set_filter_options</a></span></span><span class="code" data-ice="signature">(filter_name: <span>*</span>, options: <span>*</span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
       </div>
     </td>
     <td>
@@ -1646,6 +1842,34 @@ displayed is selected</p>
           
           
           
+          <span class="code" data-ice="name"><span><a href="class/src/admin.js~Admin.html#instance-method-_handle_filter_change">_handle_filter_change</a></span></span><span class="code" data-ice="signature">(values: <span>*</span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">private</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
           <span class="code" data-ice="name"><span><a href="class/src/admin.js~Admin.html#instance-method-_handle_search">_handle_search</a></span></span><span class="code" data-ice="signature">(event: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span>)</span>
         </p>
       </div>
@@ -1711,34 +1935,6 @@ displayed is selected</p>
         
         <div data-ice="description"><p>This method adds up/down arrows to field headers on the list display page table</p>
 </div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">private</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/admin.js~Admin.html#instance-method-_refresh_queryset">_refresh_queryset</a></span></span><span class="code" data-ice="signature">(queryset: <span>*</span>)</span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
       </div>
     </td>
     <td>
@@ -1826,6 +2022,34 @@ displayed is selected</p>
         
         <div data-ice="description"><p>Renders the back button component in the add/change view</p>
 </div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">private</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/admin.js~Admin.html#instance-method-_render_filters">_render_filters</a></span></span><span class="code" data-ice="signature">(): <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
       </div>
     </td>
     <td>
@@ -1970,7 +2194,7 @@ displayed is selected</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber14">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber16">source</a></span></span>
     </span>
   </h3>
 
@@ -2016,7 +2240,7 @@ displayed is selected</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber31">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber33">source</a></span></span>
     </span>
   </h3>
 
@@ -2059,7 +2283,7 @@ displayed is selected</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber24">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber26">source</a></span></span>
     </span>
   </h3>
 
@@ -2102,7 +2326,7 @@ displayed is selected</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber22">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber24">source</a></span></span>
     </span>
   </h3>
 
@@ -2145,7 +2369,7 @@ displayed is selected</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber23">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber25">source</a></span></span>
     </span>
   </h3>
 
@@ -2188,7 +2412,7 @@ displayed is selected</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber29">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber31">source</a></span></span>
     </span>
   </h3>
 
@@ -2231,7 +2455,7 @@ displayed is selected</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber25">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber27">source</a></span></span>
     </span>
   </h3>
 
@@ -2274,7 +2498,7 @@ displayed is selected</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber26">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber28">source</a></span></span>
     </span>
   </h3>
 
@@ -2317,7 +2541,7 @@ displayed is selected</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber27">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber29">source</a></span></span>
     </span>
   </h3>
 
@@ -2360,7 +2584,7 @@ displayed is selected</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber21">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber23">source</a></span></span>
     </span>
   </h3>
 
@@ -2403,7 +2627,7 @@ displayed is selected</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber19">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber21">source</a></span></span>
     </span>
   </h3>
 
@@ -2446,7 +2670,7 @@ displayed is selected</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber20">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber22">source</a></span></span>
     </span>
   </h3>
 
@@ -2489,7 +2713,7 @@ displayed is selected</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber30">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber32">source</a></span></span>
     </span>
   </h3>
 
@@ -2532,7 +2756,7 @@ displayed is selected</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber28">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber30">source</a></span></span>
     </span>
   </h3>
 
@@ -2571,11 +2795,11 @@ displayed is selected</p>
     
     
     
-    <span class="code" data-ice="name">state</span><span class="code" data-ice="signature">: {&quot;display_type&quot;: <span>*</span>, &quot;page_number&quot;: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>, &quot;object&quot;: <span>*</span>, &quot;selected_objects&quot;: <span>*</span>, &quot;total&quot;: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>}</span>
+    <span class="code" data-ice="name">state</span><span class="code" data-ice="signature">: {&quot;display_type&quot;: <span>*</span>, &quot;page_number&quot;: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>, &quot;object&quot;: <span>*</span>, &quot;selected_objects&quot;: <span>*</span>, &quot;total&quot;: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>, &quot;filter_options&quot;: <span>*</span>, &quot;filter_values&quot;: <span>*</span>}</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber45">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber47">source</a></span></span>
     </span>
   </h3>
 
@@ -2621,7 +2845,93 @@ displayed is selected</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber38">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber40">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-_change_uuid">
+    <span class="access" data-ice="access">private</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">_change_uuid</span><span class="code" data-ice="signature">: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber1059">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-_hash_change_listener">
+    <span class="access" data-ice="access">private</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">_hash_change_listener</span><span class="code" data-ice="signature">: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber1081">source</a></span></span>
     </span>
   </h3>
 
@@ -2667,7 +2977,7 @@ displayed is selected</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber749">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber850">source</a></span></span>
     </span>
   </h3>
 
@@ -2717,6 +3027,49 @@ displayed is selected</p>
   
 </div>
 <div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-componentWillUnmount">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">componentWillUnmount</span><span class="code" data-ice="signature">()</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber1098">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-method-get_actions">
     <span class="access" data-ice="access">public</span>
     
@@ -2728,7 +3081,7 @@ displayed is selected</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber212">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber215">source</a></span></span>
     </span>
   </h3>
 
@@ -2799,7 +3152,7 @@ actions = { &quot;delete&quot; : (selected_objects)=&gt;{ } }</code></pre>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber172">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber175">source</a></span></span>
     </span>
   </h3>
 
@@ -2870,7 +3223,7 @@ return { &apos;now&apos; : function(object,label)
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber119">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber122">source</a></span></span>
     </span>
   </h3>
 
@@ -2932,6 +3285,116 @@ return { &apos;name&apos; : function(name,object)
   
 </div>
 <div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-get_filter_values">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">get_filter_values</span><span class="code" data-ice="signature">(): <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber517">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span>*</span></td>
+          
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-get_filters">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">get_filters</span><span class="code" data-ice="signature">(): {&quot;by_id&quot;: <span>*</span>}</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber521">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType">{&quot;by_id&quot;: <span>*</span>}</td>
+          
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-method-get_form">
     <span class="access" data-ice="access">public</span>
     
@@ -2943,7 +3406,7 @@ return { &apos;name&apos; : function(name,object)
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber84">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber86">source</a></span></span>
     </span>
   </h3>
 
@@ -3021,7 +3484,7 @@ and JSON Schema from <a href="https://spacetelescope.github.io/understanding-jso
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber145">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber148">source</a></span></span>
     </span>
   </h3>
 
@@ -3092,7 +3555,7 @@ return { &apos;name&apos; : function(name)
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber263">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber266">source</a></span></span>
     </span>
   </h3>
 
@@ -3162,7 +3625,7 @@ return { &apos;name&apos; : function(name)
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber239">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber242">source</a></span></span>
     </span>
   </h3>
 
@@ -3231,7 +3694,7 @@ return { &apos;name&apos; : function(name)
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber187">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber190">source</a></span></span>
     </span>
   </h3>
 
@@ -3288,7 +3751,7 @@ return { &apos;name&apos; : function(name)
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber96">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber98">source</a></span></span>
     </span>
   </h3>
 
@@ -3345,7 +3808,7 @@ Can be overriden by the live_search member variable. Default is false.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber66">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber68">source</a></span></span>
     </span>
   </h3>
 
@@ -3435,7 +3898,7 @@ to a backend.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber328">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber331">source</a></span></span>
     </span>
   </h3>
 
@@ -3493,7 +3956,7 @@ button</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber339">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber342">source</a></span></span>
     </span>
   </h3>
 
@@ -3568,7 +4031,7 @@ enabled</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber315">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber318">source</a></span></span>
     </span>
   </h3>
 
@@ -3642,7 +4105,7 @@ enabled</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber349">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber352">source</a></span></span>
     </span>
   </h3>
 
@@ -3699,7 +4162,7 @@ enabled</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber640">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber740">source</a></span></span>
     </span>
   </h3>
 
@@ -3744,7 +4207,7 @@ progress indicator by inspecting the &quot;loading&quot; property of the state o
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber789">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber890">source</a></span></span>
     </span>
   </h3>
 
@@ -3788,7 +4251,7 @@ progress indicator by inspecting the &quot;loading&quot; property of the state o
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber801">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber902">source</a></span></span>
     </span>
   </h3>
 
@@ -3797,6 +4260,49 @@ progress indicator by inspecting the &quot;loading&quot; property of the state o
   
   <div data-ice="description"><p>An event listener that listens when the previous page is  selected.</p>
 </div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-register_listener">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">register_listener</span><span class="code" data-ice="signature">()</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber1079">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  
 
   
 
@@ -3832,7 +4338,7 @@ progress indicator by inspecting the &quot;loading&quot; property of the state o
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber922">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber1023">source</a></span></span>
     </span>
   </h3>
 
@@ -3889,7 +4395,7 @@ progress indicator by inspecting the &quot;loading&quot; property of the state o
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber650">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber750">source</a></span></span>
     </span>
   </h3>
 
@@ -3946,7 +4452,7 @@ progress indicator by inspecting the &quot;loading&quot; property of the state o
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber404">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber407">source</a></span></span>
     </span>
   </h3>
 
@@ -4003,7 +4509,7 @@ progress indicator by inspecting the &quot;loading&quot; property of the state o
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber416">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber419">source</a></span></span>
     </span>
   </h3>
 
@@ -4060,7 +4566,7 @@ progress indicator by inspecting the &quot;loading&quot; property of the state o
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber303">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber306">source</a></span></span>
     </span>
   </h3>
 
@@ -4141,7 +4647,7 @@ progress indicator by inspecting the &quot;loading&quot; property of the state o
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber767">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber868">source</a></span></span>
     </span>
   </h3>
 
@@ -4214,7 +4720,7 @@ progress indicator by inspecting the &quot;loading&quot; property of the state o
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber555">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber655">source</a></span></span>
     </span>
   </h3>
 
@@ -4275,7 +4781,7 @@ displayed within a single display page are selected</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber578">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber678">source</a></span></span>
     </span>
   </h3>
 
@@ -4337,6 +4843,71 @@ displayed is selected</p>
   
 </div>
 <div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-set_filter_options">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">set_filter_options</span><span class="code" data-ice="signature">(filter_name: <span>*</span>, options: <span>*</span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber508">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">filter_name</td>
+      <td data-ice="type" class="code"><span>*</span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"></td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">options</td>
+      <td data-ice="type" class="code"><span>*</span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"></td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-method-set_queryset">
     <span class="access" data-ice="access">public</span>
     
@@ -4348,7 +4919,7 @@ displayed is selected</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber443">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber446">source</a></span></span>
     </span>
   </h3>
 
@@ -4407,7 +4978,7 @@ displayed is selected</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber449">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber452">source</a></span></span>
     </span>
   </h3>
 
@@ -4466,7 +5037,7 @@ displayed is selected</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber960">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber1073">source</a></span></span>
     </span>
   </h3>
 
@@ -4509,7 +5080,7 @@ displayed is selected</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber629">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber729">source</a></span></span>
     </span>
   </h3>
 
@@ -4554,7 +5125,7 @@ progress indicator.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber509">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber609">source</a></span></span>
     </span>
   </h3>
 
@@ -4627,7 +5198,7 @@ progress indicator.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber432">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber435">source</a></span></span>
     </span>
   </h3>
 
@@ -4709,7 +5280,7 @@ entry in the display page</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber481">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber484">source</a></span></span>
     </span>
   </h3>
 
@@ -4786,7 +5357,7 @@ entry in the display page</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber282">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber285">source</a></span></span>
     </span>
   </h3>
 
@@ -4844,7 +5415,7 @@ the current queryset based on the sort order. </p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber457">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber460">source</a></span></span>
     </span>
   </h3>
 
@@ -4915,7 +5486,7 @@ the current queryset based on the sort order. </p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber607">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber707">source</a></span></span>
     </span>
   </h3>
 
@@ -4972,7 +5543,7 @@ the current queryset based on the sort order. </p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber462">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber465">source</a></span></span>
     </span>
   </h3>
 
@@ -5016,6 +5587,65 @@ the current queryset based on the sort order. </p>
   
 </div>
 <div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-_handle_filter_change">
+    <span class="access" data-ice="access">private</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">_handle_filter_change</span><span class="code" data-ice="signature">(values: <span>*</span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber542">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">values</td>
+      <td data-ice="type" class="code"><span>*</span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"></td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-method-_handle_search">
     <span class="access" data-ice="access">private</span>
     
@@ -5027,7 +5657,7 @@ the current queryset based on the sort order. </p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber668">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber768">source</a></span></span>
     </span>
   </h3>
 
@@ -5090,7 +5720,7 @@ search or not.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber471">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber474">source</a></span></span>
     </span>
   </h3>
 
@@ -5161,7 +5791,7 @@ search or not.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber382">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber385">source</a></span></span>
     </span>
   </h3>
 
@@ -5223,65 +5853,6 @@ search or not.</p>
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-method-_refresh_queryset">
-    <span class="access" data-ice="access">private</span>
-    
-    
-    
-    
-    
-    <span class="code" data-ice="name">_refresh_queryset</span><span class="code" data-ice="signature">(queryset: <span>*</span>)</span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber504">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
-
-  
-
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Params:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">queryset</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-method-_render_actions">
     <span class="access" data-ice="access">private</span>
     
@@ -5293,7 +5864,7 @@ search or not.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber889">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber990">source</a></span></span>
     </span>
   </h3>
 
@@ -5350,7 +5921,7 @@ search or not.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber710">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber811">source</a></span></span>
     </span>
   </h3>
 
@@ -5407,7 +5978,7 @@ search or not.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber909">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber1010">source</a></span></span>
     </span>
   </h3>
 
@@ -5453,6 +6024,61 @@ search or not.</p>
   
 </div>
 <div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-_render_filters">
+    <span class="access" data-ice="access">private</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">_render_filters</span><span class="code" data-ice="signature">(): <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber560">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span>*</span></td>
+          
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-method-_render_pagination">
     <span class="access" data-ice="access">private</span>
     
@@ -5464,7 +6090,7 @@ search or not.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber814">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber915">source</a></span></span>
     </span>
   </h3>
 
@@ -5521,7 +6147,7 @@ search or not.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber697">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber798">source</a></span></span>
     </span>
   </h3>
 
@@ -5578,7 +6204,7 @@ search or not.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber724">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber825">source</a></span></span>
     </span>
   </h3>
 
@@ -5635,7 +6261,7 @@ search or not.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber514">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/admin.js.html#lineNumber614">source</a></span></span>
     </span>
   </h3>
 
