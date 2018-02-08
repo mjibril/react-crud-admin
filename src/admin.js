@@ -1010,8 +1010,8 @@ class Admin extends React.Component {
     _render_back_button()
     {
 	
-	return <div><button className={"ra-back-button"} onClick={()=>{this.setState({display_type : display_type.list,object: null });this.get_queryset(this.state.page_number,this.list_per_page,this.state.queryset); }}> Back </button></div>
-	
+//	return <div><button className={"ra-back-button"} onClick={()=>{this.setState({display_type : display_type.list,object: null });this.get_queryset(this.state.page_number,this.list_per_page,this.state.queryset); }}> Back </button></div>
+	return null;
 
     }
     /**
@@ -1083,7 +1083,7 @@ class Admin extends React.Component {
 
 	    if(this && this.state.display_type!=display_type.list && !_.endsWith(window.location.hash,this._change_uuid))
 	    {
-		this.setState({display_type : display_type.list});
+		this.show_list_view()
 	    }
 
 	    
