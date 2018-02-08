@@ -62,7 +62,7 @@ module.exports =
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "e163f5898b6ee7891d5d"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "c9bce4adfa2ea3c62c16"; // eslint-disable-line no-unused-vars
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule; // eslint-disable-line no-unused-vars
@@ -3337,19 +3337,9 @@ var Admin = function (_React$Component) {
 	}, {
 		key: '_render_back_button',
 		value: function _render_back_button() {
-			var _this9 = this;
 
-			return _react2.default.createElement(
-				'div',
-				null,
-				_react2.default.createElement(
-					'button',
-					{ className: "ra-back-button", onClick: function onClick() {
-							_this9.setState({ display_type: display_type.list, object: null });_this9.get_queryset(_this9.state.page_number, _this9.list_per_page, _this9.state.queryset);
-						} },
-					' Back '
-				)
-			);
+			//	return <div><button className={"ra-back-button"} onClick={()=>{this.setState({display_type : display_type.list,object: null });this.get_queryset(this.state.page_number,this.list_per_page,this.state.queryset); }}> Back </button></div>
+			return null;
 		}
 		/**
    * Renders the admin interface component
@@ -3407,12 +3397,12 @@ var Admin = function (_React$Component) {
 	}, {
 		key: 'register_listener',
 		value: function register_listener() {
-			var _this10 = this;
+			var _this9 = this;
 
 			this._hash_change_listener = function (event) {
 
-				if (_this10 && _this10.state.display_type != display_type.list && !_lodash2.default.endsWith(window.location.hash, _this10._change_uuid)) {
-					_this10.setState({ display_type: display_type.list });
+				if (_this9 && _this9.state.display_type != display_type.list && !_lodash2.default.endsWith(window.location.hash, _this9._change_uuid)) {
+					_this9.show_list_view();
 				}
 			};
 			window.addEventListener("hashchange", this._hash_change_listener);
