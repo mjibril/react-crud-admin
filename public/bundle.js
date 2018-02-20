@@ -62,7 +62,7 @@ module.exports =
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "ce08812210bbc8a09ecd"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "1a1f21b1779c5655121c"; // eslint-disable-line no-unused-vars
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule; // eslint-disable-line no-unused-vars
@@ -2217,8 +2217,8 @@ var Admin = function (_React$Component) {
 		_this.state.queryset = queryset;
 		_this.state.total = queryset.length;
 		_this._handle_search = _this._handle_search.bind(_this);
-		_this.select_all = _this.select_all.bind(_this);
-		_this.select_one = _this.select_one.bind(_this);
+		_this._select_all = _this._select_all.bind(_this);
+		_this._select_one = _this._select_one.bind(_this);
 
 		return _this;
 	}
@@ -2697,7 +2697,7 @@ var Admin = function (_React$Component) {
 
 			var t = {};
 			t[filter_name] = options.map(function (option) {
-				option.filter = filter_name;return option;
+				option._filter_ = filter_name;return option;
 			});
 			this.setState({ filter_options: _lodash2.default.assign(this.state.filter_options, t) });
 		}
@@ -2709,25 +2709,32 @@ var Admin = function (_React$Component) {
 	}, {
 		key: 'get_filters',
 		value: function get_filters() {
-
-			return {
-
-				"by_id": { "options": [{ value: 'one', label: 'One' }, { value: 'two', label: 'Two' }],
-					"filter_function": function filter_function(option, queryset) {
-
-						return queryset;
-					}
-				}
-
-			};
+			/*
+   return {
+   	    "by_id" : { "options" : [
+   		    { value: 'one', label: 'One' },
+       { value: 'two', label: 'Two' },
+   		
+       ],
+        "filter_function" : (option,queryset)=>
+        {
+   
+   	 return queryset;
+        }
+             }
+       
+   }*/
 		}
 	}, {
 		key: '_handle_filter_change',
 		value: function _handle_filter_change(values) {
+			if (!(values instanceof Array) && values != null) {
+				values = [values];
+			}
 
 			this.setState({ filter_values: values || [] });
 
-			if (values.length <= 0) {
+			if (values == null || values.length <= 0) {
 				this.set_queryset(this.get_queryset(this.state.page_number, this.list_per_page, this.state.queryset));
 				return;
 			}
@@ -2741,7 +2748,7 @@ var Admin = function (_React$Component) {
 				for (var _iterator = values[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
 					var value = _step.value;
 
-					var queryset = filters[value.filter].filter_function(value, this.state.queryset);
+					var queryset = filters[value._filter_].filter_function(value, this.state.queryset);
 					this.setState({ queryset: queryset });
 				}
 			} catch (err) {
@@ -2760,8 +2767,8 @@ var Admin = function (_React$Component) {
 			}
 		}
 	}, {
-		key: '_render_filters',
-		value: function _render_filters() {
+		key: 'render_filters',
+		value: function render_filters() {
 
 			var options = [];
 			var filters = this.get_filters();
@@ -2788,7 +2795,7 @@ var Admin = function (_React$Component) {
 							for (var _iterator3 = filters[filter].options[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
 								var option = _step3.value;
 
-								option.filter = filter;
+								option._filter_ = filter;
 								options.push(option);
 							}
 						} catch (err) {
@@ -2815,7 +2822,7 @@ var Admin = function (_React$Component) {
 							for (var _iterator4 = this.state.filter_options[filter][Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
 								var _option = _step4.value;
 
-								_option.filter = filter;
+								_option._filter_ = filter;
 								options.push(_option);
 							}
 						} catch (err) {
@@ -2856,7 +2863,7 @@ var Admin = function (_React$Component) {
 					name: 'filter-form',
 					multi: true,
 					onChange: this._handle_filter_change.bind(this),
-					closeOnSelect: false,
+					closeOnSelect: true,
 					value: this.state.filter_values,
 					removeSelected: true,
 					placeholder: "Select a filter",
@@ -2903,8 +2910,8 @@ var Admin = function (_React$Component) {
    */
 
 	}, {
-		key: 'select_all',
-		value: function select_all(event) {
+		key: '_select_all',
+		value: function _select_all(event) {
 
 			if (this._all_selected) {
 
@@ -2920,8 +2927,8 @@ var Admin = function (_React$Component) {
    */
 
 	}, {
-		key: 'select_one',
-		value: function select_one(object) {
+		key: '_select_one',
+		value: function _select_one(object) {
 			var _this5 = this;
 
 			return function (event) {
@@ -2956,7 +2963,7 @@ var Admin = function (_React$Component) {
 						'td',
 						null,
 						'  ',
-						_react2.default.createElement('input', { type: 'checkbox', id: i + '_checkbox', onChange: _this6.select_one(object), checked: _this6.state.selected_objects.contains(object) }),
+						_react2.default.createElement('input', { type: 'checkbox', id: i + '_checkbox', onChange: _this6._select_one(object), checked: _this6.state.selected_objects.contains(object) }),
 						' ',
 						_react2.default.createElement(
 							'label',
@@ -3009,13 +3016,15 @@ var Admin = function (_React$Component) {
 
 	}, {
 		key: 'render_progress',
-		value: function render_progress() {
+		value: function render_progress(loading) {
+			if (loading) {
 
-			return _react2.default.createElement(
-				'div',
-				{ className: 'fetch-progress' },
-				_react2.default.createElement('progress', null)
-			);
+				return _react2.default.createElement(
+					'div',
+					{ className: 'fetch-progress' },
+					_react2.default.createElement('progress', null)
+				);
+			}
 		}
 		/**
    * An event listener that listens to the search event. This method calls search method which
@@ -3033,7 +3042,7 @@ var Admin = function (_React$Component) {
 			if (term) {
 				var key = event.which || event.keyCode;
 
-				if (this.live_search || key === 13) {
+				if (this.get_live_search() || key === 13) {
 					var queryset = this.search(term, this.state.queryset);
 					this.setState({ queryset: queryset, total: queryset.length });
 				}
@@ -3044,13 +3053,13 @@ var Admin = function (_React$Component) {
 		}
 		/**
    * Renders the search component
-   * @private 
+   * 
    * @return A search input field
    */
 
 	}, {
-		key: '_render_search_field',
-		value: function _render_search_field() {
+		key: 'render_search_field',
+		value: function render_search_field() {
 			return _react2.default.createElement(
 				'div',
 				null,
@@ -3059,13 +3068,13 @@ var Admin = function (_React$Component) {
 		}
 		/**
    * Renders the add object button. Checks to see if permission is given by has_add_permission
-   * @private 
+   * 
    * @return An add button component
    */
 
 	}, {
-		key: '_render_add_button',
-		value: function _render_add_button() {
+		key: 'render_add_button',
+		value: function render_add_button() {
 
 			if (this.has_add_permission()) {
 				return _react2.default.createElement(
@@ -3078,13 +3087,13 @@ var Admin = function (_React$Component) {
 		}
 		/**
    * Renders the table in the display page. This calls _get_table_header and _get_table_body
-   * @private 
+   * 
    * @return An a table displaying the state queryset set objects
    */
 
 	}, {
-		key: '_render_table',
-		value: function _render_table() {
+		key: 'render_table',
+		value: function render_table() {
 
 			return _react2.default.createElement(
 				'table',
@@ -3098,15 +3107,13 @@ var Admin = function (_React$Component) {
 						_react2.default.createElement(
 							'th',
 							null,
-							'  ',
-							_react2.default.createElement('input', { type: 'checkbox', id: 'all_boxes', onChange: this.select_all }),
+							_react2.default.createElement('input', { type: 'checkbox', id: 'all_boxes', onChange: this._select_all }),
 							'  ',
 							_react2.default.createElement(
 								'label',
 								{ htmlFor: 'all_boxes' },
 								'\xA0'
-							),
-							' '
+							)
 						),
 						this._get_table_header()
 					)
@@ -3183,8 +3190,8 @@ var Admin = function (_React$Component) {
    */
 
 	}, {
-		key: '_render_pagination',
-		value: function _render_pagination() {
+		key: 'render_pagination',
+		value: function render_pagination() {
 			var _this8 = this;
 
 			var pages = [];
@@ -3280,8 +3287,8 @@ var Admin = function (_React$Component) {
    */
 
 	}, {
-		key: '_render_actions',
-		value: function _render_actions() {
+		key: 'render_actions',
+		value: function render_actions() {
 
 			return _react2.default.createElement(
 				'select',
@@ -3303,13 +3310,13 @@ var Admin = function (_React$Component) {
 		}
 		/**
    * Renders the back button component in the add/change view
-   * 
+   * @ignore
    * @return A component that renders a back button
    */
 
 	}, {
-		key: '_render_back_button',
-		value: function _render_back_button() {
+		key: 'render_back_button',
+		value: function render_back_button() {
 
 			//	return <div><button className={"ra-back-button"} onClick={()=>{this.setState({display_type : display_type.list,object: null });this.get_queryset(this.state.page_number,this.list_per_page,this.state.queryset); }}> Back </button></div>
 			return null;
@@ -3320,6 +3327,71 @@ var Admin = function (_React$Component) {
    * @return A component that renders the admin interface
    */
 
+	}, {
+		key: 'render_list_view',
+		value: function render_list_view() {
+			return _react2.default.createElement(
+				'div',
+				null,
+				this.render_add_button(),
+				this.render_below_add_button(),
+				this.render_search_field(),
+				this.render_below_search_field(),
+				this.render_actions(),
+				this.render_below_actions(),
+				this.render_filters(),
+				this.render_below_filters(),
+				this.render_table(),
+				this.render_below_table(),
+				this.render_progress(this.state.loading),
+				this.render_below_progress(),
+				this.render_pagination()
+			);
+		}
+	}, {
+		key: 'render_below_add_button',
+		value: function render_below_add_button() {}
+	}, {
+		key: 'render_below_search_field',
+		value: function render_below_search_field() {}
+	}, {
+		key: 'render_below_actions',
+		value: function render_below_actions() {}
+	}, {
+		key: 'render_below_filters',
+		value: function render_below_filters() {}
+	}, {
+		key: 'render_below_table',
+		value: function render_below_table() {}
+	}, {
+		key: 'render_below_progress',
+		value: function render_below_progress() {}
+	}, {
+		key: 'render_change_view',
+		value: function render_change_view() {
+			return _react2.default.createElement(
+				'div',
+				null,
+				this.render_progress(this.state.loading),
+				_react2.default.createElement(
+					'div',
+					{ className: 'change-form' },
+					this.get_form(this.state.object)
+				)
+			);
+		}
+	}, {
+		key: 'render_above_change_view',
+		value: function render_above_change_view() {}
+	}, {
+		key: 'render_below_change_view',
+		value: function render_below_change_view() {}
+	}, {
+		key: 'render_above_list_view',
+		value: function render_above_list_view() {}
+	}, {
+		key: 'render_below_list_view',
+		value: function render_below_list_view() {}
 	}, {
 		key: 'render',
 		value: function render() {
@@ -3337,28 +3409,24 @@ var Admin = function (_React$Component) {
 			}
 
 			if (this.state.display_type == display_type.list) {
-
 				return _react2.default.createElement(
 					'div',
 					null,
-					this._render_add_button(),
-					this._render_search_field(),
-					this._render_actions(),
-					this._render_filters(),
-					this._render_table(),
-					this.state.loading ? this.render_progress() : null,
-					this._render_pagination()
+					this.render_above_list_view(),
+					this.render_list_view(),
+					this.render_below_list_view()
 				);
 			} else {
-
+				//Important: the next two lines are for URL navigation and handling the browser back button
 				this._change_uuid = uuidv1();
 				history.pushState({}, "Change View", "#/change/" + this._change_uuid);
 
 				return _react2.default.createElement(
 					'div',
-					{ className: 'change-form' },
-					this._render_back_button(),
-					this.get_form(this.state.object)
+					null,
+					this.render_above_change_view(),
+					this.render_change_view(),
+					this.render_below_change_view()
 				);
 			}
 		}
@@ -3412,7 +3480,7 @@ exports.default = Admin;
   var undefined;
 
   /** Used as the semantic version number. */
-  var VERSION = '4.17.4';
+  var VERSION = '4.17.5';
 
   /** Used as the size to enable large array optimizations. */
   var LARGE_ARRAY_SIZE = 200;
@@ -3543,7 +3611,6 @@ exports.default = Admin;
   /** Used to match property names within property paths. */
   var reIsDeepProp = /\.|\[(?:[^[\]]*|(["'])(?:(?!\1)[^\\]|\\.)*?\1)\]/,
       reIsPlainProp = /^\w*$/,
-      reLeadingDot = /^\./,
       rePropName = /[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|$))/g;
 
   /**
@@ -3643,8 +3710,8 @@ exports.default = Admin;
       reOptMod = rsModifier + '?',
       rsOptVar = '[' + rsVarRange + ']?',
       rsOptJoin = '(?:' + rsZWJ + '(?:' + [rsNonAstral, rsRegional, rsSurrPair].join('|') + ')' + rsOptVar + reOptMod + ')*',
-      rsOrdLower = '\\d*(?:(?:1st|2nd|3rd|(?![123])\\dth)\\b)',
-      rsOrdUpper = '\\d*(?:(?:1ST|2ND|3RD|(?![123])\\dTH)\\b)',
+      rsOrdLower = '\\d*(?:1st|2nd|3rd|(?![123])\\dth)(?=\\b|[A-Z_])',
+      rsOrdUpper = '\\d*(?:1ST|2ND|3RD|(?![123])\\dTH)(?=\\b|[a-z_])',
       rsSeq = rsOptVar + reOptMod + rsOptJoin,
       rsEmoji = '(?:' + [rsDingbat, rsRegional, rsSurrPair].join('|') + ')' + rsSeq,
       rsSymbol = '(?:' + [rsNonAstral + rsCombo + '?', rsCombo, rsRegional, rsSurrPair, rsAstral].join('|') + ')';
@@ -3850,34 +3917,6 @@ exports.default = Admin;
       nodeIsTypedArray = nodeUtil && nodeUtil.isTypedArray;
 
   /*--------------------------------------------------------------------------*/
-
-  /**
-   * Adds the key-value `pair` to `map`.
-   *
-   * @private
-   * @param {Object} map The map to modify.
-   * @param {Array} pair The key-value pair to add.
-   * @returns {Object} Returns `map`.
-   */
-  function addMapEntry(map, pair) {
-    // Don't return `map.set` because it's not chainable in IE 11.
-    map.set(pair[0], pair[1]);
-    return map;
-  }
-
-  /**
-   * Adds `value` to `set`.
-   *
-   * @private
-   * @param {Object} set The set to modify.
-   * @param {*} value The value to add.
-   * @returns {Object} Returns `set`.
-   */
-  function addSetEntry(set, value) {
-    // Don't return `set.add` because it's not chainable in IE 11.
-    set.add(value);
-    return set;
-  }
 
   /**
    * A faster alternative to `Function#apply`, this function invokes `func`
@@ -4643,6 +4682,20 @@ exports.default = Admin;
       }
     }
     return result;
+  }
+
+  /**
+   * Gets the value at `key`, unless `key` is "__proto__".
+   *
+   * @private
+   * @param {Object} object The object to query.
+   * @param {string} key The key of the property to get.
+   * @returns {*} Returns the property value.
+   */
+  function safeGet(object, key) {
+    return key == '__proto__'
+      ? undefined
+      : object[key];
   }
 
   /**
@@ -6077,7 +6130,7 @@ exports.default = Admin;
           if (!cloneableTags[tag]) {
             return object ? value : {};
           }
-          result = initCloneByTag(value, tag, baseClone, isDeep);
+          result = initCloneByTag(value, tag, isDeep);
         }
       }
       // Check for circular references and return its corresponding clone.
@@ -6087,6 +6140,22 @@ exports.default = Admin;
         return stacked;
       }
       stack.set(value, result);
+
+      if (isSet(value)) {
+        value.forEach(function(subValue) {
+          result.add(baseClone(subValue, bitmask, customizer, subValue, value, stack));
+        });
+
+        return result;
+      }
+
+      if (isMap(value)) {
+        value.forEach(function(subValue, key) {
+          result.set(key, baseClone(subValue, bitmask, customizer, key, value, stack));
+        });
+
+        return result;
+      }
 
       var keysFunc = isFull
         ? (isFlat ? getAllKeysIn : getAllKeys)
@@ -7015,7 +7084,7 @@ exports.default = Admin;
         }
         else {
           var newValue = customizer
-            ? customizer(object[key], srcValue, (key + ''), object, source, stack)
+            ? customizer(safeGet(object, key), srcValue, (key + ''), object, source, stack)
             : undefined;
 
           if (newValue === undefined) {
@@ -7042,8 +7111,8 @@ exports.default = Admin;
      *  counterparts.
      */
     function baseMergeDeep(object, source, key, srcIndex, mergeFunc, customizer, stack) {
-      var objValue = object[key],
-          srcValue = source[key],
+      var objValue = safeGet(object, key),
+          srcValue = safeGet(source, key),
           stacked = stack.get(srcValue);
 
       if (stacked) {
@@ -7952,20 +8021,6 @@ exports.default = Admin;
     }
 
     /**
-     * Creates a clone of `map`.
-     *
-     * @private
-     * @param {Object} map The map to clone.
-     * @param {Function} cloneFunc The function to clone values.
-     * @param {boolean} [isDeep] Specify a deep clone.
-     * @returns {Object} Returns the cloned map.
-     */
-    function cloneMap(map, isDeep, cloneFunc) {
-      var array = isDeep ? cloneFunc(mapToArray(map), CLONE_DEEP_FLAG) : mapToArray(map);
-      return arrayReduce(array, addMapEntry, new map.constructor);
-    }
-
-    /**
      * Creates a clone of `regexp`.
      *
      * @private
@@ -7976,20 +8031,6 @@ exports.default = Admin;
       var result = new regexp.constructor(regexp.source, reFlags.exec(regexp));
       result.lastIndex = regexp.lastIndex;
       return result;
-    }
-
-    /**
-     * Creates a clone of `set`.
-     *
-     * @private
-     * @param {Object} set The set to clone.
-     * @param {Function} cloneFunc The function to clone values.
-     * @param {boolean} [isDeep] Specify a deep clone.
-     * @returns {Object} Returns the cloned set.
-     */
-    function cloneSet(set, isDeep, cloneFunc) {
-      var array = isDeep ? cloneFunc(setToArray(set), CLONE_DEEP_FLAG) : setToArray(set);
-      return arrayReduce(array, addSetEntry, new set.constructor);
     }
 
     /**
@@ -9586,7 +9627,7 @@ exports.default = Admin;
      */
     function initCloneArray(array) {
       var length = array.length,
-          result = array.constructor(length);
+          result = new array.constructor(length);
 
       // Add properties assigned by `RegExp#exec`.
       if (length && typeof array[0] == 'string' && hasOwnProperty.call(array, 'index')) {
@@ -9613,16 +9654,15 @@ exports.default = Admin;
      * Initializes an object clone based on its `toStringTag`.
      *
      * **Note:** This function only supports cloning values with tags of
-     * `Boolean`, `Date`, `Error`, `Number`, `RegExp`, or `String`.
+     * `Boolean`, `Date`, `Error`, `Map`, `Number`, `RegExp`, `Set`, or `String`.
      *
      * @private
      * @param {Object} object The object to clone.
      * @param {string} tag The `toStringTag` of the object to clone.
-     * @param {Function} cloneFunc The function to clone values.
      * @param {boolean} [isDeep] Specify a deep clone.
      * @returns {Object} Returns the initialized clone.
      */
-    function initCloneByTag(object, tag, cloneFunc, isDeep) {
+    function initCloneByTag(object, tag, isDeep) {
       var Ctor = object.constructor;
       switch (tag) {
         case arrayBufferTag:
@@ -9641,7 +9681,7 @@ exports.default = Admin;
           return cloneTypedArray(object, isDeep);
 
         case mapTag:
-          return cloneMap(object, isDeep, cloneFunc);
+          return new Ctor;
 
         case numberTag:
         case stringTag:
@@ -9651,7 +9691,7 @@ exports.default = Admin;
           return cloneRegExp(object);
 
         case setTag:
-          return cloneSet(object, isDeep, cloneFunc);
+          return new Ctor;
 
         case symbolTag:
           return cloneSymbol(object);
@@ -9698,10 +9738,13 @@ exports.default = Admin;
      * @returns {boolean} Returns `true` if `value` is a valid index, else `false`.
      */
     function isIndex(value, length) {
+      var type = typeof value;
       length = length == null ? MAX_SAFE_INTEGER : length;
+
       return !!length &&
-        (typeof value == 'number' || reIsUint.test(value)) &&
-        (value > -1 && value % 1 == 0 && value < length);
+        (type == 'number' ||
+          (type != 'symbol' && reIsUint.test(value))) &&
+            (value > -1 && value % 1 == 0 && value < length);
     }
 
     /**
@@ -10151,11 +10194,11 @@ exports.default = Admin;
      */
     var stringToPath = memoizeCapped(function(string) {
       var result = [];
-      if (reLeadingDot.test(string)) {
+      if (string.charCodeAt(0) === 46 /* . */) {
         result.push('');
       }
-      string.replace(rePropName, function(match, number, quote, string) {
-        result.push(quote ? string.replace(reEscapeChar, '$1') : (number || match));
+      string.replace(rePropName, function(match, number, quote, subString) {
+        result.push(quote ? subString.replace(reEscapeChar, '$1') : (number || match));
       });
       return result;
     });
@@ -13763,9 +13806,11 @@ exports.default = Admin;
       function remainingWait(time) {
         var timeSinceLastCall = time - lastCallTime,
             timeSinceLastInvoke = time - lastInvokeTime,
-            result = wait - timeSinceLastCall;
+            timeWaiting = wait - timeSinceLastCall;
 
-        return maxing ? nativeMin(result, maxWait - timeSinceLastInvoke) : result;
+        return maxing
+          ? nativeMin(timeWaiting, maxWait - timeSinceLastInvoke)
+          : timeWaiting;
       }
 
       function shouldInvoke(time) {
@@ -16197,9 +16242,35 @@ exports.default = Admin;
      * _.defaults({ 'a': 1 }, { 'b': 2 }, { 'a': 3 });
      * // => { 'a': 1, 'b': 2 }
      */
-    var defaults = baseRest(function(args) {
-      args.push(undefined, customDefaultsAssignIn);
-      return apply(assignInWith, undefined, args);
+    var defaults = baseRest(function(object, sources) {
+      object = Object(object);
+
+      var index = -1;
+      var length = sources.length;
+      var guard = length > 2 ? sources[2] : undefined;
+
+      if (guard && isIterateeCall(sources[0], sources[1], guard)) {
+        length = 1;
+      }
+
+      while (++index < length) {
+        var source = sources[index];
+        var props = keysIn(source);
+        var propsIndex = -1;
+        var propsLength = props.length;
+
+        while (++propsIndex < propsLength) {
+          var key = props[propsIndex];
+          var value = object[key];
+
+          if (value === undefined ||
+              (eq(value, objectProto[key]) && !hasOwnProperty.call(object, key))) {
+            object[key] = source[key];
+          }
+        }
+      }
+
+      return object;
     });
 
     /**
@@ -16596,6 +16667,11 @@ exports.default = Admin;
      * // => { '1': 'c', '2': 'b' }
      */
     var invert = createInverter(function(result, value, key) {
+      if (value != null &&
+          typeof value.toString != 'function') {
+        value = nativeObjectToString.call(value);
+      }
+
       result[value] = key;
     }, constant(identity));
 
@@ -16626,6 +16702,11 @@ exports.default = Admin;
      * // => { 'group1': ['a', 'c'], 'group2': ['b'] }
      */
     var invertBy = createInverter(function(result, value, key) {
+      if (value != null &&
+          typeof value.toString != 'function') {
+        value = nativeObjectToString.call(value);
+      }
+
       if (hasOwnProperty.call(result, value)) {
         result[value].push(key);
       } else {
@@ -40748,7 +40829,7 @@ module.exports = function (css) {
 			.replace(/^'(.*)'$/, function(o, $1){ return $1; });
 
 		// already a full url? no change
-		if (/^(#|data:|http:\/\/|https:\/\/|file:\/\/\/)/i.test(unquotedOrigUrl)) {
+		if (/^(#|data:|http:\/\/|https:\/\/|file:\/\/\/|\s*$)/i.test(unquotedOrigUrl)) {
 		  return fullMatch;
 		}
 

@@ -5,18 +5,16 @@
   "main": "public/bundle.js",
   "dependencies": {
     "lodash": "",
+    "react-jsonschema-form": "^1.0.0",
+    "react-select": "^1.2.1",
+    "uuid": "^3.2.1"
+  },
+  "devDependencies": {
     "moment": "",
     "moment-timezone": "",
     "react": "",
-    "react-addons-css-transition-group": "^15.6.0",
-    "react-addons-shallow-compare": "^15.6.0",
     "react-dom": "^16.2.0",
-    "react-jsonschema-form": "^1.0.0",
-    "react-select": "^1.2.1",
-    "uuid": "^3.2.1",
-    "whatwg-fetch": ""
-  },
-  "devDependencies": {
+    "whatwg-fetch": "",
     "bootstrap-sass": "^3.3.7",
     "extract-text-webpack-plugin": "^3.0.2",
     "babel-core": "",
