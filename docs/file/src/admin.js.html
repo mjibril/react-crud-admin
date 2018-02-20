@@ -90,8 +90,8 @@ class Admin extends React.Component {
         this.state.queryset=queryset;
 	this.state.total=queryset.length;
 	this._handle_search = this._handle_search.bind(this);
-	this.select_all = this.select_all.bind(this);
-	this.select_one=this.select_one.bind(this);
+	this._select_all = this._select_all.bind(this);
+	this._select_one=this._select_one.bind(this);
 
     }
      /**
@@ -482,12 +482,14 @@ class Admin extends React.Component {
 	    return &lt;span&gt; {label} &lt;/span&gt;
 	}
     }
+    
     set_queryset(queryset)
     {
 	
 	this.setState({queryset : queryset})
 
     }
+    
     set_total(total)
     {
 	
@@ -548,7 +550,7 @@ class Admin extends React.Component {
     {
 	
 	let t={}
-	t[filter_name]= options.map((option)=&gt;{ option.filter = filter_name; return option; });
+	t[filter_name]= options.map((option)=&gt;{ option._filter_ = filter_name; return option; });
 	this.setState({ filter_options :  _.assign(this.state.filter_options,t)}    )
 
     }
@@ -559,7 +561,7 @@ class Admin extends React.Component {
     }
     get_filters()
     {
-	
+	/*
 	return {
 
 	    &quot;by_id&quot; : { &quot;options&quot; : [
@@ -576,14 +578,18 @@ class Admin extends React.Component {
 	     }
            }
 	    
-	}
+	}*/
     }
     _handle_filter_change(values)
     {
-	
+	if(!(values instanceof Array) &amp;&amp; values!=null)
+	{
+	    values=[values];
+	}
+
 	this.setState({ filter_values : values || [] });
 	
-	if(values.length&lt;=0)
+	if(values==null  || values.length&lt;=0)
 	{
 	    this.set_queryset(this.get_queryset(this.state.page_number,this.list_per_page,this.state.queryset));
 	    return
@@ -592,11 +598,11 @@ class Admin extends React.Component {
 	let filters=this.get_filters();
 	for(let value of values)
 	{
-	    let queryset=filters[value.filter].filter_function(value,this.state.queryset)
+	    let queryset=filters[value._filter_].filter_function(value,this.state.queryset)
 	    this.setState({queryset:queryset});
 	}
     }
-    _render_filters()
+    render_filters()
     {
 
 	let options=[];
@@ -613,7 +619,7 @@ class Admin extends React.Component {
 	    {
 		for(let option of  filters[filter].options)
 		{
-		    option.filter=filter;
+		    option._filter_=filter;
 		    options.push(option)
 		}
 	    }
@@ -621,7 +627,7 @@ class Admin extends React.Component {
 	    {
 		for(let option of  this.state.filter_options[filter])
 		{
-		    option.filter=filter;
+		    option._filter_=filter;
 		    options.push(option);
 		}
 	    }
@@ -636,7 +642,7 @@ class Admin extends React.Component {
 	name=&quot;filter-form&quot;
 	multi={true}
 	onChange={this._handle_filter_change.bind(this)}
-	closeOnSelect={false}
+	closeOnSelect={true}
 	value ={this.state.filter_values}
 	removeSelected = {true}
 	placeholder = {&quot;Select a filter&quot;}
@@ -691,7 +697,7 @@ class Admin extends React.Component {
      * displayed within a single display page are selected
      */   
 
-    select_all(event)
+    _select_all(event)
     {
 
 
@@ -714,7 +720,7 @@ class Admin extends React.Component {
      * displayed is selected
      */   
 
-    select_one(object)
+    _select_one(object)
     {
 
 	return (event)=&gt;{
@@ -748,7 +754,7 @@ class Admin extends React.Component {
 	return this._get_ordered_queryset().map((object,i)=&gt;
 	    {
 		return &lt;tr&gt;
-		&lt;td&gt;  &lt;input type=&quot;checkbox&quot; id={i+&apos;_checkbox&apos;} onChange={this.select_one(object)} checked={this.state.selected_objects.contains(object)}/&gt; &lt;label htmlFor={i+&apos;_checkbox&apos;}&gt;&amp;nbsp;&lt;/label&gt; &lt;/td&gt;
+		&lt;td&gt;  &lt;input type=&quot;checkbox&quot; id={i+&apos;_checkbox&apos;} onChange={this._select_one(object)} checked={this.state.selected_objects.contains(object)}/&gt; &lt;label htmlFor={i+&apos;_checkbox&apos;}&gt;&amp;nbsp;&lt;/label&gt; &lt;/td&gt;
 		{this.get_list_display().map((item)=&gt;
 		{
 		    
@@ -786,15 +792,16 @@ class Admin extends React.Component {
      * @return A progress indicator component
      */
 
-    render_progress()
+    render_progress(loading)
     {
+	if(loading)
+	{
 
-
-	return 	    &lt;div className=&quot;fetch-progress&quot; &gt;
-	 &lt;progress&gt;
+	    return &lt;div className=&quot;fetch-progress&quot; &gt;
+	            &lt;progress&gt;
 	    	    &lt;/progress&gt; 
-	    &lt;/div&gt;
-
+	           &lt;/div&gt;
+	}
     }
     /**
      * An event listener that listens to the search event. This method calls search method which
@@ -812,7 +819,7 @@ class Admin extends React.Component {
 	{
 	    let key= event.which || event.keyCode;
 	   
-            if(this.live_search || key===13)
+            if(this.get_live_search() || key===13)
 	    {
 		let queryset=this.search(term,this.state.queryset);
 		this.setState({queryset:queryset,total:queryset.length})
@@ -830,11 +837,11 @@ class Admin extends React.Component {
     }
     /**
      * Renders the search component
-     * @private 
+     * 
      * @return A search input field
      */
 
-    _render_search_field()
+    render_search_field()
     {
 	return 	&lt;div &gt;
 	&lt;input name=&quot;search&quot; type=&quot;text&quot; className=&quot;ra-search-field&quot; placeholder=&quot;Search&quot; onChange={this._handle_search}   onKeyUp={this._handle_search}/&gt;
@@ -843,11 +850,11 @@ class Admin extends React.Component {
     }
     /**
      * Renders the add object button. Checks to see if permission is given by has_add_permission
-     * @private 
+     * 
      * @return An add button component
      */
 
-    _render_add_button()
+    render_add_button()
     {
 
 	if(this.has_add_permission())
@@ -857,24 +864,28 @@ class Admin extends React.Component {
     }
     /**
      * Renders the table in the display page. This calls _get_table_header and _get_table_body
-     * @private 
+     * 
      * @return An a table displaying the state queryset set objects
      */
 
-    _render_table()
+    render_table()
     {
 
 	return 	&lt;table className=&quot;table&quot;&gt;
-		&lt;thead&gt;
-	        &lt;tr&gt;
-	         &lt;th&gt;  &lt;input type=&quot;checkbox&quot; id=&quot;all_boxes&quot; onChange={this.select_all} /&gt;  &lt;label htmlFor=&quot;all_boxes&quot;&gt;&amp;nbsp;&lt;/label&gt; &lt;/th&gt;
+	    
+	    &lt;thead&gt;
+	    
+	       &lt;tr&gt;
+	          &lt;th&gt;
+	             &lt;input type=&quot;checkbox&quot; id=&quot;all_boxes&quot; onChange={this._select_all} /&gt;  &lt;label htmlFor=&quot;all_boxes&quot;&gt;&amp;nbsp;&lt;/label&gt;
+	         &lt;/th&gt;
 		{this._get_table_header()}
-		&lt;/tr&gt;
-		&lt;/thead&gt;
-		&lt;tbody&gt;
+	       &lt;/tr&gt;
+	    &lt;/thead&gt;
+	     &lt;tbody&gt;
 		{this._get_table_body()}
-		&lt;/tbody&gt;
-		&lt;/table&gt;
+	     &lt;/tbody&gt;
+	     &lt;/table&gt;
 	
 
 
@@ -951,7 +962,7 @@ class Admin extends React.Component {
      * @return A component that renders the pagination controls
      */
 
-    _render_pagination()
+    render_pagination()
     {
 
 	let pages=[];
@@ -1026,7 +1037,7 @@ class Admin extends React.Component {
      * @return A component that renders a select input for all actions in the list display page
      */
 
-    _render_actions()
+    render_actions()
     {
 
 	    
@@ -1041,16 +1052,16 @@ class Admin extends React.Component {
     }
     /**
      * Renders the back button component in the add/change view
-     * 
+     * @ignore
      * @return A component that renders a back button
      */
 
 
-    _render_back_button()
+    render_back_button()
     {
 	
-	return &lt;div&gt;&lt;button className={&quot;ra-back-button&quot;} onClick={()=&gt;{this.setState({display_type : display_type.list,object: null });this.get_queryset(this.state.page_number,this.list_per_page,this.state.queryset); }}&gt; Back &lt;/button&gt;&lt;/div&gt;
-	
+//	return &lt;div&gt;&lt;button className={&quot;ra-back-button&quot;} onClick={()=&gt;{this.setState({display_type : display_type.list,object: null });this.get_queryset(this.state.page_number,this.list_per_page,this.state.queryset); }}&gt; Back &lt;/button&gt;&lt;/div&gt;
+	return null;
 
     }
     /**
@@ -1058,6 +1069,93 @@ class Admin extends React.Component {
      * 
      * @return A component that renders the admin interface
      */
+    render_list_view()
+    {
+	return (
+	       &lt;div &gt;
+		
+		    {this.render_add_button()}
+	            {this.render_below_add_button()}
+		    {this.render_search_field()}
+		    {this.render_below_search_field()}
+		    {this.render_actions()}
+	            {this.render_below_actions()}
+		    {this.render_filters()}
+		    {this.render_below_filters()}
+		
+		    {this.render_table()}
+		    {this.render_below_table()}
+	            {this.render_progress(this.state.loading)} 
+	            {this.render_below_progress()}
+		
+		    {this.render_pagination()}
+		
+		&lt;/div&gt;
+	    )
+	    
+
+
+    }
+    render_below_add_button(){
+
+    }
+    render_below_search_field()
+    {
+
+    }
+		
+    render_below_actions()
+    {
+
+
+    }
+		
+    render_below_filters()
+    {
+
+    }
+		
+		
+    render_below_table()
+    {
+
+    }
+		
+    render_below_progress()
+    {
+
+    }
+		
+		
+    render_change_view()
+    {
+	return (
+		&lt;div&gt;
+		{this.render_progress(this.state.loading)}
+		&lt;div className=&quot;change-form&quot;&gt;
+		{this.get_form(this.state.object)}
+	        &lt;/div&gt;
+		&lt;/div&gt;
+	    )
+
+
+    }
+    render_above_change_view()
+    {
+
+    }
+    render_below_change_view()
+    {
+
+    }
+    render_above_list_view()
+    {
+
+    }
+    render_below_list_view()
+    {
+
+    }
 
     render()
     {
@@ -1068,43 +1166,23 @@ class Admin extends React.Component {
 
 	if(this.state.display_type == display_type.list)
 	{
-
-	    return (
-	       &lt;div &gt;
-		
-		    {this._render_add_button()}
-		
-		    {this._render_search_field()}
-		
-		    {this._render_actions()}
-		
-		    {this._render_filters()}
-		
-		
-		    {this._render_table()}
-		
-		    {this.state.loading ? this.render_progress() : null}
-		
-		
-		    {this._render_pagination()}
-		
-		&lt;/div&gt;
-	    )
-	    
+	    return &lt;div&gt;
+	    {this.render_above_list_view()}
+	    {this.render_list_view()}
+	    {this.render_below_list_view()}
+	    &lt;/div&gt;
 	}
 	else
 	{
+	    //Important: the next two lines are for URL navigation and handling the browser back button
+	    this._change_uuid=uuidv1();
+	    history.pushState({}, &quot;Change View&quot;, &quot;#/change/&quot;+this._change_uuid);
 	    
-		this._change_uuid=uuidv1();
-		history.pushState({}, &quot;Change View&quot;, &quot;#/change/&quot;+this._change_uuid);	    
-		
-	    
-	    return (
-		&lt;div className=&quot;change-form&quot;&gt;
-		{this._render_back_button()}
-		{this.get_form(this.state.object)}
-		&lt;/div&gt;
-	    )
+	    return &lt;div&gt;
+	        {this.render_above_change_view()}
+	        {this.render_change_view()}
+	        {this.render_below_change_view()}
+	    &lt;/div&gt;
 	}
 
 	
@@ -1122,7 +1200,7 @@ class Admin extends React.Component {
 
 	    if(this &amp;&amp; this.state.display_type!=display_type.list &amp;&amp; !_.endsWith(window.location.hash,this._change_uuid))
 	    {
-		this.setState({display_type : display_type.list});
+		this.show_list_view()
 	    }
 
 	    

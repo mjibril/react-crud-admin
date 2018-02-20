@@ -4,8 +4,6 @@
   "description": "React Admin inspired by DjangoAdmin",
   "main": "public/bundle.js",
   "dependencies": {
-    "bootstrap-sass": "^3.3.7",
-    "extract-text-webpack-plugin": "^3.0.2",
     "lodash": "",
     "moment": "",
     "moment-timezone": "",
@@ -19,6 +17,8 @@
     "whatwg-fetch": ""
   },
   "devDependencies": {
+    "bootstrap-sass": "^3.3.7",
+    "extract-text-webpack-plugin": "^3.0.2",
     "babel-core": "",
     "babel-loader": "",
     "babel-plugin-transform-class-properties": "^6.24.1",

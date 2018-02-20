@@ -642,9 +642,9 @@ The `get_filters` method returns an object whose properties are filter names. Th
 ```
 the name of the filter and the options array of the filter. 
 
-The `"filter_function"` is a function that performs filtering. It has two arguments,  `"option"` which is the selected `"option"` and the current queryset. It must return a queryset. For asynchronous cases, `set_queryset` and `set_total` methods can be used to set the queryset after backend filtering.
+The `"filter_function"` is a function that performs filtering. It has two arguments,  `"option"` which is the selected `"option"` and the current queryset. It must return a queryset. `"option"` is one of `"options"`  array. For asynchronous cases, `set_queryset` and `set_total` methods can be used to set the queryset after backend filtering.
 
-The second filter `"by_id"` filters the queryset by even and odd `id` property.
+The second filter `"by_id"` filters the queryset by even and odd `id` property.  The filter UI uses [React Select](https://github.com/JedWatson/react-select) component. 
 
 ## Add/Change View
 ### Forms
@@ -757,7 +757,22 @@ Property | Default Value  | Description
 `selected_objects` |  Empty set | The `Set` class a wrapper around `array` that implements set  
 
 ### Progress Indicator
-`show_progress` and `hide_progress` can be used in the both the list display and add/change view to display and hide a progress indicator. `render_progress` can be used to override the default progress indicator component to be rendered. `render_progress` should return a component.
+`show_progress` and `hide_progress` can be used in the both the list display and add/change view to display and hide a progress indicator. `render_progress` can be used to override the default progress indicator component to be rendered. `render_progress` has one argument which is a boolean denoting wether or not to render a progress indicator. For example,
+
+```javascript
+render_progress(loading)
+{
+	if(loading)
+	{
+	return <progress/>
+	}	
+
+}
+
+```
+
+
+`render_progress` should return a component.
 
 ### ESDOC API Documentation.
 
@@ -766,3 +781,96 @@ The API documentation generated with `esdoc.js` is available [here](https://mjib
 ### Example
 
 The file containing the example used here is available at [link](https://github.com/mjibril/react-crud-admin/blob/master/doc_example.js).
+#Advanced
+
+##Rendering
+
+There are two main `render` like methods that combine to form the `Component.render` method of `react-crud-admin`. The first is `render_list_view` which renders the current list view and the second is `render_change_view` which renders the add/change view. Only one of these views is active at a time and forms the `Component.render` for the component.
+
+```javascript
+
+ render()
+ {
+	if(!this.has_module_permission())
+	{
+	    return <div> <h1> Permission Denied </h1></div>
+	}
+
+	if(this.state.display_type == display_type.list)
+	{
+	    return <div>
+	    	    {this.render_above_list_view()}
+	   	    {this.render_list_view()}
+	    	    {this.render_below_list_view()}
+	    	   </div>
+	}
+	else
+	{
+	    //Important: the next two lines are for URL navigation and handling the browser back button
+	    this._change_uuid=uuidv1();//use uuid to avoid conflict with custom router implementations
+	    history.pushState({}, "Change View", "#/change/"+this._change_uuid);
+	    
+	    return <div>
+	             {this.render_above_change_view()}
+	             {this.render_change_view()}
+	             {this.render_below_change_view()}
+	           </div>
+	}
+}
+
+
+
+
+```
+
+### List View
+It is possible to add components above and below the list view using `render_above_list_view` and `render_below_list_view` methods. Both methods take no arguments and by default return `null`.
+
+Within the `render_list_view` method itself, customisations are possible.
+```javascript
+ render_list_view()
+ {
+	return (
+	       <div >
+		
+		    {this.render_add_button()}
+	            {this.render_below_add_button()}
+		    {this.render_search_field()}
+		    {this.render_below_search_field()}
+		    {this.render_actions()}
+	            {this.render_below_actions()}
+		    {this.render_filters()}
+		    {this.render_below_filters()}
+		    {this.render_table()}
+		    {this.render_below_table()}
+	            {this.render_progress(this.state.loading)} 
+	            {this.render_below_progress()}
+		
+		    {this.render_pagination()}
+		
+		</div>
+	    )
+	    
+
+
+    }
+```
+
+The `render_below_*` methods are used to add components below the add button, search field, actions,filters,list table and progress indicator. By default these methods return `null`.
+
+It is also worth noting that one can hide any of the components by the overriding their methods and returning null. For example to hide the actions component, we override the `render_actions` method.
+
+```javascript
+
+render_actions()
+{
+
+}
+
+```
+### The Add/Change View
+
+It is possible to add components above and below the add/change view using `render_above_change_view` and `render_below_change_view` methods. Both methods take no arguments and by default return `null`.
+
+
+

@@ -384,45 +384,15 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/admin.js~admin#_render_actions",
-    "class/src/admin.js~Admin.html#instance-method-_render_actions",
-    "src/admin.js~Admin#_render_actions",
+    "src/admin.js~admin#_select_all",
+    "class/src/admin.js~Admin.html#instance-method-_select_all",
+    "src/admin.js~Admin#_select_all",
     "method"
   ],
   [
-    "src/admin.js~admin#_render_add_button",
-    "class/src/admin.js~Admin.html#instance-method-_render_add_button",
-    "src/admin.js~Admin#_render_add_button",
-    "method"
-  ],
-  [
-    "src/admin.js~admin#_render_back_button",
-    "class/src/admin.js~Admin.html#instance-method-_render_back_button",
-    "src/admin.js~Admin#_render_back_button",
-    "method"
-  ],
-  [
-    "src/admin.js~admin#_render_filters",
-    "class/src/admin.js~Admin.html#instance-method-_render_filters",
-    "src/admin.js~Admin#_render_filters",
-    "method"
-  ],
-  [
-    "src/admin.js~admin#_render_pagination",
-    "class/src/admin.js~Admin.html#instance-method-_render_pagination",
-    "src/admin.js~Admin#_render_pagination",
-    "method"
-  ],
-  [
-    "src/admin.js~admin#_render_search_field",
-    "class/src/admin.js~Admin.html#instance-method-_render_search_field",
-    "src/admin.js~Admin#_render_search_field",
-    "method"
-  ],
-  [
-    "src/admin.js~admin#_render_table",
-    "class/src/admin.js~Admin.html#instance-method-_render_table",
-    "src/admin.js~Admin#_render_table",
+    "src/admin.js~admin#_select_one",
+    "class/src/admin.js~Admin.html#instance-method-_select_one",
+    "src/admin.js~Admin#_select_one",
     "method"
   ],
   [
@@ -648,9 +618,117 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/admin.js~admin#render_above_change_view",
+    "class/src/admin.js~Admin.html#instance-method-render_above_change_view",
+    "src/admin.js~Admin#render_above_change_view",
+    "method"
+  ],
+  [
+    "src/admin.js~admin#render_above_list_view",
+    "class/src/admin.js~Admin.html#instance-method-render_above_list_view",
+    "src/admin.js~Admin#render_above_list_view",
+    "method"
+  ],
+  [
+    "src/admin.js~admin#render_actions",
+    "class/src/admin.js~Admin.html#instance-method-render_actions",
+    "src/admin.js~Admin#render_actions",
+    "method"
+  ],
+  [
+    "src/admin.js~admin#render_add_button",
+    "class/src/admin.js~Admin.html#instance-method-render_add_button",
+    "src/admin.js~Admin#render_add_button",
+    "method"
+  ],
+  [
+    "src/admin.js~admin#render_below_actions",
+    "class/src/admin.js~Admin.html#instance-method-render_below_actions",
+    "src/admin.js~Admin#render_below_actions",
+    "method"
+  ],
+  [
+    "src/admin.js~admin#render_below_add_button",
+    "class/src/admin.js~Admin.html#instance-method-render_below_add_button",
+    "src/admin.js~Admin#render_below_add_button",
+    "method"
+  ],
+  [
+    "src/admin.js~admin#render_below_change_view",
+    "class/src/admin.js~Admin.html#instance-method-render_below_change_view",
+    "src/admin.js~Admin#render_below_change_view",
+    "method"
+  ],
+  [
+    "src/admin.js~admin#render_below_filters",
+    "class/src/admin.js~Admin.html#instance-method-render_below_filters",
+    "src/admin.js~Admin#render_below_filters",
+    "method"
+  ],
+  [
+    "src/admin.js~admin#render_below_list_view",
+    "class/src/admin.js~Admin.html#instance-method-render_below_list_view",
+    "src/admin.js~Admin#render_below_list_view",
+    "method"
+  ],
+  [
+    "src/admin.js~admin#render_below_progress",
+    "class/src/admin.js~Admin.html#instance-method-render_below_progress",
+    "src/admin.js~Admin#render_below_progress",
+    "method"
+  ],
+  [
+    "src/admin.js~admin#render_below_search_field",
+    "class/src/admin.js~Admin.html#instance-method-render_below_search_field",
+    "src/admin.js~Admin#render_below_search_field",
+    "method"
+  ],
+  [
+    "src/admin.js~admin#render_below_table",
+    "class/src/admin.js~Admin.html#instance-method-render_below_table",
+    "src/admin.js~Admin#render_below_table",
+    "method"
+  ],
+  [
+    "src/admin.js~admin#render_change_view",
+    "class/src/admin.js~Admin.html#instance-method-render_change_view",
+    "src/admin.js~Admin#render_change_view",
+    "method"
+  ],
+  [
+    "src/admin.js~admin#render_filters",
+    "class/src/admin.js~Admin.html#instance-method-render_filters",
+    "src/admin.js~Admin#render_filters",
+    "method"
+  ],
+  [
+    "src/admin.js~admin#render_list_view",
+    "class/src/admin.js~Admin.html#instance-method-render_list_view",
+    "src/admin.js~Admin#render_list_view",
+    "method"
+  ],
+  [
+    "src/admin.js~admin#render_pagination",
+    "class/src/admin.js~Admin.html#instance-method-render_pagination",
+    "src/admin.js~Admin#render_pagination",
+    "method"
+  ],
+  [
     "src/admin.js~admin#render_progress",
     "class/src/admin.js~Admin.html#instance-method-render_progress",
     "src/admin.js~Admin#render_progress",
+    "method"
+  ],
+  [
+    "src/admin.js~admin#render_search_field",
+    "class/src/admin.js~Admin.html#instance-method-render_search_field",
+    "src/admin.js~Admin#render_search_field",
+    "method"
+  ],
+  [
+    "src/admin.js~admin#render_table",
+    "class/src/admin.js~Admin.html#instance-method-render_table",
+    "src/admin.js~Admin#render_table",
     "method"
   ],
   [
@@ -675,18 +753,6 @@ window.esdocSearchIndex = [
     "src/admin.js~admin#selectpage",
     "class/src/admin.js~Admin.html#instance-method-selectPage",
     "src/admin.js~Admin#selectPage",
-    "method"
-  ],
-  [
-    "src/admin.js~admin#select_all",
-    "class/src/admin.js~Admin.html#instance-method-select_all",
-    "src/admin.js~Admin#select_all",
-    "method"
-  ],
-  [
-    "src/admin.js~admin#select_one",
-    "class/src/admin.js~Admin.html#instance-method-select_one",
-    "src/admin.js~Admin#select_one",
     "method"
   ],
   [

@@ -51,8 +51,8 @@ class Admin extends React.Component {
         this.state.queryset=queryset;
 	this.state.total=queryset.length;
 	this._handle_search = this._handle_search.bind(this);
-	this.select_all = this.select_all.bind(this);
-	this.select_one=this.select_one.bind(this);
+	this._select_all = this._select_all.bind(this);
+	this._select_one=this._select_one.bind(this);
 
     }
      /**
@@ -443,12 +443,14 @@ class Admin extends React.Component {
 	    return <span> {label} </span>
 	}
     }
+    
     set_queryset(queryset)
     {
 	
 	this.setState({queryset : queryset})
 
     }
+    
     set_total(total)
     {
 	
@@ -509,7 +511,7 @@ class Admin extends React.Component {
     {
 	
 	let t={}
-	t[filter_name]= options.map((option)=>{ option.filter = filter_name; return option; });
+	t[filter_name]= options.map((option)=>{ option._filter_ = filter_name; return option; });
 	this.setState({ filter_options :  _.assign(this.state.filter_options,t)}    )
 
     }
@@ -520,7 +522,7 @@ class Admin extends React.Component {
     }
     get_filters()
     {
-	
+	/*
 	return {
 
 	    "by_id" : { "options" : [
@@ -537,14 +539,18 @@ class Admin extends React.Component {
 	     }
            }
 	    
-	}
+	}*/
     }
     _handle_filter_change(values)
     {
-	
+	if(!(values instanceof Array) && values!=null)
+	{
+	    values=[values];
+	}
+
 	this.setState({ filter_values : values || [] });
 	
-	if(values.length<=0)
+	if(values==null  || values.length<=0)
 	{
 	    this.set_queryset(this.get_queryset(this.state.page_number,this.list_per_page,this.state.queryset));
 	    return
@@ -553,11 +559,11 @@ class Admin extends React.Component {
 	let filters=this.get_filters();
 	for(let value of values)
 	{
-	    let queryset=filters[value.filter].filter_function(value,this.state.queryset)
+	    let queryset=filters[value._filter_].filter_function(value,this.state.queryset)
 	    this.setState({queryset:queryset});
 	}
     }
-    _render_filters()
+    render_filters()
     {
 
 	let options=[];
@@ -574,7 +580,7 @@ class Admin extends React.Component {
 	    {
 		for(let option of  filters[filter].options)
 		{
-		    option.filter=filter;
+		    option._filter_=filter;
 		    options.push(option)
 		}
 	    }
@@ -582,7 +588,7 @@ class Admin extends React.Component {
 	    {
 		for(let option of  this.state.filter_options[filter])
 		{
-		    option.filter=filter;
+		    option._filter_=filter;
 		    options.push(option);
 		}
 	    }
@@ -597,7 +603,7 @@ class Admin extends React.Component {
 	name="filter-form"
 	multi={true}
 	onChange={this._handle_filter_change.bind(this)}
-	closeOnSelect={false}
+	closeOnSelect={true}
 	value ={this.state.filter_values}
 	removeSelected = {true}
 	placeholder = {"Select a filter"}
@@ -652,7 +658,7 @@ class Admin extends React.Component {
      * displayed within a single display page are selected
      */   
 
-    select_all(event)
+    _select_all(event)
     {
 
 
@@ -675,7 +681,7 @@ class Admin extends React.Component {
      * displayed is selected
      */   
 
-    select_one(object)
+    _select_one(object)
     {
 
 	return (event)=>{
@@ -709,7 +715,7 @@ class Admin extends React.Component {
 	return this._get_ordered_queryset().map((object,i)=>
 	    {
 		return <tr>
-		<td>  <input type="checkbox" id={i+'_checkbox'} onChange={this.select_one(object)} checked={this.state.selected_objects.contains(object)}/> <label htmlFor={i+'_checkbox'}>&nbsp;</label> </td>
+		<td>  <input type="checkbox" id={i+'_checkbox'} onChange={this._select_one(object)} checked={this.state.selected_objects.contains(object)}/> <label htmlFor={i+'_checkbox'}>&nbsp;</label> </td>
 		{this.get_list_display().map((item)=>
 		{
 		    
@@ -747,15 +753,16 @@ class Admin extends React.Component {
      * @return A progress indicator component
      */
 
-    render_progress()
+    render_progress(loading)
     {
+	if(loading)
+	{
 
-
-	return 	    <div className="fetch-progress" >
-	 <progress>
+	    return <div className="fetch-progress" >
+	            <progress>
 	    	    </progress> 
-	    </div>
-
+	           </div>
+	}
     }
     /**
      * An event listener that listens to the search event. This method calls search method which
@@ -773,7 +780,7 @@ class Admin extends React.Component {
 	{
 	    let key= event.which || event.keyCode;
 	   
-            if(this.live_search || key===13)
+            if(this.get_live_search() || key===13)
 	    {
 		let queryset=this.search(term,this.state.queryset);
 		this.setState({queryset:queryset,total:queryset.length})
@@ -791,11 +798,11 @@ class Admin extends React.Component {
     }
     /**
      * Renders the search component
-     * @private 
+     * 
      * @return A search input field
      */
 
-    _render_search_field()
+    render_search_field()
     {
 	return 	<div >
 	<input name="search" type="text" className="ra-search-field" placeholder="Search" onChange={this._handle_search}   onKeyUp={this._handle_search}/>
@@ -804,11 +811,11 @@ class Admin extends React.Component {
     }
     /**
      * Renders the add object button. Checks to see if permission is given by has_add_permission
-     * @private 
+     * 
      * @return An add button component
      */
 
-    _render_add_button()
+    render_add_button()
     {
 
 	if(this.has_add_permission())
@@ -818,24 +825,28 @@ class Admin extends React.Component {
     }
     /**
      * Renders the table in the display page. This calls _get_table_header and _get_table_body
-     * @private 
+     * 
      * @return An a table displaying the state queryset set objects
      */
 
-    _render_table()
+    render_table()
     {
 
 	return 	<table className="table">
-		<thead>
-	        <tr>
-	         <th>  <input type="checkbox" id="all_boxes" onChange={this.select_all} />  <label htmlFor="all_boxes">&nbsp;</label> </th>
+	    
+	    <thead>
+	    
+	       <tr>
+	          <th>
+	             <input type="checkbox" id="all_boxes" onChange={this._select_all} />  <label htmlFor="all_boxes">&nbsp;</label>
+	         </th>
 		{this._get_table_header()}
-		</tr>
-		</thead>
-		<tbody>
+	       </tr>
+	    </thead>
+	     <tbody>
 		{this._get_table_body()}
-		</tbody>
-		</table>
+	     </tbody>
+	     </table>
 	
 
 
@@ -912,7 +923,7 @@ class Admin extends React.Component {
      * @return A component that renders the pagination controls
      */
 
-    _render_pagination()
+    render_pagination()
     {
 
 	let pages=[];
@@ -987,7 +998,7 @@ class Admin extends React.Component {
      * @return A component that renders a select input for all actions in the list display page
      */
 
-    _render_actions()
+    render_actions()
     {
 
 	    
@@ -1002,12 +1013,12 @@ class Admin extends React.Component {
     }
     /**
      * Renders the back button component in the add/change view
-     * 
+     * @ignore
      * @return A component that renders a back button
      */
 
 
-    _render_back_button()
+    render_back_button()
     {
 	
 //	return <div><button className={"ra-back-button"} onClick={()=>{this.setState({display_type : display_type.list,object: null });this.get_queryset(this.state.page_number,this.list_per_page,this.state.queryset); }}> Back </button></div>
@@ -1019,6 +1030,93 @@ class Admin extends React.Component {
      * 
      * @return A component that renders the admin interface
      */
+    render_list_view()
+    {
+	return (
+	       <div >
+		
+		    {this.render_add_button()}
+	            {this.render_below_add_button()}
+		    {this.render_search_field()}
+		    {this.render_below_search_field()}
+		    {this.render_actions()}
+	            {this.render_below_actions()}
+		    {this.render_filters()}
+		    {this.render_below_filters()}
+		
+		    {this.render_table()}
+		    {this.render_below_table()}
+	            {this.render_progress(this.state.loading)} 
+	            {this.render_below_progress()}
+		
+		    {this.render_pagination()}
+		
+		</div>
+	    )
+	    
+
+
+    }
+    render_below_add_button(){
+
+    }
+    render_below_search_field()
+    {
+
+    }
+		
+    render_below_actions()
+    {
+
+
+    }
+		
+    render_below_filters()
+    {
+
+    }
+		
+		
+    render_below_table()
+    {
+
+    }
+		
+    render_below_progress()
+    {
+
+    }
+		
+		
+    render_change_view()
+    {
+	return (
+		<div>
+		{this.render_progress(this.state.loading)}
+		<div className="change-form">
+		{this.get_form(this.state.object)}
+	        </div>
+		</div>
+	    )
+
+
+    }
+    render_above_change_view()
+    {
+
+    }
+    render_below_change_view()
+    {
+
+    }
+    render_above_list_view()
+    {
+
+    }
+    render_below_list_view()
+    {
+
+    }
 
     render()
     {
@@ -1029,43 +1127,23 @@ class Admin extends React.Component {
 
 	if(this.state.display_type == display_type.list)
 	{
-
-	    return (
-	       <div >
-		
-		    {this._render_add_button()}
-		
-		    {this._render_search_field()}
-		
-		    {this._render_actions()}
-		
-		    {this._render_filters()}
-		
-		
-		    {this._render_table()}
-		
-		    {this.state.loading ? this.render_progress() : null}
-		
-		
-		    {this._render_pagination()}
-		
-		</div>
-	    )
-	    
+	    return <div>
+	    {this.render_above_list_view()}
+	    {this.render_list_view()}
+	    {this.render_below_list_view()}
+	    </div>
 	}
 	else
 	{
+	    //Important: the next two lines are for URL navigation and handling the browser back button
+	    this._change_uuid=uuidv1();
+	    history.pushState({}, "Change View", "#/change/"+this._change_uuid);
 	    
-		this._change_uuid=uuidv1();
-		history.pushState({}, "Change View", "#/change/"+this._change_uuid);	    
-		
-	    
-	    return (
-		<div className="change-form">
-		{this._render_back_button()}
-		{this.get_form(this.state.object)}
-		</div>
-	    )
+	    return <div>
+	        {this.render_above_change_view()}
+	        {this.render_change_view()}
+	        {this.render_below_change_view()}
+	    </div>
 	}
 
 	

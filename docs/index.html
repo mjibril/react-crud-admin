@@ -510,8 +510,8 @@ get_filters()
 <pre><code class="lang-javascript"><code class="source-code prettyprint"> set_filter_options(filter_name,options)</code>
 </code></pre>
 <p>the name of the filter and the options array of the filter. </p>
-<p>The <code>&quot;filter_function&quot;</code> is a function that performs filtering. It has two arguments,  <code>&quot;option&quot;</code> which is the selected <code>&quot;option&quot;</code> and the current queryset. It must return a queryset. For asynchronous cases, <code>set_queryset</code> and <code>set_total</code> methods can be used to set the queryset after backend filtering.</p>
-<p>The second filter <code>&quot;by_id&quot;</code> filters the queryset by even and odd <code>id</code> property.</p>
+<p>The <code>&quot;filter_function&quot;</code> is a function that performs filtering. It has two arguments,  <code>&quot;option&quot;</code> which is the selected <code>&quot;option&quot;</code> and the current queryset. It must return a queryset. <code>&quot;option&quot;</code> is one of <code>&quot;options&quot;</code>  array. For asynchronous cases, <code>set_queryset</code> and <code>set_total</code> methods can be used to set the queryset after backend filtering.</p>
+<p>The second filter <code>&quot;by_id&quot;</code> filters the queryset by even and odd <code>id</code> property.  The filter UI uses <a href="https://github.com/JedWatson/react-select">React Select</a> component. </p>
 <h2 id="add-change-view">Add/Change View</h2><h3 id="forms">Forms</h3><p>We can add submit handlers for the form in our example,</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">....
 ....
@@ -632,9 +632,90 @@ export default class Example extends Admin
 </tr>
 </tbody>
 </table>
-<h3 id="progress-indicator">Progress Indicator</h3><p><code>show_progress</code> and <code>hide_progress</code> can be used in the both the list display and add/change view to display and hide a progress indicator. <code>render_progress</code> can be used to override the default progress indicator component to be rendered. <code>render_progress</code> should return a component.</p>
+<h3 id="progress-indicator">Progress Indicator</h3><p><code>show_progress</code> and <code>hide_progress</code> can be used in the both the list display and add/change view to display and hide a progress indicator. <code>render_progress</code> can be used to override the default progress indicator component to be rendered. <code>render_progress</code> has one argument which is a boolean denoting wether or not to render a progress indicator. For example,</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">render_progress(loading)
+{
+    if(loading)
+    {
+    return &lt;progress/&gt;
+    }    
+
+}</code>
+</code></pre>
+<p><code>render_progress</code> should return a component.</p>
 <h3 id="esdoc-api-documentation-">ESDOC API Documentation.</h3><p>The API documentation generated with <code>esdoc.js</code> is available <a href="https://mjibril.github.io/react-crud-admin/">here</a>.</p>
 <h3 id="example">Example</h3><p>The file containing the example used here is available at <a href="https://github.com/mjibril/react-crud-admin/blob/master/doc_example.js">link</a>.</p>
+<p>#Advanced</p>
+<p>##Rendering</p>
+<p>There are two main <code>render</code> like methods that combine to form the <code>Component.render</code> method of <code>react-crud-admin</code>. The first is <code>render_list_view</code> which renders the current list view and the second is <code>render_change_view</code> which renders the add/change view. Only one of these views is active at a time and forms the <code>Component.render</code> for the component.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">
+ render()
+ {
+    if(!this.has_module_permission())
+    {
+        return &lt;div&gt; &lt;h1&gt; Permission Denied &lt;/h1&gt;&lt;/div&gt;
+    }
+
+    if(this.state.display_type == display_type.list)
+    {
+        return &lt;div&gt;
+                {this.render_above_list_view()}
+               {this.render_list_view()}
+                {this.render_below_list_view()}
+               &lt;/div&gt;
+    }
+    else
+    {
+        //Important: the next two lines are for URL navigation and handling the browser back button
+        this._change_uuid=uuidv1();//use uuid to avoid conflict with custom router implementations
+        history.pushState({}, &quot;Change View&quot;, &quot;#/change/&quot;+this._change_uuid);
+
+        return &lt;div&gt;
+                 {this.render_above_change_view()}
+                 {this.render_change_view()}
+                 {this.render_below_change_view()}
+               &lt;/div&gt;
+    }
+}</code>
+</code></pre>
+<h3 id="list-view">List View</h3><p>It is possible to add components above and below the list view using <code>render_above_list_view</code> and <code>render_below_list_view</code> methods. Both methods take no arguments and by default return <code>null</code>.</p>
+<p>Within the <code>render_list_view</code> method itself, customisations are possible.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint"> render_list_view()
+ {
+    return (
+           &lt;div &gt;
+
+            {this.render_add_button()}
+                {this.render_below_add_button()}
+            {this.render_search_field()}
+            {this.render_below_search_field()}
+            {this.render_actions()}
+                {this.render_below_actions()}
+            {this.render_filters()}
+            {this.render_below_filters()}
+            {this.render_table()}
+            {this.render_below_table()}
+                {this.render_progress(this.state.loading)} 
+                {this.render_below_progress()}
+
+            {this.render_pagination()}
+
+        &lt;/div&gt;
+        )
+
+
+
+    }</code>
+</code></pre>
+<p>The <code>render_below_*</code> methods are used to add components below the add button, search field, actions,filters,list table and progress indicator. By default these methods return <code>null</code>.</p>
+<p>It is also worth noting that one can hide any of the components by the overriding their methods and returning null. For example to hide the actions component, we override the <code>render_actions</code> method.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">
+render_actions()
+{
+
+}</code>
+</code></pre>
+<h3 id="the-add-change-view">The Add/Change View</h3><p>It is possible to add components above and below the add/change view using <code>render_above_change_view</code> and <code>render_below_change_view</code> methods. Both methods take no arguments and by default return <code>null</code>.</p>
 </div>
 </div>
 
