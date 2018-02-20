@@ -39,8 +39,20 @@ class Admin extends React.Component {
     
 	this._all_selected=false
 	this.register_listener()
-
-
+	/*
+	_.keys(props).map((key)=>{
+	    if(typeof props[key] == "function")
+	    {
+		this[key] = props[key]
+		this[key].bind(this);
+	    }
+	    else
+	    {
+		this[key]=props[key];
+	    }
+	    
+	});
+	*/
 	/**
 	 * Initialize the state of the component
 	*/
