@@ -36,10 +36,10 @@ class Admin extends React.Component {
 	    }
 	}
 	
-    
+	this.queryset=[]
 	this._all_selected=false
 	this.register_listener()
-	/*
+
 	_.keys(props).map((key)=>{
 	    if(typeof props[key] == "function")
 	    {
@@ -52,7 +52,7 @@ class Admin extends React.Component {
 	    }
 	    
 	});
-	*/
+
 	/**
 	 * Initialize the state of the component
 	*/
@@ -81,7 +81,7 @@ class Admin extends React.Component {
     {
     
 
-	return []
+	return this.queryset;
     }
 
     
