@@ -785,7 +785,7 @@ The file containing the example used here is available at [link](https://github.
 
 ##Rendering
 
-There are two main `render` like methods that combine to form the `Component.render` method of `react-crud-admin`. The first is `render_list_view` which renders the current list view and the second is `render_change_view` which renders the add/change view. Only one of these views is active at a time and forms the `Component.render` for the component.
+There are two main `render` like methods that combine to form the `Component.render` method of `react-crud-admin`. The first is `render_list_view` which renders the current list view and the second is `render_change_view` which renders the add/change view. Only one of these views is active at a time and forms the `Component.render` for the component. A full implementation is given below,
 
 ```javascript
 
@@ -824,9 +824,9 @@ There are two main `render` like methods that combine to form the `Component.ren
 ```
 
 ### List View
-It is possible to add components above and below the list view using `render_above_list_view` and `render_below_list_view` methods. Both methods take no arguments and by default return `null`.
+It is possible to add components above and below the list view using `render_above_list_view` and `render_below_list_view` methods. Both methods take no arguments and by default return `null`. These methods can be overridden to return components.
 
-Within the `render_list_view` method itself, customisations are possible.
+Within the `render_list_view` method itself, customisations are possible. The full implementation of `render_list_view` is,
 ```javascript
  render_list_view()
  {
@@ -856,7 +856,7 @@ Within the `render_list_view` method itself, customisations are possible.
     }
 ```
 
-The `render_below_*` methods are used to add components below the add button, search field, actions,filters,list table and progress indicator. By default these methods return `null`.
+The `render_below_*` methods are used to add components below the add button, search field, actions,filters,list table and progress indicator. By default these methods return `null`. These methods can be overridden to return components.
 
 It is also worth noting that one can hide any of the components by the overriding their methods and returning null. For example to hide the actions component, we override the `render_actions` method.
 
@@ -870,7 +870,7 @@ render_actions()
 ```
 ### The Add/Change View
 
-It is possible to add components above and below the add/change view using `render_above_change_view` and `render_below_change_view` methods. Both methods take no arguments and by default return `null`.
+It is possible to add components above and below the add/change view using `render_above_change_view` and `render_below_change_view` methods. Both methods take no arguments and by default return `null`. These methods can be overridden to return components.
 
 
 
