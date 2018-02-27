@@ -818,9 +818,10 @@ A complete example is available at [link](https://github.com/mjibril/react-crud-
 ### Example
 
 The file containing the example used here is available at [link](https://github.com/mjibril/react-crud-admin/blob/master/doc_example.js).
-#Advanced
 
-##Rendering
+# Advanced
+
+## Rendering
 
 There are two main `render` like methods that combine to form the `Component.render` method of `react-crud-admin`. The first is `render_list_view` which renders the current list view and the second is `render_change_view` which renders the add/change view. Only one of these views is active at a time and forms the `Component.render` for the component. A full implementation is given below,
 
