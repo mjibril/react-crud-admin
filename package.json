@@ -41,7 +41,7 @@
     "build-publish": "webpack --config webpack.config.publish.js --progress --profile --colors",
     "start": "webpack-dev-server --progress --profile --colors",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "scss": "node-sass --watch src -o css"
+    "scss": "node-sass src -o css"
   },
   "repository": {
     "type": "git",

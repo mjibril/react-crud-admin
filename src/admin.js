@@ -12,12 +12,12 @@ export const display_type = {
 
 /** Admin Class extends React.Component. To implement a CRUD interface similar to Django Admin you need to extend the Admin class. */
 class Admin extends React.Component {
-	
+    
     constructor(props)
     {
 	
 	super(props);
-	
+
 	this.name='default'
 	this.name_plural='defaults'
 	this.live_search=false
@@ -39,19 +39,26 @@ class Admin extends React.Component {
 	this.queryset=[]
 	this._all_selected=false
 	this.register_listener()
-
-	_.keys(props).map((key)=>{
-	    if(typeof props[key] == "function")
-	    {
-		this[key] = props[key]
-		this[key].bind(this);
-	    }
-	    else
-	    {
-		this[key]=props[key];
-	    }
-	    
-	});
+	if(props)
+	{
+	    this.bind_exclude= props.bind_exclude ? props.bind_exclude : []
+	    _.keys(props).map((key)=>{
+		if(typeof props[key] == "function")
+		{
+		    if(_.includes(key,this.bind_exclude))
+		    {
+			this[key] = props[key]
+			
+			this[key].bind(this);
+		    }
+		}
+		else
+		{
+		    this[key]=props[key];
+		}
+		
+	    });
+	}
 
 	/**
 	 * Initialize the state of the component
@@ -1102,12 +1109,9 @@ class Admin extends React.Component {
 		
     render_change_view()
     {
-	return (
-		<div>
-		{this.render_progress(this.state.loading)}
-		<div className="change-form">
+	return (<div>
+	    {this.render_progress(this.state.loading)}
 		{this.get_form(this.state.object)}
-	        </div>
 		</div>
 	    )
 

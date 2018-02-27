@@ -11,6 +11,7 @@ Since React is primarily a UI library and there are a litany of  backends, **rea
 Install the library,
 
     npm install react-crud-admin
+    
 
 ## Example
 
@@ -185,6 +186,7 @@ get_queryset(page_number,list_per_page,queryset)
 ```
 It is important to note that `get_queryset` returns only items to be listed in the current display view/page.  It is necessary to use the arguments `page_number` and `list_per_page` for fetching data from the backend. This allows us to implement pagination.
 
+
 ```javascript
     get_queryset(page_number,list_per_page,queryset)
     {
@@ -233,6 +235,14 @@ set_total(total)
 
 }
 ```
+It is also possible to set a fixed queryset using `queryset` property.
+```javascript
+this.queryset=[
+	    {id: 1, name: 'Ken Next', number: '08939303003',address:{ street: "Hallmark Street"}},
+            {id: 2,name: 'Isa Yoll', number: '0908839202',address:{ street: "Barbican Street"}}
+	]
+```
+This is always overriden by `get_queryset`.
 
 ### UI Customisation
 #### Display
@@ -777,6 +787,33 @@ render_progress(loading)
 ### ESDOC API Documentation.
 
 The API documentation generated with `esdoc.js` is available [here](https://mjibril.github.io/react-crud-admin/).
+## Component Props
+There are many instances where customising the `react-crud-admin` component using component props is beneficial. Perhaps the component is to be used as a child component that reacts to changes in the parent component. For those cases it is possible to use props to customise the `Admin` component.
+
+All members and properties of the `Admin` component class can be assigned using React component props. All functions passed as props are automatically bound to the `Admin` thus making them class members. This means that `this` will reference the `Admin` component despite being used outside the component.
+
+The end result will look like,
+```javascript
+    <Example
+     queryset={data}
+     search={search}
+     form_submit={form_submit}
+     get_form={get_form}
+     get_header_transforms={get_header_transforms}
+     get_field_transforms={get_field_transforms}
+     get_extra_fields={get_extra_fields}
+     get_actions={get_actions}
+     get_filters={get_filters}
+     name={name}
+     name_plural={name_plural}
+     list_display={list_display}
+     list_display_links={list_display_links}
+    />
+
+```
+You can use `bind_exclude` prop which is an array that contains names of methods that should be excluded from automatic binding, allowing `this` reference to refer to something else.
+
+A complete example is available at [link](https://github.com/mjibril/react-crud-admin/blob/master/doc_example.props.js).
 
 ### Example
 
