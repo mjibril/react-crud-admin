@@ -213,6 +213,13 @@ and there are a total 100 records in the backend <code>results.data</code> will 
 
 }</code>
 </code></pre>
+<p>It is also possible to set a fixed queryset using <code>queryset</code> property.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">this.queryset=[
+        {id: 1, name: &apos;Ken Next&apos;, number: &apos;08939303003&apos;,address:{ street: &quot;Hallmark Street&quot;}},
+            {id: 2,name: &apos;Isa Yoll&apos;, number: &apos;0908839202&apos;,address:{ street: &quot;Barbican Street&quot;}}
+    ]</code>
+</code></pre>
+<p>This is always overriden by <code>get_queryset</code>.</p>
 <h3 id="ui-customisation">UI Customisation</h3><h4 id="display">Display</h4><h5 id="list-display">List Display</h5><p>The <code>get_list_display</code> method returns a list/array of properties/field names of the objects in the queryset to be displayed on the list display page. It can be overridden by the member variable
 list<em>display. A property is any string that should exist in the objects within 
 a queryset and works with lodash&apos;s </em>.at function. See more at <a href="https://lodash.com/docs/#at">Lodash</a></p>
@@ -644,10 +651,31 @@ export default class Example extends Admin
 </code></pre>
 <p><code>render_progress</code> should return a component.</p>
 <h3 id="esdoc-api-documentation-">ESDOC API Documentation.</h3><p>The API documentation generated with <code>esdoc.js</code> is available <a href="https://mjibril.github.io/react-crud-admin/">here</a>.</p>
+<h2 id="component-props">Component Props</h2><p>There are many instances where customising the <code>react-crud-admin</code> component using component props is beneficial. Perhaps the component is to be used as a child component that reacts to changes in the parent component. For those cases it is possible to use props to customise the <code>Admin</code> component.</p>
+<p>All members and properties of the <code>Admin</code> component class can be assigned using React component props. All functions passed as props are automatically bound to the <code>Admin</code> thus making them class members. This means that <code>this</code> will reference the <code>Admin</code> component despite being used outside the component.</p>
+<p>The end result will look like,</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">    &lt;Example
+     queryset={data}
+     search={search}
+     form_submit={form_submit}
+     get_form={get_form}
+     get_header_transforms={get_header_transforms}
+     get_field_transforms={get_field_transforms}
+     get_extra_fields={get_extra_fields}
+     get_actions={get_actions}
+     get_filters={get_filters}
+     name={name}
+     name_plural={name_plural}
+     list_display={list_display}
+     list_display_links={list_display_links}
+    /&gt;</code>
+</code></pre>
+<p>You can use <code>bind_exclude</code> prop which is an array that contains names of methods that should be excluded from automatic binding, allowing <code>this</code> reference to refer to something else.</p>
+<p>A complete example is available at <a href="https://github.com/mjibril/react-crud-admin/blob/master/doc_example.props.js">link</a>.</p>
 <h3 id="example">Example</h3><p>The file containing the example used here is available at <a href="https://github.com/mjibril/react-crud-admin/blob/master/doc_example.js">link</a>.</p>
 <p>#Advanced</p>
 <p>##Rendering</p>
-<p>There are two main <code>render</code> like methods that combine to form the <code>Component.render</code> method of <code>react-crud-admin</code>. The first is <code>render_list_view</code> which renders the current list view and the second is <code>render_change_view</code> which renders the add/change view. Only one of these views is active at a time and forms the <code>Component.render</code> for the component.</p>
+<p>There are two main <code>render</code> like methods that combine to form the <code>Component.render</code> method of <code>react-crud-admin</code>. The first is <code>render_list_view</code> which renders the current list view and the second is <code>render_change_view</code> which renders the add/change view. Only one of these views is active at a time and forms the <code>Component.render</code> for the component. A full implementation is given below,</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">
  render()
  {
@@ -678,8 +706,8 @@ export default class Example extends Admin
     }
 }</code>
 </code></pre>
-<h3 id="list-view">List View</h3><p>It is possible to add components above and below the list view using <code>render_above_list_view</code> and <code>render_below_list_view</code> methods. Both methods take no arguments and by default return <code>null</code>.</p>
-<p>Within the <code>render_list_view</code> method itself, customisations are possible.</p>
+<h3 id="list-view">List View</h3><p>It is possible to add components above and below the list view using <code>render_above_list_view</code> and <code>render_below_list_view</code> methods. Both methods take no arguments and by default return <code>null</code>. These methods can be overridden to return components.</p>
+<p>Within the <code>render_list_view</code> method itself, customisations are possible. The full implementation of <code>render_list_view</code> is,</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint"> render_list_view()
  {
     return (
@@ -707,7 +735,7 @@ export default class Example extends Admin
 
     }</code>
 </code></pre>
-<p>The <code>render_below_*</code> methods are used to add components below the add button, search field, actions,filters,list table and progress indicator. By default these methods return <code>null</code>.</p>
+<p>The <code>render_below_*</code> methods are used to add components below the add button, search field, actions,filters,list table and progress indicator. By default these methods return <code>null</code>. These methods can be overridden to return components.</p>
 <p>It is also worth noting that one can hide any of the components by the overriding their methods and returning null. For example to hide the actions component, we override the <code>render_actions</code> method.</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">
 render_actions()
@@ -715,7 +743,7 @@ render_actions()
 
 }</code>
 </code></pre>
-<h3 id="the-add-change-view">The Add/Change View</h3><p>It is possible to add components above and below the add/change view using <code>render_above_change_view</code> and <code>render_below_change_view</code> methods. Both methods take no arguments and by default return <code>null</code>.</p>
+<h3 id="the-add-change-view">The Add/Change View</h3><p>It is possible to add components above and below the add/change view using <code>render_above_change_view</code> and <code>render_below_change_view</code> methods. Both methods take no arguments and by default return <code>null</code>. These methods can be overridden to return components.</p>
 </div>
 </div>
 

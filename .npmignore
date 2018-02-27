@@ -3,3 +3,4 @@ testbed/
 *#
 voter.*
 src/example*.js
+src/evoting.js

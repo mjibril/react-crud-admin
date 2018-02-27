@@ -306,6 +306,12 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/admin.js~admin#[key]",
+    "class/src/admin.js~Admin.html#instance-member-[key]",
+    "src/admin.js~Admin#[key]",
+    "member"
+  ],
+  [
     "src/admin.js~admin#_all_selected",
     "class/src/admin.js~Admin.html#instance-member-_all_selected",
     "src/admin.js~Admin#_all_selected",
@@ -411,6 +417,12 @@ window.esdocSearchIndex = [
     "src/admin.js~admin#actions",
     "class/src/admin.js~Admin.html#instance-member-actions",
     "src/admin.js~Admin#actions",
+    "member"
+  ],
+  [
+    "src/admin.js~admin#bind_exclude",
+    "class/src/admin.js~Admin.html#instance-member-bind_exclude",
+    "src/admin.js~Admin#bind_exclude",
     "member"
   ],
   [
@@ -604,6 +616,12 @@ window.esdocSearchIndex = [
     "class/src/admin.js~Admin.html#instance-method-prevPage",
     "src/admin.js~Admin#prevPage",
     "method"
+  ],
+  [
+    "src/admin.js~admin#queryset",
+    "class/src/admin.js~Admin.html#instance-member-queryset",
+    "src/admin.js~Admin#queryset",
+    "member"
   ],
   [
     "src/admin.js~admin#register_listener",

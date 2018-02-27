@@ -6,5 +6,5 @@
 	{"name" :"esdoc-jsx-plugin"}
 	
     ],
-    "excludes": ["voter.js","example.*.js","utils.js"]
+    "excludes": ["voter.js","example.*.js","utils.js","evoting.js"]
 }
