@@ -1,12 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-//import exampleComponent from './example5.js';
+import exampleComponent from './example5.js';
 import {Voter} from './voter.js';
-import Evoting from './evoting.js';
+//import Evoting from './evoting.js';
 
 
 
 
 
-ReactDOM.render(  <Voter/>  ,  document.querySelector("#app"))
+ReactDOM.render(  exampleComponent()  ,  document.querySelector("#app"))
 

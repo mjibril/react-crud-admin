@@ -58,10 +58,11 @@ function build_composite_key(keys)
                         )
 
 */
-
+if(window.ELECTION === "undefined")
+{
     window.SERVER="http://localhost:5984";
     window.ELECTION="NIM2017";
-
+}
 
 export const default_headers = new Headers();
 default_headers.set('Content-Type', 'application/json');

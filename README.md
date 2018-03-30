@@ -353,9 +353,17 @@ This produces
 
 ![example31](assets/example3-1.png)
 
-All the contact names have been turned to lower case. Field transforms apply to full columns on the data table in the display view.
+All the contact names have been turned to lower case. Field transforms apply to full columns on the data table in the display view. It is possible to replace fields with React components like images and buttons. As an example suppose a column has fields which contain image urls, we can replace each field with a corresponding image.
+```javascript
+this.field_transforms ={ 'image_url' : function(content,object)
+  	                  {
+                              return <img src={content}/>
+                          }
+                        }
+```
+
 #### Extra Fields
-It is sometimes desirable to create new fields that are not properties in any of the objects in the queryset. As an example, we create a new field that displays the current time using the `moment` library.
+It is sometimes desirable to create new fields that are not properties of any of the objects in the queryset. As an example, we create a new field that displays the current time using the `moment` library.
 ```javascript
 
 get_extra_fields()

@@ -425,8 +425,8 @@ class Admin extends React.Component {
     
     response_add()
     {
-	
-	this.setState({display_type :display_type.list, object :null,queryset: this.get_queryset(this.state.page_number,this.list_per_page,this.state.queryset)  });
+	this._display_will_change()
+	this.setState({display_type :display_type.list, object :null,queryset: this.get_queryset(this.state.page_number,this.list_per_page,this.state.queryset)  },this._display_changed);
 
 	return true
     }
@@ -437,7 +437,8 @@ class Admin extends React.Component {
 
     response_change()
     {
-	this.setState({display_type :display_type.list, object :null,queryset: this.get_queryset(this.state.page_number,this.list_per_page,this.state.queryset)  });
+	this._display_will_change()
+	this.setState({display_type :display_type.list, object :null,queryset: this.get_queryset(this.state.page_number,this.list_per_page,this.state.queryset)  },this._display_changed);
 	
 	return true
     }
@@ -491,14 +492,49 @@ class Admin extends React.Component {
 	})
 
     }
+    _display_changed()
+    {
+	this.display_changed(this.state.display_type,this.state.object)
 
+    }
+    /**
+     * An event listener that listens to state changes in the display type i.e.
+     * from list to add/change. It is fired after state changes are made.
+     * 
+     * @param {string} display_type - the current display type of the component either "list" or "change" 
+     * @param {object} object - the current object or null
+     
+     */
+
+    display_changed(display_type,object)
+    {
+
+    }
+    _display_will_change()
+    {
+	this.display_will_change(this.state.display_type,this.state.object)
+    }
+    /**
+     * An event listener that listens to state changes in the display type i.e.
+     * from list to add/change . It is fired before state changes are made.
+     * 
+     * @param {string} display_type - the current display type of the component either "list" or "change" 
+     * @param {object} object - the current object or null
+     
+     */
+
+    display_will_change(display_type,object)
+    {
+
+    }
     _object_link_clicked(object)
     {
 	
 	return (event)=>
-	{
-	    this.setState({display_type :display_type.change, object :object  });
-	    event.preventDefault();
+	    {
+		this._display_will_change()
+		this.setState({display_type :display_type.change, object :object  },this._display_changed);
+		event.preventDefault();
 	}
     }
 
@@ -1133,7 +1169,25 @@ class Admin extends React.Component {
     {
 
     }
+    render_list_page()
+    {
+	 return <div>
+	    {this.render_above_list_view()}
+	    {this.render_list_view()}
+	    {this.render_below_list_view()}
+	    </div>
 
+    }
+    render_change_page()
+    {
+	return <div>
+	    {this.render_above_change_view()}
+	{this.render_change_view()}
+	{this.render_below_change_view()}
+	</div>
+
+
+    }
     render()
     {
 	if(!this.has_module_permission())
@@ -1143,30 +1197,23 @@ class Admin extends React.Component {
 
 	if(this.state.display_type == display_type.list)
 	{
-	    return <div>
-	    {this.render_above_list_view()}
-	    {this.render_list_view()}
-	    {this.render_below_list_view()}
-	    </div>
+	    return this.render_list_page();
 	}
 	else
 	{
 	    //Important: the next two lines are for URL navigation and handling the browser back button
 	    this._change_uuid=uuidv1();
-	    history.pushState({}, "Change View", "#/change/"+this._change_uuid);
-	    
-	    return <div>
-	        {this.render_above_change_view()}
-	        {this.render_change_view()}
-	        {this.render_below_change_view()}
-	    </div>
+	    history.pushState({}, "Change View", window.location.hash+"/change/"+this._change_uuid);
+
+	    return this.render_change_page();
 	}
 
 	
     }
     show_list_view()
     {
-	this.setState({display_type : display_type.list})
+	this._display_will_change()
+	this.setState({display_type : display_type.list},this._display_changed)
 
     }
 
