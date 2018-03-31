@@ -769,7 +769,7 @@ class Admin extends React.Component {
     {
 	return this._get_ordered_queryset().map((object,i)=>
 	    {
-		return <tr>
+		return <tr key={"row-"+i}>
 		<td>  <input type="checkbox" id={i+'_checkbox'} onChange={this._select_one(object)} checked={this.state.selected_objects.contains(object)}/> <label htmlFor={i+'_checkbox'}>&nbsp;</label> </td>
 		{this.get_list_display().map((item)=>
 		{
@@ -891,7 +891,7 @@ class Admin extends React.Component {
 	    
 	    <thead>
 	    
-	       <tr>
+	       <tr key="header">
 	          <th>
 	             <input type="checkbox" id="all_boxes" onChange={this._select_all} />  <label htmlFor="all_boxes">&nbsp;</label>
 	         </th>
@@ -1027,18 +1027,18 @@ class Admin extends React.Component {
 
 	<nav  aria-label="Page navigation">
 	<ul className="pagination">
-	<li className="page-item">
+	<li  key={"left"} className="page-item">
 	    <a href="#" aria-label="Previous" onClick={this.prevPage.bind(this)} className="page-link">
 	<span aria-hidden="true">&laquo;</span>
 	</a>
 	    </li>
 	    
 	{pages.map((page)=>{
-	    return <li className="page-item"><a href="#" className="page-link"  onClick={this.selectPage({page})}>{page}</a></li>
+	    return <li key={page} className="page-item"><a href="#" className="page-link"  onClick={this.selectPage({page})}>{page}</a></li>
 	})
 	}
 	<li className="page-item">
-	    <a href="#" onClick={this.nextPage.bind(this)} aria-label="Next" className="page-link">
+	    <a href="#" key={"right"} onClick={this.nextPage.bind(this)} aria-label="Next" className="page-link">
 	<span aria-hidden="true">&raquo;</span>
 	</a>
 	</li>
@@ -1057,10 +1057,10 @@ class Admin extends React.Component {
     {
 
 	    
-	return <select className="ra-action-button" onChange={this.action_selected.bind(this)}>
-	<option value="" disabled selected>Choose an action</option>
+	return <select className="ra-action-button" onChange={this.action_selected.bind(this)} defaultValue="">
+	    <option key="key" value="" disabled={true}>Choose an action</option>
 	{ _.keys(this.actions).map((action)=>{
-	    return <option value={action}> {_.startCase(action)}</option> 
+	    return <option key={action} value={action}> {_.startCase(action)}</option> 
 
 	    })}
 	</select>
@@ -1172,19 +1172,19 @@ class Admin extends React.Component {
     render_list_page()
     {
 	 return <div>
-	    {this.render_above_list_view()}
-	    {this.render_list_view()}
-	    {this.render_below_list_view()}
-	    </div>
+	        {this.render_above_list_view()}
+	        {this.render_list_view()}
+	        {this.render_below_list_view()}
+	       </div>
 
     }
     render_change_page()
     {
 	return <div>
-	    {this.render_above_change_view()}
-	{this.render_change_view()}
-	{this.render_below_change_view()}
-	</div>
+	        {this.render_above_change_view()}
+        	{this.render_change_view()}
+	        {this.render_below_change_view()}
+	       </div>
 
 
     }
