@@ -72,6 +72,8 @@ class Admin extends React.Component {
 	this._handle_search = this._handle_search.bind(this);
 	this._select_all = this._select_all.bind(this);
 	this._select_one=this._select_one.bind(this);
+	this.response_change = this.response_change.bind(this);
+	this.response_add = this.response_add.bind(this);
 
     }
      /**
@@ -1059,7 +1061,7 @@ class Admin extends React.Component {
 	    
 	return <select className="ra-action-button" onChange={this.action_selected.bind(this)} defaultValue="">
 	    <option key="key" value="" disabled={true}>Choose an action</option>
-	{ _.keys(this.actions).map((action)=>{
+     	{ _.keys(this.actions).map((action)=>{
 	    return <option key={action} value={action}> {_.startCase(action)}</option> 
 
 	    })}
