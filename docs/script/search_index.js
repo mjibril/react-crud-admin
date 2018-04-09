@@ -330,9 +330,21 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/admin.js~admin#_display_changed",
+    "class/src/admin.js~Admin.html#instance-method-_display_changed",
+    "src/admin.js~Admin#_display_changed",
+    "method"
+  ],
+  [
     "src/admin.js~admin#_display_field",
     "class/src/admin.js~Admin.html#instance-method-_display_field",
     "src/admin.js~Admin#_display_field",
+    "method"
+  ],
+  [
+    "src/admin.js~admin#_display_will_change",
+    "class/src/admin.js~Admin.html#instance-method-_display_will_change",
+    "src/admin.js~Admin#_display_will_change",
     "method"
   ],
   [
@@ -435,6 +447,18 @@ window.esdocSearchIndex = [
     "src/admin.js~admin#constructor",
     "class/src/admin.js~Admin.html#instance-constructor-constructor",
     "src/admin.js~Admin#constructor",
+    "method"
+  ],
+  [
+    "src/admin.js~admin#display_changed",
+    "class/src/admin.js~Admin.html#instance-method-display_changed",
+    "src/admin.js~Admin#display_changed",
+    "method"
+  ],
+  [
+    "src/admin.js~admin#display_will_change",
+    "class/src/admin.js~Admin.html#instance-method-display_will_change",
+    "src/admin.js~Admin#display_will_change",
     "method"
   ],
   [
@@ -708,6 +732,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/admin.js~admin#render_change_page",
+    "class/src/admin.js~Admin.html#instance-method-render_change_page",
+    "src/admin.js~Admin#render_change_page",
+    "method"
+  ],
+  [
     "src/admin.js~admin#render_change_view",
     "class/src/admin.js~Admin.html#instance-method-render_change_view",
     "src/admin.js~Admin#render_change_view",
@@ -717,6 +747,12 @@ window.esdocSearchIndex = [
     "src/admin.js~admin#render_filters",
     "class/src/admin.js~Admin.html#instance-method-render_filters",
     "src/admin.js~Admin#render_filters",
+    "method"
+  ],
+  [
+    "src/admin.js~admin#render_list_page",
+    "class/src/admin.js~Admin.html#instance-method-render_list_page",
+    "src/admin.js~Admin#render_list_page",
     "method"
   ],
   [

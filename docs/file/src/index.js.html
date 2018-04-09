@@ -39,15 +39,15 @@
 <div class="content" data-ice="content"><h1 data-ice="title">src/index.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import React from &apos;react&apos;;
 import ReactDOM from &apos;react-dom&apos;;
-//import exampleComponent from &apos;./example5.js&apos;;
+import exampleComponent from &apos;./example5.js&apos;;
 import {Voter} from &apos;./voter.js&apos;;
-import Evoting from &apos;./evoting.js&apos;;
+//import Evoting from &apos;./evoting.js&apos;;
 
 
 
 
 
-ReactDOM.render(  &lt;Voter/&gt;  ,  document.querySelector(&quot;#app&quot;))
+ReactDOM.render(  exampleComponent()  ,  document.querySelector(&quot;#app&quot;))
 
 </code></pre>
 

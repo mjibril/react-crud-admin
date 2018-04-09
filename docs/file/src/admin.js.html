@@ -111,6 +111,8 @@ class Admin extends React.Component {
 	this._handle_search = this._handle_search.bind(this);
 	this._select_all = this._select_all.bind(this);
 	this._select_one=this._select_one.bind(this);
+	this.response_change = this.response_change.bind(this);
+	this.response_add = this.response_add.bind(this);
 
     }
      /**
@@ -464,8 +466,8 @@ class Admin extends React.Component {
     
     response_add()
     {
-	
-	this.setState({display_type :display_type.list, object :null,queryset: this.get_queryset(this.state.page_number,this.list_per_page,this.state.queryset)  });
+	this._display_will_change()
+	this.setState({display_type :display_type.list, object :null,queryset: this.get_queryset(this.state.page_number,this.list_per_page,this.state.queryset)  },this._display_changed);
 
 	return true
     }
@@ -476,7 +478,8 @@ class Admin extends React.Component {
 
     response_change()
     {
-	this.setState({display_type :display_type.list, object :null,queryset: this.get_queryset(this.state.page_number,this.list_per_page,this.state.queryset)  });
+	this._display_will_change()
+	this.setState({display_type :display_type.list, object :null,queryset: this.get_queryset(this.state.page_number,this.list_per_page,this.state.queryset)  },this._display_changed);
 	
 	return true
     }
@@ -530,14 +533,49 @@ class Admin extends React.Component {
 	})
 
     }
+    _display_changed()
+    {
+	this.display_changed(this.state.display_type,this.state.object)
 
+    }
+    /**
+     * An event listener that listens to state changes in the display type i.e.
+     * from list to add/change. It is fired after state changes are made.
+     * 
+     * @param {string} display_type - the current display type of the component either &quot;list&quot; or &quot;change&quot; 
+     * @param {object} object - the current object or null
+     
+     */
+
+    display_changed(display_type,object)
+    {
+
+    }
+    _display_will_change()
+    {
+	this.display_will_change(this.state.display_type,this.state.object)
+    }
+    /**
+     * An event listener that listens to state changes in the display type i.e.
+     * from list to add/change . It is fired before state changes are made.
+     * 
+     * @param {string} display_type - the current display type of the component either &quot;list&quot; or &quot;change&quot; 
+     * @param {object} object - the current object or null
+     
+     */
+
+    display_will_change(display_type,object)
+    {
+
+    }
     _object_link_clicked(object)
     {
 	
 	return (event)=&gt;
-	{
-	    this.setState({display_type :display_type.change, object :object  });
-	    event.preventDefault();
+	    {
+		this._display_will_change()
+		this.setState({display_type :display_type.change, object :object  },this._display_changed);
+		event.preventDefault();
 	}
     }
 
@@ -772,7 +810,7 @@ class Admin extends React.Component {
     {
 	return this._get_ordered_queryset().map((object,i)=&gt;
 	    {
-		return &lt;tr&gt;
+		return &lt;tr key={&quot;row-&quot;+i}&gt;
 		&lt;td&gt;  &lt;input type=&quot;checkbox&quot; id={i+&apos;_checkbox&apos;} onChange={this._select_one(object)} checked={this.state.selected_objects.contains(object)}/&gt; &lt;label htmlFor={i+&apos;_checkbox&apos;}&gt;&amp;nbsp;&lt;/label&gt; &lt;/td&gt;
 		{this.get_list_display().map((item)=&gt;
 		{
@@ -894,7 +932,7 @@ class Admin extends React.Component {
 	    
 	    &lt;thead&gt;
 	    
-	       &lt;tr&gt;
+	       &lt;tr key=&quot;header&quot;&gt;
 	          &lt;th&gt;
 	             &lt;input type=&quot;checkbox&quot; id=&quot;all_boxes&quot; onChange={this._select_all} /&gt;  &lt;label htmlFor=&quot;all_boxes&quot;&gt;&amp;nbsp;&lt;/label&gt;
 	         &lt;/th&gt;
@@ -1030,18 +1068,18 @@ class Admin extends React.Component {
 
 	&lt;nav  aria-label=&quot;Page navigation&quot;&gt;
 	&lt;ul className=&quot;pagination&quot;&gt;
-	&lt;li className=&quot;page-item&quot;&gt;
+	&lt;li  key={&quot;left&quot;} className=&quot;page-item&quot;&gt;
 	    &lt;a href=&quot;#&quot; aria-label=&quot;Previous&quot; onClick={this.prevPage.bind(this)} className=&quot;page-link&quot;&gt;
 	&lt;span aria-hidden=&quot;true&quot;&gt;&amp;laquo;&lt;/span&gt;
 	&lt;/a&gt;
 	    &lt;/li&gt;
 	    
 	{pages.map((page)=&gt;{
-	    return &lt;li className=&quot;page-item&quot;&gt;&lt;a href=&quot;#&quot; className=&quot;page-link&quot;  onClick={this.selectPage({page})}&gt;{page}&lt;/a&gt;&lt;/li&gt;
+	    return &lt;li key={page} className=&quot;page-item&quot;&gt;&lt;a href=&quot;#&quot; className=&quot;page-link&quot;  onClick={this.selectPage({page})}&gt;{page}&lt;/a&gt;&lt;/li&gt;
 	})
 	}
 	&lt;li className=&quot;page-item&quot;&gt;
-	    &lt;a href=&quot;#&quot; onClick={this.nextPage.bind(this)} aria-label=&quot;Next&quot; className=&quot;page-link&quot;&gt;
+	    &lt;a href=&quot;#&quot; key={&quot;right&quot;} onClick={this.nextPage.bind(this)} aria-label=&quot;Next&quot; className=&quot;page-link&quot;&gt;
 	&lt;span aria-hidden=&quot;true&quot;&gt;&amp;raquo;&lt;/span&gt;
 	&lt;/a&gt;
 	&lt;/li&gt;
@@ -1060,10 +1098,10 @@ class Admin extends React.Component {
     {
 
 	    
-	return &lt;select className=&quot;ra-action-button&quot; onChange={this.action_selected.bind(this)}&gt;
-	&lt;option value=&quot;&quot; disabled selected&gt;Choose an action&lt;/option&gt;
-	{ _.keys(this.actions).map((action)=&gt;{
-	    return &lt;option value={action}&gt; {_.startCase(action)}&lt;/option&gt; 
+	return &lt;select className=&quot;ra-action-button&quot; onChange={this.action_selected.bind(this)} defaultValue=&quot;&quot;&gt;
+	    &lt;option key=&quot;key&quot; value=&quot;&quot; disabled={true}&gt;Choose an action&lt;/option&gt;
+     	{ _.keys(this.actions).map((action)=&gt;{
+	    return &lt;option key={action} value={action}&gt; {_.startCase(action)}&lt;/option&gt; 
 
 	    })}
 	&lt;/select&gt;
@@ -1172,7 +1210,25 @@ class Admin extends React.Component {
     {
 
     }
+    render_list_page()
+    {
+	 return &lt;div&gt;
+	        {this.render_above_list_view()}
+	        {this.render_list_view()}
+	        {this.render_below_list_view()}
+	       &lt;/div&gt;
 
+    }
+    render_change_page()
+    {
+	return &lt;div&gt;
+	        {this.render_above_change_view()}
+        	{this.render_change_view()}
+	        {this.render_below_change_view()}
+	       &lt;/div&gt;
+
+
+    }
     render()
     {
 	if(!this.has_module_permission())
@@ -1182,30 +1238,23 @@ class Admin extends React.Component {
 
 	if(this.state.display_type == display_type.list)
 	{
-	    return &lt;div&gt;
-	    {this.render_above_list_view()}
-	    {this.render_list_view()}
-	    {this.render_below_list_view()}
-	    &lt;/div&gt;
+	    return this.render_list_page();
 	}
 	else
 	{
 	    //Important: the next two lines are for URL navigation and handling the browser back button
 	    this._change_uuid=uuidv1();
-	    history.pushState({}, &quot;Change View&quot;, &quot;#/change/&quot;+this._change_uuid);
-	    
-	    return &lt;div&gt;
-	        {this.render_above_change_view()}
-	        {this.render_change_view()}
-	        {this.render_below_change_view()}
-	    &lt;/div&gt;
+	    history.pushState({}, &quot;Change View&quot;, window.location.hash+&quot;/change/&quot;+this._change_uuid);
+
+	    return this.render_change_page();
 	}
 
 	
     }
     show_list_view()
     {
-	this.setState({display_type : display_type.list})
+	this._display_will_change()
+	this.setState({display_type : display_type.list},this._display_changed)
 
     }
 

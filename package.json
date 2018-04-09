@@ -5,6 +5,7 @@
   "main": "public/bundle.js",
   "dependencies": {
     "lodash": "",
+    "npm": "^5.8.0",
     "react": "^16.3.0",
     "react-jsonschema-form": "^1.0.0",
     "react-select": "^1.2.1",
@@ -37,7 +38,7 @@
     "whatwg-fetch": ""
   },
   "scripts": {
-    "docs": "esdoc -c .esdoc.json",
+    "edocs": "esdoc -c .esdoc.json",
     "build": "webpack --config webpack.config.production.js --progress --profile --colors",
     "build-publish": "webpack --config webpack.config.publish.js --progress --profile --colors",
     "start": "webpack-dev-server --progress --profile --colors",

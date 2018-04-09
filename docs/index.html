@@ -62,17 +62,17 @@ cd example</code>
         this.list_display=[&apos;name&apos;,&apos;number&apos;,&apos;address.street&apos;]// a list of properties of the object to displayed on the list display page
 
 
-    }
-     }
-    get_queryset(page_number,list_per_page,queryset)
-    {
-        // the actual array containing objects to be displayed
-    return [
-        {id: 1, name: &apos;Joe Next&apos;, number: &apos;08939303003&apos;,address:{ street: &quot;Hallmark Street&quot;}},
-            {id: 2,name: &apos;Isa Yoll&apos;, number: &apos;0908839202&apos;,address:{ street: &quot;Barbican Street&quot;}}
-    ]
 
-    }
+        }
+        get_queryset(page_number,list_per_page,queryset)
+        {
+        // the actual array containing objects to be displayed
+        return [
+               {id: 1, name: &apos;Joe Next&apos;, number: &apos;08939303003&apos;,address:{ street: &quot;Hallmark Street&quot;}},
+                   {id: 2,name: &apos;Isa Yoll&apos;, number: &apos;0908839202&apos;,address:{ street: &quot;Barbican Street&quot;}}
+           ]
+
+        }
 
     }</code>
 </code></pre>
@@ -289,8 +289,14 @@ a queryset and works with lodash&apos;s <code>_.at</code> function. </p>
 <p>The first argument of the transform function is the content to be displayed while the second argument is the current object.</p>
 <p>This produces</p>
 <p><img src="assets/example3-1.png" alt="example31"></p>
-<p>All the contact names have been turned to lower case. Field transforms apply to full columns on the data table in the display view.</p>
-<h4 id="extra-fields">Extra Fields</h4><p>It is sometimes desirable to create new fields that are not properties in any of the objects in the queryset. As an example, we create a new field that displays the current time using the <code>moment</code> library.</p>
+<p>All the contact names have been turned to lower case. Field transforms apply to full columns on the data table in the display view. It is possible to replace fields with React components like images and buttons. As an example suppose a column has fields which contain image urls, we can replace each field with a corresponding image.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">this.field_transforms ={ &apos;image_url&apos; : function(content,object)
+                        {
+                              return &lt;img src={content}/&gt;
+                          }
+                        }</code>
+</code></pre>
+<h4 id="extra-fields">Extra Fields</h4><p>It is sometimes desirable to create new fields that are not properties of any of the objects in the queryset. As an example, we create a new field that displays the current time using the <code>moment</code> library.</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">
 get_extra_fields()
      {
@@ -673,12 +679,9 @@ export default class Example extends Admin
 <p>You can use <code>bind_exclude</code> prop which is an array that contains names of methods that should be excluded from automatic binding, allowing <code>this</code> reference to refer to something else.</p>
 <p>A complete example is available at <a href="https://github.com/mjibril/react-crud-admin/blob/master/doc_example.props.js">link</a>.</p>
 <h3 id="example">Example</h3><p>The file containing the example used here is available at <a href="https://github.com/mjibril/react-crud-admin/blob/master/doc_example.js">link</a>.</p>
-<p>#Advanced</p>
-<p>##Rendering</p>
-<p>There are two main <code>render</code> like methods that combine to form the <code>Component.render</code> method of <code>react-crud-admin</code>. The first is <code>render_list_view</code> which renders the current list view and the second is <code>render_change_view</code> which renders the add/change view. Only one of these views is active at a time and forms the <code>Component.render</code> for the component. A full implementation is given below,</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">
- render()
- {
+<h1 id="advanced">Advanced</h1><h2 id="rendering">Rendering</h2><p>There are two main <code>render</code> like methods that combine to form the <code>Component.render</code> method of <code>react-crud-admin</code>. The first is <code>render_list_page</code> which renders the current list view and the second is <code>render_change_page</code> which renders the add/change view. Only one of these views is active at a time and forms the <code>Component.render</code> for the component. A full implementation is given below,</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">    render()
+    {
     if(!this.has_module_permission())
     {
         return &lt;div&gt; &lt;h1&gt; Permission Denied &lt;/h1&gt;&lt;/div&gt;
@@ -686,33 +689,36 @@ export default class Example extends Admin
 
     if(this.state.display_type == display_type.list)
     {
-        return &lt;div&gt;
-                {this.render_above_list_view()}
-               {this.render_list_view()}
-                {this.render_below_list_view()}
-               &lt;/div&gt;
+        return this.render_list_page();
     }
     else
     {
         //Important: the next two lines are for URL navigation and handling the browser back button
-        this._change_uuid=uuidv1();//use uuid to avoid conflict with custom router implementations
-        history.pushState({}, &quot;Change View&quot;, &quot;#/change/&quot;+this._change_uuid);
+        this._change_uuid=uuidv1();
+        history.pushState({}, &quot;Change View&quot;, window.location.hash+&quot;/change/&quot;+this._change_uuid);
 
-        return &lt;div&gt;
-                 {this.render_above_change_view()}
-                 {this.render_change_view()}
-                 {this.render_below_change_view()}
-               &lt;/div&gt;
+        return this.render_change_page();
     }
-}</code>
+
+
+    }</code>
 </code></pre>
-<h3 id="list-view">List View</h3><p>It is possible to add components above and below the list view using <code>render_above_list_view</code> and <code>render_below_list_view</code> methods. Both methods take no arguments and by default return <code>null</code>. These methods can be overridden to return components.</p>
+<h3 id="list-page">List Page</h3><p>It is possible to add components above and below the list view using <code>render_above_list_view</code> and <code>render_below_list_view</code> methods. Both methods take no arguments and by default return <code>null</code>. These methods can be overridden to return components.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">    render_list_page()
+    {
+     return &lt;div&gt;
+            {this.render_above_list_view()}
+            {this.render_list_view()}
+            {this.render_below_list_view()}
+           &lt;/div&gt;
+
+    }</code>
+</code></pre>
 <p>Within the <code>render_list_view</code> method itself, customisations are possible. The full implementation of <code>render_list_view</code> is,</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint"> render_list_view()
  {
     return (
            &lt;div &gt;
-
             {this.render_add_button()}
                 {this.render_below_add_button()}
             {this.render_search_field()}
@@ -725,7 +731,6 @@ export default class Example extends Admin
             {this.render_below_table()}
                 {this.render_progress(this.state.loading)} 
                 {this.render_below_progress()}
-
             {this.render_pagination()}
 
         &lt;/div&gt;
@@ -743,7 +748,18 @@ render_actions()
 
 }</code>
 </code></pre>
-<h3 id="the-add-change-view">The Add/Change View</h3><p>It is possible to add components above and below the add/change view using <code>render_above_change_view</code> and <code>render_below_change_view</code> methods. Both methods take no arguments and by default return <code>null</code>. These methods can be overridden to return components.</p>
+<h3 id="the-add-change-page">The Add/Change Page</h3><p>It is possible to add components above and below the add/change view using <code>render_above_change_view</code> and <code>render_below_change_view</code> methods. Both methods take no arguments and by default return <code>null</code>. These methods can be overridden to return components. The full implementation is</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">    render_change_page()
+    {
+    return &lt;div&gt;
+            {this.render_above_change_view()}
+            {this.render_change_view()}
+            {this.render_below_change_view()}
+           &lt;/div&gt;
+
+
+    }</code>
+</code></pre>
 </div>
 </div>
 

@@ -44,17 +44,17 @@ Create a new file `example.js` in the `\src` folder, in that file add the follow
 		this.list_display=['name','number','address.street']// a list of properties of the object to displayed on the list display page
 
 
-	}
-     }
-    get_queryset(page_number,list_per_page,queryset)
-    {
-    	// the actual array containing objects to be displayed
-	return [
-	    {id: 1, name: 'Joe Next', number: '08939303003',address:{ street: "Hallmark Street"}},
-            {id: 2,name: 'Isa Yoll', number: '0908839202',address:{ street: "Barbican Street"}}
-	]
+
+        }
+    	get_queryset(page_number,list_per_page,queryset)
+        {
+		// the actual array containing objects to be displayed
+	    return [
+	    	   {id: 1, name: 'Joe Next', number: '08939303003',address:{ street: "Hallmark Street"}},
+            	   {id: 2,name: 'Isa Yoll', number: '0908839202',address:{ street: "Barbican Street"}}
+		   ]
 	    
-    }
+        }
 
     }  
      
@@ -831,12 +831,11 @@ The file containing the example used here is available at [link](https://github.
 
 ## Rendering
 
-There are two main `render` like methods that combine to form the `Component.render` method of `react-crud-admin`. The first is `render_list_view` which renders the current list view and the second is `render_change_view` which renders the add/change view. Only one of these views is active at a time and forms the `Component.render` for the component. A full implementation is given below,
+There are two main `render` like methods that combine to form the `Component.render` method of `react-crud-admin`. The first is `render_list_page` which renders the current list view and the second is `render_change_page` which renders the add/change view. Only one of these views is active at a time and forms the `Component.render` for the component. A full implementation is given below,
 
 ```javascript
-
- render()
- {
+    render()
+    {
 	if(!this.has_module_permission())
 	{
 	    return <div> <h1> Permission Denied </h1></div>
@@ -844,41 +843,45 @@ There are two main `render` like methods that combine to form the `Component.ren
 
 	if(this.state.display_type == display_type.list)
 	{
-	    return <div>
-	    	    {this.render_above_list_view()}
-	   	    {this.render_list_view()}
-	    	    {this.render_below_list_view()}
-	    	   </div>
+	    return this.render_list_page();
 	}
 	else
 	{
 	    //Important: the next two lines are for URL navigation and handling the browser back button
-	    this._change_uuid=uuidv1();//use uuid to avoid conflict with custom router implementations
-	    history.pushState({}, "Change View", "#/change/"+this._change_uuid);
-	    
-	    return <div>
-	             {this.render_above_change_view()}
-	             {this.render_change_view()}
-	             {this.render_below_change_view()}
-	           </div>
+	    this._change_uuid=uuidv1();
+	    history.pushState({}, "Change View", window.location.hash+"/change/"+this._change_uuid);
+
+	    return this.render_change_page();
 	}
-}
 
-
-
+	
+    }
 
 ```
 
-### List View
+### List Page
+
 It is possible to add components above and below the list view using `render_above_list_view` and `render_below_list_view` methods. Both methods take no arguments and by default return `null`. These methods can be overridden to return components.
+``` javascript
+    render_list_page()
+    {
+	 return <div>
+	        {this.render_above_list_view()}
+	        {this.render_list_view()}
+	        {this.render_below_list_view()}
+	       </div>
+
+    }
+
+```
 
 Within the `render_list_view` method itself, customisations are possible. The full implementation of `render_list_view` is,
+
 ```javascript
  render_list_view()
  {
 	return (
 	       <div >
-		
 		    {this.render_add_button()}
 	            {this.render_below_add_button()}
 		    {this.render_search_field()}
@@ -891,7 +894,6 @@ Within the `render_list_view` method itself, customisations are possible. The fu
 		    {this.render_below_table()}
 	            {this.render_progress(this.state.loading)} 
 	            {this.render_below_progress()}
-		
 		    {this.render_pagination()}
 		
 		</div>
@@ -914,9 +916,23 @@ render_actions()
 }
 
 ```
-### The Add/Change View
+### The Add/Change Page
 
-It is possible to add components above and below the add/change view using `render_above_change_view` and `render_below_change_view` methods. Both methods take no arguments and by default return `null`. These methods can be overridden to return components.
+It is possible to add components above and below the add/change view using `render_above_change_view` and `render_below_change_view` methods. Both methods take no arguments and by default return `null`. These methods can be overridden to return components. The full implementation is
+
+```javascript
+    render_change_page()
+    {
+	return <div>
+	        {this.render_above_change_view()}
+        	{this.render_change_view()}
+	        {this.render_below_change_view()}
+	       </div>
+
+
+    }
+
+```
 
 
 
