@@ -1061,7 +1061,7 @@ class Admin extends React.Component {
 	    
 	return <select className="ra-action-button" onChange={this.action_selected.bind(this)} defaultValue="">
 	    <option key="key" value="" disabled={true}>Choose an action</option>
-     	{ _.keys(this.actions).map((action)=>{
+     	    { _.keys(this.get_actions()).map((action)=>{
 	    return <option key={action} value={action}> {_.startCase(action)}</option> 
 
 	    })}

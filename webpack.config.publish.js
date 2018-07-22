@@ -5,17 +5,11 @@ var webpack = require('webpack');
 var path = require('path');
 ///var loaders = require('./webpack.loaders');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
-
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HOST = process.env.HOST || "127.0.0.1";
 const PORT = process.env.PORT || "9999";
 
 
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
-
-const extractSass = new ExtractTextPlugin({
-    filename: "[name].css",
-    disable: process.env.NODE_ENV === "development"
-});
 var loaders = [
 	{
 		test: /\.jsx?$/,
@@ -58,38 +52,37 @@ var loaders = [
 		exclude: /(node_modules|bower_components)/,
 		loader: "url-loader?limit=10000&mimetype=image/png"
 	},
-    	{
-		test:  /\.json$/,
-		loader: "json-loader"
+        {
+        test: /\.(sa|sc|c)ss$/,
+        use: [
+             MiniCssExtractPlugin.loader,
+            'css-loader',
+            'sass-loader',
+        ],
 	},
+
        {
 	test   : /\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9=&.]+)?$/,
 	loader : 'file-loader'
 
-       },
-    {
-	test   : /\.css$/,
-	loaders: ['style-loader', 'css-loader', 'resolve-url-loader']
-	
-    }, {
-	test   : /\.scss$/,
-	use: extractSass.extract({
-	    use: [{
-		loader: "css-loader"
-	    },
-	    {
-		loader: "sass-loader"
-	    },
-	],
-	    // use style-loader in development
-	    fallback: "style-loader"
-	})
-    }
+       }
 ];
 
 module.exports = {
+    optimization: {
+    splitChunks: {
+      cacheGroups: {
+        styles: {
+          name: 'styles',
+          test: /\.css$/,
+          chunks: 'all',
+          enforce: true
+        }
+      }
+    }
+  },
     entry: [
-	'whatwg-fetch',
+
 	'./src/admin.js' // Your appʼs entry point
 	],
 	devtool: process.env.WEBPACK_DEVTOOL || 'cheap-module-source-map',
@@ -127,7 +120,14 @@ module.exports = {
 	    host: HOST
 	},
     plugins: [
-	extractSass,
+	new MiniCssExtractPlugin({
+	    // Options similar to the same options in webpackOptions.output
+	    // both options are optional
+	    filename: '[name].css',
+	    chunkFilename: '[id].css',
+	    publicPath: './public'
+}),	        
+
 	    new webpack.NoEmitOnErrorsPlugin(),
 	    new webpack.HotModuleReplacementPlugin(),
 	    new HtmlWebpackPlugin({
