@@ -37,7 +37,7 @@
 </nav>
 
 <div class="content" data-ice="content"><div data-ice="index" class="github-markdown"><h1 id="react-crud-admin">react-crud-admin</h1><p><strong>react-crud-admin</strong> is inspired by the Django Admin Interface. In the spirit of Django admin it opts for component customization by inheritance. The create-read-update-delete pattern is something that is encountered in a lot of apps. By creating a single component that lists entries and allows adding/changing it becomes possible to implement a DRY approach.</p>
-<p>Since React is primarily a UI library and there are a litany of  backends, <strong>react-crud-admin</strong> does not implement any backend specific features but allows the developer to provide custom implementations.</p>
+<p>Since React is primarily a UI library and there are a litany of backends, <strong>react-crud-admin</strong> does not implement any backend specific features but allows the developer to provide custom implementations.</p>
 <h1 id="getting-started">Getting Started</h1><h2 id="installation">Installation</h2><p>Install the library,</p>
 <pre><code><code class="source-code prettyprint">npm install react-crud-admin</code>
 </code></pre><h2 id="example">Example</h2><p>If you are starting a react project you can use <strong>create-react-app</strong> to speed up bootstrapping,</p>
@@ -47,98 +47,106 @@ cd example</code>
 </code></pre><p>then within the <code>example</code> directory,</p>
 <pre><code><code class="source-code prettyprint">npm install react-crud-admin</code>
 </code></pre><p>Create a new file <code>example.js</code> in the <code>\src</code> folder, in that file add the following lines</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">    import React from &apos;react&apos;;
-    import Admin from &quot;react-crud-admin&quot;;
-    import &quot;../node_modules/react-crud-admin/public/main.css&quot;;
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import React from &quot;react&quot;;
+import Admin from &quot;react-crud-admin&quot;;
+import &quot;../node_modules/react-crud-admin/public/main.css&quot;;
 
-    export default class Example extends Admin
-    {
-    constructor()
-        {
-        super()
-        this.name=&apos;Contact&apos;; // name of the objects 
-        this.name_plural=&apos;Contacts&apos;; // name of the objects in plural
-        this.list_display_links=[&apos;name&apos;]; // which property of the object is clickable
-        this.list_display=[&apos;name&apos;,&apos;number&apos;,&apos;address.street&apos;]// a list of properties of the object to displayed on the list display page
-
-
-
-        }
-        get_queryset(page_number,list_per_page,queryset)
-        {
-        // the actual array containing objects to be displayed
-        return [
-               {id: 1, name: &apos;Joe Next&apos;, number: &apos;08939303003&apos;,address:{ street: &quot;Hallmark Street&quot;}},
-                   {id: 2,name: &apos;Isa Yoll&apos;, number: &apos;0908839202&apos;,address:{ street: &quot;Barbican Street&quot;}}
-           ]
-
-        }
-
-    }</code>
+export default class Example extends Admin {
+  constructor() {
+    super();
+    this.name = &quot;Contact&quot;; // name of the objects
+    this.name_plural = &quot;Contacts&quot;; // name of the objects in plural
+    this.list_display_links = [&quot;name&quot;]; // which property of the object is clickable
+    this.list_display = [&quot;name&quot;, &quot;number&quot;, &quot;address.street&quot;]; // a list of properties of the object to displayed on the list display page
+  }
+  get_queryset(page_number, list_per_page, queryset) {
+    // the actual array containing objects to be displayed
+    return [
+      {
+        id: 1,
+        name: &quot;Joe Next&quot;,
+        number: &quot;08939303003&quot;,
+        address: { street: &quot;Hallmark Street&quot; }
+      },
+      {
+        id: 2,
+        name: &quot;Isa Yoll&quot;,
+        number: &quot;0908839202&quot;,
+        address: { street: &quot;Barbican Street&quot; }
+      }
+    ];
+  }
+}</code>
 </code></pre>
 <p>then in <code>index.js</code> do</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">
-import React from &apos;react&apos;;
-import ReactDOM from &apos;react-dom&apos;;
-import Example from &apos;./example.js&apos;;
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import React from &quot;react&quot;;
+import ReactDOM from &quot;react-dom&quot;;
+import Example from &quot;./example.js&quot;;
 
-ReactDOM.render(&lt;Example/&gt;
-    ,  document.getElementbyId(&quot;root&quot;))</code>
+ReactDOM.render(&lt;Example /&gt;, document.getElementById(&quot;root&quot;));</code>
 </code></pre>
 <p>The output in your browser should be</p>
 <p><img src="assets/example1.png" alt="example1"></p>
 <p>This is the list display view. At this point adding and editing objects will not be possible since we have not configured the add/change view. To do that we need to import the <code>react-jsonschema-form</code> package.</p>
 <p>Edit <code>example.js</code> and add the following,</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">import React from &apos;react&apos;;
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import React from &quot;react&quot;;
 import Admin from &quot;react-crud-admin&quot;;
 import Form from &quot;react-jsonschema-form&quot;;
 import &quot;../node_modules/react-crud-admin/public/main.css&quot;;
 
-export default class Example extends Admin
-{
-    constructor()
-    {
-    super()
-    this.name=&apos;Contact&apos;;
-    this.name_plural=&apos;Contacts&apos;;
-    this.list_display_links=[&apos;name&apos;];
-    this.list_display=[&apos;name&apos;,&apos;number&apos;,&apos;address.street&apos;]
-    }
-    get_queryset(page_number,list_per_page,queryset)
-    {
+export default class Example extends Admin {
+  constructor() {
+    super();
+    this.name = &quot;Contact&quot;;
+    this.name_plural = &quot;Contacts&quot;;
+    this.list_display_links = [&quot;name&quot;];
+    this.list_display = [&quot;name&quot;, &quot;number&quot;, &quot;address.street&quot;];
+  }
+  get_queryset(page_number, list_per_page, queryset) {
     return [
-        {id: 1, name: &apos;Ken Next&apos;, number: &apos;08939303003&apos;,address:{ street: &quot;Hallmark Street&quot;}},
-            {id: 2,name: &apos;Isa Yoll&apos;, number: &apos;0908839202&apos;,address:{ street: &quot;Barbican Street&quot;}}
-    ]
+      {
+        id: 1,
+        name: &quot;Ken Next&quot;,
+        number: &quot;08939303003&quot;,
+        address: { street: &quot;Hallmark Street&quot; }
+      },
+      {
+        id: 2,
+        name: &quot;Isa Yoll&quot;,
+        number: &quot;0908839202&quot;,
+        address: { street: &quot;Barbican Street&quot; }
+      }
+    ];
+  }
+  get_form(object = null) {
+    let schema = {
+      title: this.name,
+      type: &quot;object&quot;,
+      required: [&quot;name&quot;],
+      properties: {
+        id: {
+          type: &quot;number&quot;,
+          title: &quot;id&quot;,
+          default: Math.floor(1000 * Math.random()) + 1
+        },
+        name: { type: &quot;string&quot;, title: &quot;Name&quot;, default: &quot;&quot; },
+        number: { type: &quot;string&quot;, title: &quot;Number&quot;, default: &quot;&quot; },
+        address: {
+          type: &quot;object&quot;,
+          title: &quot;Address&quot;,
+          properties: {
+            street: { type: &quot;string&quot;, title: &quot;Street&quot; }
+          }
+        }
+      }
+    };
+
+    if (!object) {
+      return &lt;Form schema={schema} /&gt;;
+    } else {
+      return &lt;Form schema={schema} formData={object} /&gt;;
     }
-    get_form(object=null)
-    {
-        let schema = {
-        title: this.name,
-        type: &quot;object&quot;,
-        required: [&quot;name&quot;],
-        properties: {
-        id: {type: &quot;number&quot;, title: &quot;id&quot;, default: Math.floor(1000*Math.random())+1 },
-        name: {type: &quot;string&quot;, title: &quot;Name&quot;, default: &quot;&quot;},
-        number : {type: &quot;string&quot;, title: &quot;Number&quot;, default: &quot;&quot;},
-        address : {type: &quot;object&quot;, title: &quot;Address&quot;,
-               properties : {
-                      street : { type : &quot;string&quot;,title : &quot;Street&quot;}
-                }
-            }
-             }
-        };
-
-     if(!object)
-     {
-           return &lt;Form schema={schema}  /&gt;
-     }
-     else
-     {
-            return &lt;Form schema={schema}  formData={object}  /&gt;
-     }
-     }
-
+  }
 }</code>
 </code></pre>
 <p>the <code>get_form</code> method is passed the current object. The method returns a <code>react-json-schema</code> <code>Form</code> component. The <code>schema</code> object is used to define a <code>schema</code> for the Form (and to provide validation). See more on <code>react-jsonschema-form</code> at <a href="https://github.com/mozilla-services/react-jsonschema-form">react-jsonschema-form</a>. You can also read more on JSON Schema at <a href="https://spacetelescope.github.io/understanding-json-schema/">JSON Schema Tutorial</a></p>
@@ -148,97 +156,108 @@ export default class Example extends Admin
 <p>The output in your browser after clicking the first contact&apos;s name should be</p>
 <p><img src="assets/example2.png" alt="example2"></p>
 <h1 id="guide">Guide</h1><h2 id="list-display-view">List Display View</h2><h3 id="data">Data</h3><p>Data is primarily injected through <code>get_queryset</code>.</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">get_queryset(page_number,list_per_page,queryset)
+<pre><code class="lang-javascript"><code class="source-code prettyprint">get_queryset(page_number, list_per_page, queryset);
+{
+  return [
     {
-    return [
-        {id: 1, name: &apos;Ken Next&apos;, number: &apos;08939303003&apos;,address:{ street: &quot;Hallmark Street&quot;}},
-            {id: 2,name: &apos;Isa Yoll&apos;, number: &apos;0908839202&apos;,address:{ street: &quot;Barbican Street&quot;}}
-    ]
-    }</code>
+      id: 1,
+      name: &quot;Ken Next&quot;,
+      number: &quot;08939303003&quot;,
+      address: { street: &quot;Hallmark Street&quot; }
+    },
+    {
+      id: 2,
+      name: &quot;Isa Yoll&quot;,
+      number: &quot;0908839202&quot;,
+      address: { street: &quot;Barbican Street&quot; }
+    }
+  ];
+}</code>
 </code></pre>
-<p>The <code>get_queryset</code> method returns the queryset array including objects to be displayed in the current display page. Returning an array may not be useful when asynchronous network calls are made to a remote backend using AJAX or <code>window.fetch</code>.  A class method of the <code>Admin</code> component <code>set_queryset</code> can be used for asynchronous calls.</p>
+<p>The <code>get_queryset</code> method returns the queryset array including objects to be displayed in the current display page. Returning an array may not be useful when asynchronous network calls are made to a remote backend using AJAX or <code>window.fetch</code>. A class method of the <code>Admin</code> component <code>set_queryset</code> can be used for asynchronous calls.</p>
 <p>The example below returns the queryset in the current state object synchronously and sets a new queryset when the asynchronous call returns successfully. <code>set_queryset</code> invokes <code>setState</code> internally.</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">get_queryset(page_number,list_per_page,queryset)
-    {
-    fetch(&quot;/path/to/backend&quot;,{method : &apos;get&apos;}).then((response)=&gt;{
-        if(response.ok)
-        {
-            this.set_queryset(response.results);
-
-            }        
-
-        })
-    return queryset;
-    }</code>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">get_queryset(page_number, list_per_page, queryset);
+{
+  fetch(&quot;/path/to/backend&quot;, { method: &quot;get&quot; }).then(response =&gt; {
+    if (response.ok) {
+      this.set_queryset(response.results);
+    }
+  });
+  return queryset;
+}</code>
 </code></pre>
-<p>It is important to note that <code>get_queryset</code> returns only items to be listed in the current display view/page.  It is necessary to use the arguments <code>page_number</code> and <code>list_per_page</code> for fetching data from the backend. This allows us to implement pagination.</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">    get_queryset(page_number,list_per_page,queryset)
-    {
+<p>It is important to note that <code>get_queryset</code> returns only items to be listed in the current display view/page. It is necessary to use the arguments <code>page_number</code> and <code>list_per_page</code> for fetching data from the backend. This allows us to implement pagination.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">get_queryset(page_number, list_per_page, queryset);
+{
+  let backend = &quot;/path/to/backend&quot;;
+  let path =
+    backend +
+    &quot;&amp;limit=&quot; +
+    list_per_page +
+    &quot;&amp;skip=&quot; +
+    (page_number - 1) * list_per_page;
+  fetch(path, { method: &quot;get&quot; }).then(response =&gt; {
+    if (response.ok) {
+      response.json().then(results =&gt; {
+        this.set_queryset(results.data);
+        this.set_total(results.total);
+      });
+    }
+  });
 
-        let backend=&apos;/path/to/backend&apos;;
-    let path=backend+&apos;&amp;limit=&apos;+list_per_page+\
-            &apos;&amp;skip=&apos;+((page_number-1) * list_per_page);
-    fetch(path,{
-        method : &apos;get&apos;,
-    }).then((response)=&gt;{
-        if(response.ok)
-        {
-        response.json().then((results)=&gt;
-        {
-
-            this.set_queryset(results.data)
-            this.set_total(results.total);
-
-        });
-        }
-    });
-
-
-    return queryset;
-    }</code>
+  return queryset;
+}</code>
 </code></pre>
 <p><code>set_total</code> is used to set the total number of items available. For example if <code>list_per_page</code> is 10
 and there are a total 100 records in the backend <code>results.data</code> will have 10 items and <code>results.total</code> is 10. Please note that it is the responsibility of the backend to return these values in whatever format.</p>
 <p><code>set_queryset</code> is just,</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">set_queryset(queryset)
+<pre><code class="lang-javascript"><code class="source-code prettyprint">set_queryset(queryset);
 {
-    this.setState({queryset:queryset})
-
+  this.setState({ queryset: queryset });
 }</code>
 </code></pre>
 <p>and <code>set_total</code> is ,</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">set_total(total)
+<pre><code class="lang-javascript"><code class="source-code prettyprint">set_total(total);
 {
-    this.setState({total:total})
-
+  this.setState({ total: total });
 }</code>
 </code></pre>
 <p>It is also possible to set a fixed queryset using <code>queryset</code> property.</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">this.queryset=[
-        {id: 1, name: &apos;Ken Next&apos;, number: &apos;08939303003&apos;,address:{ street: &quot;Hallmark Street&quot;}},
-            {id: 2,name: &apos;Isa Yoll&apos;, number: &apos;0908839202&apos;,address:{ street: &quot;Barbican Street&quot;}}
-    ]</code>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">this.queryset = [
+  {
+    id: 1,
+    name: &quot;Ken Next&quot;,
+    number: &quot;08939303003&quot;,
+    address: { street: &quot;Hallmark Street&quot; }
+  },
+  {
+    id: 2,
+    name: &quot;Isa Yoll&quot;,
+    number: &quot;0908839202&quot;,
+    address: { street: &quot;Barbican Street&quot; }
+  }
+];</code>
 </code></pre>
 <p>This is always overriden by <code>get_queryset</code>.</p>
 <h3 id="ui-customisation">UI Customisation</h3><h4 id="display">Display</h4><h5 id="list-display">List Display</h5><p>The <code>get_list_display</code> method returns a list/array of properties/field names of the objects in the queryset to be displayed on the list display page. It can be overridden by the member variable
-list<em>display. A property is any string that should exist in the objects within 
+list<em>display. A property is any string that should exist in the objects within
 a queryset and works with lodash&apos;s </em>.at function. See more at <a href="https://lodash.com/docs/#at">Lodash</a></p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">let object={ name : &quot;any name&quot;,{ address : { street : &quot;any&quot;}},emails: [&quot;any@any.com&quot;]}</code>
 </code></pre>
 <p>The properties &quot;name&quot;,&quot;address.street&quot; and &quot;emails[0]&quot; are all acceptable. In our example we use,</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">this.list_display=[&apos;name&apos;,&apos;number&apos;,&apos;address.street&apos;]</code>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">this.list_display = [&quot;name&quot;, &quot;number&quot;, &quot;address.street&quot;];</code>
 </code></pre>
 <p>We can also use,</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">get_list_display()
+<pre><code class="lang-javascript"><code class="source-code prettyprint">get_list_display();
 {
- return [&apos;name&apos;,&apos;number&apos;,&apos;address.street&apos;]
+  return [&quot;name&quot;, &quot;number&quot;, &quot;address.street&quot;];
 }</code>
 </code></pre>
 <h5 id="list-display-links">List Display Links</h5><p>The <code>get_list_display_links</code> method returns the list/array of properties of the objects in the queryset that are clickable (and redirect to the add/change view) when displayed on the list display page. It can be overridden by the member variable
-<code>list_display_links</code>. A property is any string that should exist as a property in the objects within 
-a queryset and works with lodash&apos;s <code>_.at</code> function. </p>
+<code>list_display_links</code>. A property is any string that should exist as a property in the objects within
+a queryset and works with lodash&apos;s <code>_.at</code> function.</p>
 <p>In our example we use,</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">this.list_display_links=[&apos;name&apos;]</code>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">this.list_display_links = [&quot;name&quot;];</code>
 </code></pre>
 <p>in the constructor but we could have used,</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">get_list_display_links(){
@@ -248,156 +267,149 @@ a queryset and works with lodash&apos;s <code>_.at</code> function. </p>
 }</code>
 </code></pre>
 <h4 id="header-transforms">Header Transforms</h4><p>Table headers in the list display view are obtained from property names in <code>get_list_display</code> method by default. There are certain cases when one would like to customise these headers. <code>get_header_transforms</code> does just that. As an example</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">get_header_transforms()
+<pre><code class="lang-javascript"><code class="source-code prettyprint">get_header_transforms();
 {
-  return { &apos;name&apos; : function(header)
-                        {
-
-                return &apos;Contact &apos;+header    
-                        }
-              }
+  return {
+    name: function(header) {
+      return &quot;Contact &quot; + header;
+    }
+  };
 }</code>
 </code></pre>
 <p>Should produce</p>
 <p><img src="assets/example3.png" alt="example3"></p>
 <p>Header transforms can be defined using the instance variable <code>header_transforms</code> (which is always overridden by <code>get_header_transforms</code>).</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">this.header_transforms = { &apos;name&apos; : function(header)
-                          {
-
-                return &apos;Contact &apos;+header    
-                            }
-                          }</code>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">this.header_transforms = {
+  name: function(header) {
+    return &quot;Contact &quot; + header;
+  }
+};</code>
 </code></pre>
 <p>In summary <code>get_header_transforms</code> returns an object whose properties are field names corresponding to properties of any object in the queryset and whose values are transform functions.</p>
 <h4 id="field-transforms">Field Transforms</h4><p>Field transforms return an object whose properties are field names corresponding to properties of any object in the queryset and whose values are transform functions. They are used to transform the values of objects within the queryset. For example to transform every &quot;name&quot; property of all the objects in the queryset to lower case we use,</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">get_field_transforms()
+<pre><code class="lang-javascript"><code class="source-code prettyprint">get_field_transforms();
 {
-    return { &apos;name&apos; : function(content,object)
-                        {
-                              return content.toLowerCase()
-                          }
-               }
-    }</code>
+  return {
+    name: function(content, object) {
+      return content.toLowerCase();
+    }
+  };
+}</code>
 </code></pre>
 <p>or</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">this.field_transforms ={ &apos;name&apos; : function(content,object)
-                        {
-                              return content.toLowerCase()
-                          }
-                        }</code>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">this.field_transforms = {
+  name: function(content, object) {
+    return content.toLowerCase();
+  }
+};</code>
 </code></pre>
 <p>The first argument of the transform function is the content to be displayed while the second argument is the current object.</p>
 <p>This produces</p>
 <p><img src="assets/example3-1.png" alt="example31"></p>
 <p>All the contact names have been turned to lower case. Field transforms apply to full columns on the data table in the display view. It is possible to replace fields with React components like images and buttons. As an example suppose a column has fields which contain image urls, we can replace each field with a corresponding image.</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">this.field_transforms ={ &apos;image_url&apos; : function(content,object)
-                        {
-                              return &lt;img src={content}/&gt;
-                          }
-                        }</code>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">this.field_transforms = {
+  image_url: function(content, object) {
+    return &lt;img src={content} /&gt;;
+  }
+};</code>
 </code></pre>
 <h4 id="extra-fields">Extra Fields</h4><p>It is sometimes desirable to create new fields that are not properties of any of the objects in the queryset. As an example, we create a new field that displays the current time using the <code>moment</code> library.</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">
-get_extra_fields()
-     {
-      return { &apos;now&apos; : function(object,label)
-                        {
-                           return moment(new Date()).format(&apos;LLL&apos;);
-                         }
-              }
-     }</code>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">get_extra_fields();
+{
+  return {
+    now: function(object, label) {
+      return moment(new Date()).format(&quot;LLL&quot;);
+    }
+  };
+}</code>
 </code></pre>
 <p>or somewhere in the constructor,</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">
-this.extra_fields ={
-            &apos;now&apos; : function(object,label)
-                            {
-                                 return moment(new Date()).format(&apos;LLL&apos;);
-                         }
-                      }</code>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">this.extra_fields = {
+  now: function(object, label) {
+    return moment(new Date()).format(&quot;LLL&quot;);
+  }
+};</code>
 </code></pre>
 <p>The <code>get_extra_fields</code> method returns an object whose properties are extra field names not corresponding to properties of any object in the queryset and whose values are display functions. This will create extra fields that are not tied to objects. Extra fields have to be manually included in the <code>get_list_display</code> in order to appear in the list display page.</p>
 <p>Adding the <code>get_extra_fields</code> method is not enough to display the newly created field. We must add the field to <code>list_display</code> .</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">this.list_display=[&apos;name&apos;,&apos;number&apos;,&apos;address.street&apos;,&apos;now&apos;]</code>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">this.list_display = [&quot;name&quot;, &quot;number&quot;, &quot;address.street&quot;, &quot;now&quot;];</code>
 </code></pre>
 <p>Don&apos;t forget to add <code>import moment from &quot;moment&quot;;</code> at the top of the file. The output is,</p>
 <p><img src="assets/example3-2.png" alt="example32"></p>
-<h4 id="pagination">Pagination</h4><p><code>get_list_per_page</code> method  returns the number of items to be listed in a page. Can be overridden by <code>list_per_page</code>.</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">this.list_per_page=10</code>
+<h4 id="pagination">Pagination</h4><p><code>get_list_per_page</code> method returns the number of items to be listed in a page. Can be overridden by <code>list_per_page</code>.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">this.list_per_page = 10;</code>
 </code></pre>
 <p>or</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">get_list_per_page()
+<pre><code class="lang-javascript"><code class="source-code prettyprint">get_list_per_page();
 {
- return 10
-
+  return 10;
 }</code>
 </code></pre>
 <h4 id="search">Search</h4><p>Search is not implemented by default. One has to implement the <code>search(term,queryset)</code> method.
 From our previous example, we can implement search by matching the search term with the &quot;name&quot; property of all objects in the queryset. The method returns a filtered queryset. Optionally, if search requires an asynchronous call to a backend, one can use <code>set_queryset</code>.</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">    search(term,queryset)
-    {
-
-    let filtered_queryset=[];
-    for(var object of queryset)
-    {
-        if(object.name.search(new RegExp(term,&quot;i&quot;))&gt;=0)
-        {
-        filtered_queryset.push(object)
-
-        }
-
+<pre><code class="lang-javascript"><code class="source-code prettyprint">search(term, queryset);
+{
+  let filtered_queryset = [];
+  for (var object of queryset) {
+    if (object.name.search(new RegExp(term, &quot;i&quot;)) &gt;= 0) {
+      filtered_queryset.push(object);
     }
-    return filtered_queryset;
-    }</code>
+  }
+  return filtered_queryset;
+}</code>
 </code></pre>
 <p>or asynchronously</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">    search(term,queryset)
-    {
-    fetch(&quot;/path/to/backend/search?q=&quot;+term,{method : &apos;get&apos;}).then((response)=&gt;{
-        if(response.ok)
-        {
-            this.set_queryset(response.results);
-
-            }        
-
-        })
-    return queryset;//remember to return queryset synchronously
-
-    }</code>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">search(term, queryset);
+{
+  fetch(&quot;/path/to/backend/search?q=&quot; + term, { method: &quot;get&quot; }).then(
+    response =&gt; {
+      if (response.ok) {
+        this.set_queryset(response.results);
+      }
+    }
+  );
+  return queryset; //remember to return queryset synchronously
+}</code>
 </code></pre>
 <p>We can enable live search by</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">this.live_search=true</code>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">this.live_search = true;</code>
 </code></pre>
 <p>default is <code>false</code>.</p>
-<h4 id="sorting">Sorting</h4><p>Sorting is not implemented by default. Sorting can be achieved by implementing the <code>sort_by</code> method, </p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">sort_by(sort_fields,queryset)
+<h4 id="sorting">Sorting</h4><p>Sorting is not implemented by default. Sorting can be achieved by implementing the <code>sort_by</code> method,</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">sort_by(sort_fields, queryset);
 {
-
 }</code>
 </code></pre>
 <p><code>sort_fields</code> is an array containing objects whose properties are properties of objects in the queryset and whose values are either &quot;asc&quot; or &quot;desc&quot;. As an example, for a queryset</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">[
-{id: 1, name: &apos;Joe Next&apos;, number: &apos;08939303003&apos;,address:{ street: &quot;Hallmark Street&quot;}},
-{id: 2,name: &apos;Isa Yoll&apos;, number: &apos;0908839202&apos;,address:{ street: &quot;Barbican Street&quot;}}
-]</code>
+  {
+    id: 1,
+    name: &quot;Joe Next&quot;,
+    number: &quot;08939303003&quot;,
+    address: { street: &quot;Hallmark Street&quot; }
+  },
+  {
+    id: 2,
+    name: &quot;Isa Yoll&quot;,
+    number: &quot;0908839202&quot;,
+    address: { street: &quot;Barbican Street&quot; }
+  }
+];</code>
 </code></pre>
 <p>we can have <code>sort_fields</code> equal to</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">[ {&quot;name&quot; : &quot;asc&quot;}, {&quot;number&quot; :&quot;desc&quot;},{&quot;address&quot; :&quot;asc&quot;}]</code>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">[{ name: &quot;asc&quot; }, { number: &quot;desc&quot; }, { address: &quot;asc&quot; }];</code>
 </code></pre>
 <p>For our example, we implement <code>sort_by</code> using,</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">    sort_by(sort_fields,queryset)//from adminjs
-    {
+<pre><code class="lang-javascript"><code class="source-code prettyprint">sort_by(sort_fields, queryset); //from adminjs
+{
+  let item = sort_fields[sort_fields.length - 1];
 
+  let pairs = _.toPairs(item);
+  let field_names = pairs.map(item =&gt; item[0]);
+  let field_orders = pairs.map(item =&gt; item[1]);
 
-    let item =sort_fields[sort_fields.length-1];
-
-    let pairs=_.toPairs(item);
-    let field_names=pairs.map(item =&gt; item[0]);
-    let field_orders=pairs.map(item =&gt; item[1]);
-
-
-       return  _.orderBy(queryset,field_names,field_orders);
-    }</code>
+  return _.orderBy(queryset, field_names, field_orders);
+}</code>
 </code></pre>
 <p>We use the <code>lodash</code> library to sort the current queryset and return an updated one. We only use the latest sort order by examining the last item of the <code>sort_fields</code> array. In a practical application,
 a backend will perform the sort operations and we will use <code>set_queryset</code>.</p>
@@ -416,27 +428,27 @@ a backend will perform the sort operations and we will use <code>set_queryset</c
 
             })
 
-                   }    
+                   }
          })
 
       return  queryset;
     }</code>
 </code></pre>
-<p>It is also important to define the member variable <code>is_object_equal</code> which defines equality between objects in a queryset. This variable is used to test if an object has been previously selected  using the radio buttons in the display view. By default,<code>is_object_equal</code> is</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">this.is_object_equal = function(a,b){
-             return a==b ;
-             }</code>
+<p>It is also important to define the member variable <code>is_object_equal</code> which defines equality between objects in a queryset. This variable is used to test if an object has been previously selected using the radio buttons in the display view. By default,<code>is_object_equal</code> is</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">this.is_object_equal = function(a, b) {
+  return a == b;
+};</code>
 </code></pre>
 <p>This may not be sufficient for some applications. For example we might want to use the object&apos;s <code>id</code> property to check equality.</p>
-<p>Sorting can achieved in the list display view by clicking on the table headers corresponding to property names. </p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">this.is_object_equal = function(a,b){
-             return a.id==b.id ;
-             }</code>
+<p>Sorting can achieved in the list display view by clicking on the table headers corresponding to property names.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">this.is_object_equal = function(a, b) {
+  return a.id == b.id;
+};</code>
 </code></pre>
 <h4 id="actions">Actions</h4><p><code>get_actions</code> returns an actions object whose properties are action names and values are action methods. <code>get_actions</code> can be overridden by the <code>actions</code> member variable.</p>
 <p>Each actions object property (e.g. &quot;delete&quot;) is passed an array of selected objects. One
 can then handle those objects. Actions will appear on the list display page within a
-dropdown.  The default &quot;delete&quot; action method is not implemented.</p>
+dropdown. The default &quot;delete&quot; action method is not implemented.</p>
 <p>We can implement the delete action for our previous example,</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">import React from &apos;react&apos;;
 import Admin from &quot;react-crud-admin&quot;;
@@ -467,7 +479,7 @@ export default class Example extends Admin
 
                                    }
                    this.set_queryset(data);
-                   this.set_total(total-selected_objects.length);    
+                   this.set_total(total-selected_objects.length);
               }
           }
 
@@ -475,56 +487,43 @@ export default class Example extends Admin
 
 }</code>
 </code></pre>
-<h4 id="filters">Filters</h4><p><code>get_filters</code> can be used to implement filters for the queryset. </p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">
-get_filters()
-    {
-      return     {
-    &quot;by_street_name&quot; : {
-          &quot;options&quot; : [
-                      { value: &apos;Hallmark Street&apos;, label: &apos;Hallmark Street&apos; },
-                  { value: &apos;Barbican Street&apos;, label: &apos;Barbican Street&apos; },
+<h4 id="filters">Filters</h4><p><code>get_filters</code> can be used to implement filters for the queryset.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">get_filters();
+{
+  return {
+    by_street_name: {
+      options: [
+        { value: &quot;Hallmark Street&quot;, label: &quot;Hallmark Street&quot; },
+        { value: &quot;Barbican Street&quot;, label: &quot;Barbican Street&quot; }
+      ],
+      filter_function: (option, queryset) =&gt; {
+        let grouped = _.groupBy(queryset, &quot;address.street&quot;);
 
-
-                  ],
-           &quot;filter_function&quot; : (option,queryset)=&gt;
-                 {
-
-                let grouped= _.groupBy(queryset,&apos;address.street&apos;);
-
-                 return _.has(grouped,option.value) ? grouped[option.value] : [] ;
-                  }
-         },
-    &quot;by_id&quot; : {
-                  &quot;options&quot; : [
-                      { value: &apos;even&apos;, label: &apos;even&apos; },
-                  { value: &apos;odd&apos;, label: &apos;odd&apos; },
-
-
-                  ],    
-           &quot;filter_function&quot; : (option,queryset)=&gt;
-                 {
-
-                let grouped= _.groupBy(queryset,(contact)=&gt;{
-                                  return contact.id % 2 ==0 ? &quot;even&quot; : &quot;odd&quot; ;
-                                          });
-
-                 return _.has(grouped,option.value) ? grouped[option.value] : [] ;
-                  }
-         }
-
-
+        return _.has(grouped, option.value) ? grouped[option.value] : [];
       }
+    },
+    by_id: {
+      options: [
+        { value: &quot;even&quot;, label: &quot;even&quot; },
+        { value: &quot;odd&quot;, label: &quot;odd&quot; }
+      ],
+      filter_function: (option, queryset) =&gt; {
+        let grouped = _.groupBy(queryset, contact =&gt; {
+          return contact.id % 2 == 0 ? &quot;even&quot; : &quot;odd&quot;;
+        });
 
-
-    }</code>
+        return _.has(grouped, option.value) ? grouped[option.value] : [];
+      }
+    }
+  };
+}</code>
 </code></pre>
 <p>The <code>get_filters</code> method returns an object whose properties are filter names. The example above returns 2 filters. The first is a filter <code>&quot;by_street_names&quot;</code> that filters based on the street addresses of the contacts. Each filter object has two properties : <code>&quot;options&quot;</code> and <code>&quot;filter_function&quot;</code>. <code>&quot;options&quot;</code> is an array of options objects which have a <code>&quot;value&quot;</code> and <code>&quot;label&quot;</code> properties. The <code>&quot;label&quot;</code> will appear in the UI while the <code>&quot;value&quot;</code> is used for processing. This is similar to the <code>select</code> HTML tag. For asynchronous operations, a method to set the options of a filter is provided. <code>set_filter_options</code> takes two arguments,</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint"> set_filter_options(filter_name,options)</code>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">set_filter_options(filter_name, options);</code>
 </code></pre>
-<p>the name of the filter and the options array of the filter. </p>
-<p>The <code>&quot;filter_function&quot;</code> is a function that performs filtering. It has two arguments,  <code>&quot;option&quot;</code> which is the selected <code>&quot;option&quot;</code> and the current queryset. It must return a queryset. <code>&quot;option&quot;</code> is one of <code>&quot;options&quot;</code>  array. For asynchronous cases, <code>set_queryset</code> and <code>set_total</code> methods can be used to set the queryset after backend filtering.</p>
-<p>The second filter <code>&quot;by_id&quot;</code> filters the queryset by even and odd <code>id</code> property.  The filter UI uses <a href="https://github.com/JedWatson/react-select">React Select</a> component. </p>
+<p>the name of the filter and the options array of the filter.</p>
+<p>The <code>&quot;filter_function&quot;</code> is a function that performs filtering. It has two arguments, <code>&quot;option&quot;</code> which is the selected <code>&quot;option&quot;</code> and the current queryset. It must return a queryset. <code>&quot;option&quot;</code> is one of <code>&quot;options&quot;</code> array. For asynchronous cases, <code>set_queryset</code> and <code>set_total</code> methods can be used to set the queryset after backend filtering.</p>
+<p>The second filter <code>&quot;by_id&quot;</code> filters the queryset by even and odd <code>id</code> property. The filter UI uses <a href="https://github.com/JedWatson/react-select">React Select</a> component.</p>
 <h2 id="add-change-view">Add/Change View</h2><h3 id="forms">Forms</h3><p>We can add submit handlers for the form in our example,</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">....
 ....
@@ -591,7 +590,7 @@ export default class Example extends Admin
 <p>The submit handler checks to see if an object is being edited and replaces it with the edited object. If the object is being added, the method appends it to the <code>state.queryset</code> object.</p>
 <h4 id="post-submit">Post Submit</h4><p><code>response_add</code> or <code>response_change</code> can be called after a new object is created or edited respectively. These functions should implement behaviour after a successful form submission. By default these functions are both defined as,</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">function()
-{    
+{
   this.setState({display_type :display_type.list,
                  object :null,
                  queryset: this.get_queryset(this.state.page_number,this.list_per_page,this.state.queryset)
@@ -600,9 +599,9 @@ export default class Example extends Admin
 </code></pre>
 <p>This sets the display type to &quot;list&quot;, changes the object to <code>null</code> and invokes <code>get_queryset</code> to fetch the latest data.</p>
 <h2 id="permissions">Permissions</h2><p><code>has_add_permission</code> , <code>has_change_permission</code> and <code>has_module_permission</code> methods are used to control access.</p>
-<p>The <code>has_add_permission</code>  method takes no arguments and should return a boolean that signifies wether the user can add a new object. It simply hides the Add button.</p>
-<p>The <code>has_change_permission</code>  method takes the current object being edited, <code>state.object</code>, as an argument and should return a boolean that signifies wether the user can edit an object. It simply disables all <code>list_display_links</code>.</p>
-<p>The <code>has_module_permission</code>  method takes no arguments and should return a boolean that signifies wether the user should load the component. It simply shows an error message after an unauthorized access attempt.</p>
+<p>The <code>has_add_permission</code> method takes no arguments and should return a boolean that signifies wether the user can add a new object. It simply hides the Add button.</p>
+<p>The <code>has_change_permission</code> method takes the current object being edited, <code>state.object</code>, as an argument and should return a boolean that signifies wether the user can edit an object. It simply disables all <code>list_display_links</code>.</p>
+<p>The <code>has_module_permission</code> method takes no arguments and should return a boolean that signifies wether the user should load the component. It simply shows an error message after an unauthorized access attempt.</p>
 <h2 id="miscellany">Miscellany</h2><h3 id="-code-state--code--object"><code>state</code> object</h3><p>The default <code>state</code> object has the following properties,</p>
 <table>
 <thead>
@@ -621,7 +620,6 @@ export default class Example extends Admin
 <tr>
 <td><code>page_number</code></td>
 <td><code>1</code></td>
-<td></td>
 </tr>
 <tr>
 <td><code>total</code></td>
@@ -641,18 +639,16 @@ export default class Example extends Admin
 <tr>
 <td><code>selected_objects</code></td>
 <td>Empty set</td>
-<td>The <code>Set</code> class a wrapper around <code>array</code> that implements set  </td>
+<td>The <code>Set</code> class a wrapper around <code>array</code> that implements set</td>
 </tr>
 </tbody>
 </table>
-<h3 id="progress-indicator">Progress Indicator</h3><p><code>show_progress</code> and <code>hide_progress</code> can be used in the both the list display and add/change view to display and hide a progress indicator. <code>render_progress</code> can be used to override the default progress indicator component to be rendered. <code>render_progress</code> has one argument which is a boolean denoting wether or not to render a progress indicator. For example,</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">render_progress(loading)
+<h3 id="progress-indicator">Progress Indicator</h3><p><code>show_progress</code> and <code>hide_progress</code> can be used in the both the list display and add/change view to display and hide a progress indicator. <code>render_progress</code> can be used to override the default progress indicator component to be rendered. <code>render_progress</code> has one argument which is a boolean denoting whether or not to render a progress indicator. For example,</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">render_progress(loading);
 {
-    if(loading)
-    {
-    return &lt;progress/&gt;
-    }    
-
+  if (loading) {
+    return &lt;progress /&gt;;
+  }
 }</code>
 </code></pre>
 <p><code>render_progress</code> should return a component.</p>
@@ -660,105 +656,103 @@ export default class Example extends Admin
 <h2 id="component-props">Component Props</h2><p>There are many instances where customising the <code>react-crud-admin</code> component using component props is beneficial. Perhaps the component is to be used as a child component that reacts to changes in the parent component. For those cases it is possible to use props to customise the <code>Admin</code> component.</p>
 <p>All members and properties of the <code>Admin</code> component class can be assigned using React component props. All functions passed as props are automatically bound to the <code>Admin</code> thus making them class members. This means that <code>this</code> will reference the <code>Admin</code> component despite being used outside the component.</p>
 <p>The end result will look like,</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">    &lt;Example
-     queryset={data}
-     search={search}
-     form_submit={form_submit}
-     get_form={get_form}
-     get_header_transforms={get_header_transforms}
-     get_field_transforms={get_field_transforms}
-     get_extra_fields={get_extra_fields}
-     get_actions={get_actions}
-     get_filters={get_filters}
-     name={name}
-     name_plural={name_plural}
-     list_display={list_display}
-     list_display_links={list_display_links}
-    /&gt;</code>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">&lt;Example
+  queryset={data}
+  search={search}
+  form_submit={form_submit}
+  get_form={get_form}
+  get_header_transforms={get_header_transforms}
+  get_field_transforms={get_field_transforms}
+  get_extra_fields={get_extra_fields}
+  get_actions={get_actions}
+  get_filters={get_filters}
+  name={name}
+  name_plural={name_plural}
+  list_display={list_display}
+  list_display_links={list_display_links}
+/&gt;</code>
 </code></pre>
 <p>You can use <code>bind_exclude</code> prop which is an array that contains names of methods that should be excluded from automatic binding, allowing <code>this</code> reference to refer to something else.</p>
 <p>A complete example is available at <a href="https://github.com/mjibril/react-crud-admin/blob/master/doc_example.props.js">link</a>.</p>
 <h3 id="example">Example</h3><p>The file containing the example used here is available at <a href="https://github.com/mjibril/react-crud-admin/blob/master/doc_example.js">link</a>.</p>
 <h1 id="advanced">Advanced</h1><h2 id="rendering">Rendering</h2><p>There are two main <code>render</code> like methods that combine to form the <code>Component.render</code> method of <code>react-crud-admin</code>. The first is <code>render_list_page</code> which renders the current list view and the second is <code>render_change_page</code> which renders the add/change view. Only one of these views is active at a time and forms the <code>Component.render</code> for the component. A full implementation is given below,</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">    render()
-    {
-    if(!this.has_module_permission())
-    {
-        return &lt;div&gt; &lt;h1&gt; Permission Denied &lt;/h1&gt;&lt;/div&gt;
-    }
+<pre><code class="lang-javascript"><code class="source-code prettyprint">render();
+{
+  if (!this.has_module_permission()) {
+    return (
+      &lt;div&gt;
+        {&quot; &quot;}
+        &lt;h1&gt; Permission Denied &lt;/h1&gt;
+      &lt;/div&gt;
+    );
+  }
 
-    if(this.state.display_type == display_type.list)
-    {
-        return this.render_list_page();
-    }
-    else
-    {
-        //Important: the next two lines are for URL navigation and handling the browser back button
-        this._change_uuid=uuidv1();
-        history.pushState({}, &quot;Change View&quot;, window.location.hash+&quot;/change/&quot;+this._change_uuid);
+  if (this.state.display_type == display_type.list) {
+    return this.render_list_page();
+  } else {
+    //Important: the next two lines are for URL navigation and handling the browser back button
+    this._change_uuid = uuidv1();
+    history.pushState(
+      {},
+      &quot;Change View&quot;,
+      window.location.hash + &quot;/change/&quot; + this._change_uuid
+    );
 
-        return this.render_change_page();
-    }
-
-
-    }</code>
+    return this.render_change_page();
+  }
+}</code>
 </code></pre>
 <h3 id="list-page">List Page</h3><p>It is possible to add components above and below the list view using <code>render_above_list_view</code> and <code>render_below_list_view</code> methods. Both methods take no arguments and by default return <code>null</code>. These methods can be overridden to return components.</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">    render_list_page()
-    {
-     return &lt;div&gt;
-            {this.render_above_list_view()}
-            {this.render_list_view()}
-            {this.render_below_list_view()}
-           &lt;/div&gt;
-
-    }</code>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">render_list_page();
+{
+  return (
+    &lt;div&gt;
+      {this.render_above_list_view()}
+      {this.render_list_view()}
+      {this.render_below_list_view()}
+    &lt;/div&gt;
+  );
+}</code>
 </code></pre>
 <p>Within the <code>render_list_view</code> method itself, customisations are possible. The full implementation of <code>render_list_view</code> is,</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint"> render_list_view()
- {
-    return (
-           &lt;div &gt;
-            {this.render_add_button()}
-                {this.render_below_add_button()}
-            {this.render_search_field()}
-            {this.render_below_search_field()}
-            {this.render_actions()}
-                {this.render_below_actions()}
-            {this.render_filters()}
-            {this.render_below_filters()}
-            {this.render_table()}
-            {this.render_below_table()}
-                {this.render_progress(this.state.loading)} 
-                {this.render_below_progress()}
-            {this.render_pagination()}
-
-        &lt;/div&gt;
-        )
-
-
-
-    }</code>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">render_list_view();
+{
+  return (
+    &lt;div&gt;
+      {this.render_add_button()}
+      {this.render_below_add_button()}
+      {this.render_search_field()}
+      {this.render_below_search_field()}
+      {this.render_actions()}
+      {this.render_below_actions()}
+      {this.render_filters()}
+      {this.render_below_filters()}
+      {this.render_table()}
+      {this.render_below_table()}
+      {this.render_progress(this.state.loading)}
+      {this.render_below_progress()}
+      {this.render_pagination()}
+    &lt;/div&gt;
+  );
+}</code>
 </code></pre>
 <p>The <code>render_below_*</code> methods are used to add components below the add button, search field, actions,filters,list table and progress indicator. By default these methods return <code>null</code>. These methods can be overridden to return components.</p>
 <p>It is also worth noting that one can hide any of the components by the overriding their methods and returning null. For example to hide the actions component, we override the <code>render_actions</code> method.</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">
-render_actions()
+<pre><code class="lang-javascript"><code class="source-code prettyprint">render_actions();
 {
-
 }</code>
 </code></pre>
 <h3 id="the-add-change-page">The Add/Change Page</h3><p>It is possible to add components above and below the add/change view using <code>render_above_change_view</code> and <code>render_below_change_view</code> methods. Both methods take no arguments and by default return <code>null</code>. These methods can be overridden to return components. The full implementation is</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">    render_change_page()
-    {
-    return &lt;div&gt;
-            {this.render_above_change_view()}
-            {this.render_change_view()}
-            {this.render_below_change_view()}
-           &lt;/div&gt;
-
-
-    }</code>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">render_change_page();
+{
+  return (
+    &lt;div&gt;
+      {this.render_above_change_view()}
+      {this.render_change_view()}
+      {this.render_below_change_view()}
+    &lt;/div&gt;
+  );
+}</code>
 </code></pre>
 </div>
 </div>
