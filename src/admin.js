@@ -93,7 +93,7 @@ class Admin extends React.Component {
 
   get_queryset(
     page_number = this.state.page_number,
-    list_per_page = this.list_per_page,
+    list_per_page = this.get_list_per_page(),
     queryset = this.state.queryset
   ) {
     return this.queryset;
@@ -391,7 +391,7 @@ class Admin extends React.Component {
         object: null,
         queryset: this.get_queryset(
           this.state.page_number,
-          this.list_per_page,
+          this.get_list_per_page(),
           this.state.queryset
         )
       },
@@ -413,7 +413,7 @@ class Admin extends React.Component {
         object: null,
         queryset: this.get_queryset(
           this.state.page_number,
-          this.list_per_page,
+          this.get_list_per_page(),
           this.state.queryset
         )
       },
@@ -566,7 +566,7 @@ class Admin extends React.Component {
       this.set_queryset(
         this.get_queryset(
           this.state.page_number,
-          this.list_per_page,
+          this.get_list_per_page(),
           this.state.queryset
         )
       );
@@ -774,7 +774,7 @@ class Admin extends React.Component {
       this.setState({
         queryset: this.get_queryset(
           this.state.page_number,
-          this.list_per_page,
+          this.get_list_per_page(),
           this.state.queryset
         ),
         total: this.get_queryset(
@@ -861,7 +861,7 @@ class Admin extends React.Component {
 
     console.log(this.state.selected_objects.getItems());
     this.get_actions()[action](this.state.selected_objects.getItems());
-    this.get_queryset(this.state.page_number, this.list_per_page);
+    this.get_queryset(this.state.page_number, this.get_list_per_page());
   }
   /**
    * An event listener that listens when a page is  selected.
@@ -875,7 +875,7 @@ class Admin extends React.Component {
         this.setState({
           queryset: this.get_queryset(
             this.state.page_number,
-            this.list_per_page,
+            this.get_list_per_page(),
             this.state.queryset
           )
         });
@@ -910,7 +910,7 @@ class Admin extends React.Component {
   render_pagination() {
     let pages = [];
     if (this.state.total) {
-      let numpages = Math.ceil(this.state.total / this.list_per_page);
+      let numpages = Math.ceil(this.state.total / this.get_list_per_page());
       let pages_in_pagination =
         numpages < this.pages_in_pagination
           ? numpages
@@ -940,10 +940,10 @@ class Admin extends React.Component {
     return (
       <div className="pull-right">
         <span className="summary">
-          {this.list_per_page * (this.state.page_number - 1) + 1}-
+          {this.get_list_per_page() * (this.state.page_number - 1) + 1}-
           {Math.min(
-            this.list_per_page * (this.state.page_number - 1) +
-              this.list_per_page,
+            this.get_list_per_page() * (this.state.page_number - 1) +
+              this.get_list_per_page(),
             this.state.total
           )}{" "}
           of {this.state.total}{" "}
@@ -1033,7 +1033,7 @@ class Admin extends React.Component {
             this.setState({ display_type: display_type.list, object: null });
             this.get_queryset(
               this.state.page_number,
-              this.list_per_page,
+              this.get_list_per_page(),
               this.state.queryset
             );
           }}
@@ -1127,7 +1127,7 @@ class Admin extends React.Component {
     } else {
       //Important: the next two lines are for URL navigation and handling the browser back button
       this._change_uuid = uuidv1();
-      history.pushState(
+      window.history.pushState(
         {},
         "Change View",
         window.location.hash + "/change/" + this._change_uuid

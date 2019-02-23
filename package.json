@@ -1,53 +1,35 @@
 {
   "name": "react-crud-admin",
   "version": "1.0.41",
+  "private": true,
   "description": "React Admin inspired by DjangoAdmin",
-  "main": "public/bundle.js",
   "dependencies": {
-    "lodash": "",
-    "react": "^16.3.0",
-    "react-jsonschema-form": "^1.0.0",
-    "react-select": "^1.2.1",
-    "uuid": "^3.2.1"
-  },
-  "devDependencies": {
-    "babel-core": "",
-    "babel-loader": "",
-    "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-plugin-transform-runtime": "",
-    "babel-preset-es2015": "",
-    "babel-preset-react": "",
-    "babel-preset-stage-2": "",
-    "bootstrap-sass": "^3.3.7",
-    "css-loader": "",
-    "extract-text-webpack-plugin": "^3.0.2",
-    "file-loader": "",
-    "html-webpack-plugin": "",
-    "moment": "",
-    "moment-timezone": "",
-    "node-sass": "",
-    "react": "",
-    "react-dom": "^16.3.0",
-    "resolve-url-loader": "",
-    "sass-loader": "",
-    "style-loader": "",
-    "url-loader": "",
-    "webpack": "",
-    "webpack-dev-server": "",
-    "whatwg-fetch": ""
+    "bootstrap": "^4.3.1",
+    "lodash": "^4.17.11",
+    "moment": "^2.24.0",
+    "react": "^16.8.3",
+    "react-dom": "^16.8.3",
+    "react-jsonschema-form": "^1.2.1",
+    "react-scripts": "2.1.5",
+    "react-select": "^2.4.1",
+    "uuid": "^3.3.2"
   },
   "scripts": {
     "edocs": "esdoc -c .esdoc.json",
     "build": "webpack --config webpack.config.production.js --progress --profile --colors",
     "build-publish": "webpack --config webpack.config.publish.js --progress --profile --colors",
-    "start": "webpack-dev-server --progress --profile --colors",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "scss": "node-sass src -o css"
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/mjibril/react-crud-admin.git"
+  "eslintConfig": {
+    "extends": "react-app"
   },
-  "author": "Mubarak Jibril",
-  "license": "ISC"
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }
