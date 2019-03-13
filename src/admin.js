@@ -2,9 +2,9 @@ import React from "react";
 import _ from "lodash";
 import Set from "./set.js";
 import Select from "react-select";
-import "react-select/dist/react-select.css";
 const uuidv1 = require("uuid/v1");
 
+require("./admin.scss");
 export const display_type = {
   list: "list",
   change: "change"

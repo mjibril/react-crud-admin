@@ -1,6 +1,6 @@
 import React from "react";
 import Admin from "./admin.js";
-import "../public/main.css";
+//import "../public/main.css";
 import _ from "lodash";
 import Form from "react-jsonschema-form";
 import moment from "moment";
