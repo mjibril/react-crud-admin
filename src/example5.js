@@ -1,9 +1,10 @@
 import React from "react";
 import Admin from "./admin.js";
-import "../public/main.css";
+import "../css/main.css";
 import Form from "react-jsonschema-form";
 import moment from "moment";
 import _ from "lodash";
+
 let search = function(term, queryset) {
   let filtered_queryset = [];
   for (var object of queryset) {

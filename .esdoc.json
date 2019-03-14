@@ -1,0 +1,10 @@
+{
+    "source": "./src",
+    "destination": "./docs",
+    "plugins": [
+	{"name" :"esdoc-standard-plugin"},
+	{"name" :"esdoc-jsx-plugin"}
+	
+    ],
+    "excludes": ["voter.js","example.*.js","utils.js","evoting.js"]
+}

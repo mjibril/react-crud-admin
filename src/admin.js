@@ -4,7 +4,7 @@ import Set from "./set.js";
 import Select from "react-select";
 const uuidv1 = require("uuid/v1");
 
-require("./admin.scss");
+//require("./admin.scss");
 export const display_type = {
   list: "list",
   change: "change"

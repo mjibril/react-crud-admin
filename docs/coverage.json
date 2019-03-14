@@ -1,0 +1,111 @@
+{
+  "coverage": "36.2%",
+  "expectCount": 116,
+  "actualCount": 42,
+  "files": {
+    "src/App.js": {
+      "expectCount": 2,
+      "actualCount": 0,
+      "undocumentLines": [
+        5,
+        6
+      ]
+    },
+    "src/admin.js": {
+      "expectCount": 96,
+      "actualCount": 42,
+      "undocumentLines": [
+        5,
+        8,
+        15,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        34,
+        35,
+        38,
+        42,
+        448,
+        452,
+        456,
+        460,
+        473,
+        486,
+        499,
+        510,
+        526,
+        535,
+        538,
+        558,
+        585,
+        625,
+        629,
+        1073,
+        1074,
+        1076,
+        1078,
+        1080,
+        1082,
+        1084,
+        1093,
+        1094,
+        1095,
+        1096,
+        1097,
+        1106,
+        1115,
+        1129,
+        1139,
+        1144,
+        1145,
+        1157
+      ]
+    },
+    "src/index.js": {
+      "expectCount": 5,
+      "actualCount": 0,
+      "undocumentLines": [
+        8,
+        9,
+        11,
+        14,
+        21
+      ]
+    },
+    "src/serviceWorker.js": {
+      "expectCount": 5,
+      "actualCount": 0,
+      "undocumentLines": [
+        13,
+        23,
+        57,
+        101,
+        129
+      ]
+    },
+    "src/set.js": {
+      "expectCount": 8,
+      "actualCount": 0,
+      "undocumentLines": [
+        1,
+        2,
+        4,
+        5,
+        7,
+        19,
+        60,
+        71
+      ]
+    }
+  }
+}
