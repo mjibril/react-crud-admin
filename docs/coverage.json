@@ -1,16 +1,8 @@
 {
-  "coverage": "36.2%",
-  "expectCount": 116,
+  "coverage": "38.53%",
+  "expectCount": 109,
   "actualCount": 42,
   "files": {
-    "src/App.js": {
-      "expectCount": 2,
-      "actualCount": 0,
-      "undocumentLines": [
-        5,
-        6
-      ]
-    },
     "src/admin.js": {
       "expectCount": 96,
       "actualCount": 42,
@@ -80,17 +72,6 @@
         11,
         14,
         21
-      ]
-    },
-    "src/serviceWorker.js": {
-      "expectCount": 5,
-      "actualCount": 0,
-      "undocumentLines": [
-        13,
-        23,
-        57,
-        101,
-        129
       ]
     },
     "src/set.js": {

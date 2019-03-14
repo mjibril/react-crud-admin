@@ -566,67 +566,6 @@
   {
     "__docId__": 48,
     "kind": "file",
-    "name": "src/App.js",
-    "content": "import React, { Component } from 'react';\nimport logo from './logo.svg';\nimport './App.css';\n\nclass App extends Component {\n  render() {\n    return (\n      <div className=\"App\">\n        <header className=\"App-header\">\n          <img src={logo} className=\"App-logo\" alt=\"logo\" />\n          <p>\n            Edit <code>src/App.js</code> and save to reload.\n          </p>\n          <a\n            className=\"App-link\"\n            href=\"https://reactjs.org\"\n            target=\"_blank\"\n            rel=\"noopener noreferrer\"\n          >\n            Learn React\n          </a>\n        </header>\n      </div>\n    );\n  }\n}\n\nexport default App;\n",
-    "static": true,
-    "longname": "/home/mubarak/Dropbox/Projects/react-crud-admin/src/App.js",
-    "access": "public",
-    "description": null,
-    "lineNumber": 1
-  },
-  {
-    "__docId__": 49,
-    "kind": "class",
-    "name": "App",
-    "memberof": "src/App.js",
-    "static": true,
-    "longname": "src/App.js~App",
-    "access": "public",
-    "export": true,
-    "importPath": "react-crud-admin/src/App.js",
-    "importStyle": "App",
-    "description": null,
-    "lineNumber": 5,
-    "undocument": true,
-    "interface": false,
-    "extends": [
-      "react~Component"
-    ]
-  },
-  {
-    "__docId__": 50,
-    "kind": "method",
-    "name": "render",
-    "memberof": "src/App.js~App",
-    "generator": false,
-    "async": false,
-    "static": false,
-    "longname": "src/App.js~App#render",
-    "access": "public",
-    "description": null,
-    "lineNumber": 6,
-    "undocument": true,
-    "params": [],
-    "return": {
-      "types": [
-        "*"
-      ]
-    }
-  },
-  {
-    "__docId__": 51,
-    "kind": "file",
-    "name": "src/App.test.js",
-    "content": "import React from 'react';\nimport ReactDOM from 'react-dom';\nimport App from './App';\n\nit('renders without crashing', () => {\n  const div = document.createElement('div');\n  ReactDOM.render(<App />, div);\n  ReactDOM.unmountComponentAtNode(div);\n});\n",
-    "static": true,
-    "longname": "/home/mubarak/Dropbox/Projects/react-crud-admin/src/App.test.js",
-    "access": "public",
-    "description": null,
-    "lineNumber": 1
-  },
-  {
-    "__docId__": 52,
-    "kind": "file",
     "name": "src/admin.js",
     "content": "import React from \"react\";\nimport _ from \"lodash\";\nimport Set from \"./set.js\";\nimport Select from \"react-select\";\nconst uuidv1 = require(\"uuid/v1\");\n\n//require(\"./admin.scss\");\nexport const display_type = {\n  list: \"list\",\n  change: \"change\"\n};\n\n/** Admin Class extends React.Component. To implement a CRUD interface similar to Django Admin you need to extend the Admin class. */\nclass Admin extends React.Component {\n  constructor(props) {\n    super(props);\n\n    this.name = \"default\";\n    this.name_plural = \"defaults\";\n    this.live_search = false;\n    this.field_transforms = {};\n    this.header_transforms = {};\n    this.extra_fields = {};\n    this.list_display = [];\n    this.list_display_links = [];\n    this.list_per_page = 10;\n    this.sort_fields = [];\n    this.is_object_equal = (a, b) => a == b;\n    this.pages_in_pagination = 3;\n    this.actions = {\n      delete: selected_objects => {}\n    };\n\n    this.queryset = [];\n    this._all_selected = false;\n    this.register_listener();\n    if (props) {\n      this.bind_exclude = props.bind_exclude ? props.bind_exclude : [];\n      _.keys(props).map(key => {\n        if (typeof props[key] == \"function\") {\n          if (_.includes(key, this.bind_exclude)) {\n            this[key] = props[key];\n\n            this[key].bind(this);\n          }\n        } else {\n          this[key] = props[key];\n        }\n      });\n    }\n\n    /**\n     * Initialize the state of the component\n     */\n    this.state = {\n      display_type: display_type.list,\n      page_number: 1,\n      object: null,\n      selected_objects: new Set([], this.is_object_equal),\n      total: 1,\n      filter_options: {},\n      filter_values: []\n    };\n\n    let queryset = this.get_queryset(\n      this.state.page_number,\n      this.list_per_page,\n      this.state.queryset\n    )\n      ? this.get_queryset(\n          this.state.page_number,\n          this.list_per_page,\n          this.state.queryset\n        )\n      : [];\n    this.state.queryset = queryset;\n    this.state.total = queryset.length;\n    this._handle_search = this._handle_search.bind(this);\n    this._select_all = this._select_all.bind(this);\n    this._select_one = this._select_one.bind(this);\n    this.response_change = this.response_change.bind(this);\n    this.response_add = this.response_add.bind(this);\n  }\n  /**\n   * This function returns an array of objects that will serve as the\n   * queryset for the admin interface. Typically involves an HTTP request\n   * to a backend.\n   * @param {number} page_number - The current page number\n   * @param {number} list_per_page - Number items to list per page. Defaults to `list_per_page`\n   * @param {object[]} queryset - The current queryset\n   * @returns {object[]} An array of objects. - Objects to display\n   */\n\n  get_queryset(\n    page_number = this.state.page_number,\n    list_per_page = this.get_list_per_page(),\n    queryset = this.state.queryset\n  ) {\n    return this.queryset;\n  }\n\n  /**\n   * This functions returns a JSON Schema Form for editing\n   * the objects in the array returned by get_queryset(). This method needs to be overridden to\n   * so as to return a Form Component for the object.  Learn more on\n   * JSON schema forms from https://github.com/mozilla-services/react-jsonschema-form\n   * and JSON Schema from https://spacetelescope.github.io/understanding-json-schema/\n   * @param {object} object - The current selected object.\n   * @returns  A JSON Schema Form Component.\n   */\n\n  get_form(object = null) {\n    return {};\n  }\n  /**\n   * Returns a true/false value. Controls wether search is implement on live input or not.\n   * Can be overriden by the live_search member variable. Default is false.\n   *\n   *@return {boolean}\n   */\n\n  get_live_search() {\n    return this.live_search;\n  }\n\n  /**\n   *Returns an object whose properties are field names corresponding to properties of any object\n   *in the queryset and whose values are transform functions. The example below will transform each \"name\"\n   *property of objects in the queryset to upper case in the list display view.\n   *@example\n   *get_field_transforms()\n   *{\n   * return { 'name' : function(name,object)\n   *                   {\n   *                       return name.toUpperCase()\n   *                   }\n   *         }\n   *\n   *}\n   *@return {object}\n   */\n\n  get_field_transforms() {\n    if (this.field_transforms) {\n      return this.field_transforms;\n    }\n    return {};\n  }\n\n  /**\n   *Returns an object whose properties are field names corresponding to properties of any object\n   *in the queryset and whose values are transform functions. The example below will transform the header \"name\" to upper case in the list display view.\n   *@example\n   *get_header_transforms()\n   *{\n   * return { 'name' : function(name)\n   *                   {\n   *                       return name.toUpperCase()\n   *                   }\n   *         }\n   *}\n   *\n   *@return {object}\n   */\n\n  get_header_transforms() {\n    if (this.header_transforms) {\n      return this.header_transforms;\n    }\n\n    return {};\n  }\n\n  /**\n   * Returns an object whose properties are extra  field names not corresponding to properties of any object\n   * in the queryset and whose values are display functions. This will create extra fields that are not tied to objects. Extra fields have to be manually included in the `list_display` in order to appear in the list display page. The display functions take the current object being rendered in the table row and  the field name\n   *@example\n   *get_extra_fields()\n   *{\n   * return { 'now' : function(object,label)\n   *                   {\n   *                      return moment(new Date()).format('LLL');\n   *                   }\n   *         }\n   *}\n   *\n   *@return {object}\n   */\n\n  get_extra_fields() {\n    if (this.extra_fields) {\n      return this.extra_fields;\n    }\n\n    return {};\n  }\n  /**\n   * Returns the number of items to be listed in a page. Can be overridden by `list_per_page`.\n   *@return {number} The number of objects in a page\n   */\n\n  get_list_per_page() {\n    if (this.list_per_page) {\n      return this.list_per_page;\n    }\n    return 10;\n  }\n\n  /**\n     * Gets an actions object whose properties are action names and values are action methods.\n     * This can be overridden by the action member variable. The default \"delete\" method is not\n     * implemented.\n     *\n     * Each actions object property (e.g. \"delete\") is passed an array of selected objects. One\n     * can then handle those objects. Actions will appear on the list display page within a\n     * dropdown. Selecting an action should have the action method applied to all currently \n     * selected objects.\n     * @example\n     *\n     * actions = { \"delete\" : (selected_objects)=>{ } }\n\n     *@return {object} An actions object\n     */\n\n  get_actions() {\n    if (this.actions) {\n      return this.actions;\n    }\n\n    return {};\n  }\n  /**\n   *   Gets the list/array of properties of the objects in the queryset that are clickable\n   *    when displayed on the list display page. It can be overridden by the member variable\n   *   `list_display_links`. A property is any string that should exist as a property in the objects within\n   *   a queryset and works with lodash's `_.at` function.\n   *\n   *   The properties \"name\",\"address.street\" and \"emails[0]\" are all acceptable by `_.at` in the example below\n   *   @example\n   *   let object={ name : \"any name\",{ address : { street : \"any\"}},emails: [\"any@any.com\"]}\n   *\n   *\n   *\n   * @return {string[]} A list of properties of the object to be displayed\n   */\n\n  get_list_display_links() {\n    if (this.list_display_links) {\n      return this.list_display_links;\n    }\n    return [];\n  }\n  /**\n   *   Gets the list/array of properties/field names of the objects in the queryset to be\n   *   displayed on the list display page. It can be overridden by the member variable\n   *   list_display. A property is any string that should exist in the objects within\n   *   a queryset and works with lodash's _.at function. See more at\n   *   https://lodash.com/docs/#at\n   *\n   *   @example\n   *   let object={ name : \"any name\",{ address : { street : \"any\"}},emails: [\"any@any.com\"]}\n   *\n   *   The properties \"name\",\"address.street\" and \"emails[0]\" are all acceptable\n   *\n   * @return {string[]} A list of properties of the object to be displayed\n   */\n\n  get_list_display() {\n    if (this.list_display) {\n      return this.list_display;\n    }\n    return [];\n  }\n  /**\n   * Returns an ordered queryset. The method checks to see if sorting is active and sorts\n   * the current queryset based on the sort order.\n   * @private\n   * @return {object[]} An ordered queryset\n   */\n\n  _get_ordered_queryset() {\n    if (this.sort_fields.length > 0) {\n      return this.sort_by(this.sort_fields, this.state.queryset);\n    }\n\n    return this.state.queryset ? this.state.queryset : [];\n  }\n  /**\n   * Implements search. This method should be overridden to implement a custom search\n   *\n   *@param {string} term - the search term\n   *@param {object[]} queryset - the current queryset\n   *@return {object[]} the queryset as a result of the search\n   */\n\n  search(term, queryset) {\n    return queryset;\n  }\n  /**\n   * Grants permission to delete object. This method is not implemented and can be handled via\n   *  implementing actions.\n   *\n   *@param {object} object -\n   *@return {boolean} Returns true is the object has been deleted or false otherwise\n   */\n\n  has_delete_permission(object) {\n    return true;\n  }\n  /**\n   * Grants permission to add an object. This method controls rendering of the Add\n   * button\n   *\n   *\n   *@return {boolean} Returns true is the object can be added or false otherwise\n   */\n\n  has_add_permission() {\n    return true;\n  }\n  /**\n   * Grants permission to change an object. It disables all links to the add/change page when\n   * enabled\n   *\n   *@return {boolean} Returns true is the object can be changed or false otherwise\n   */\n\n  has_change_permission(object = null) {\n    return true;\n  }\n  /**\n   * Grants permission to the this admin interface.\n   *\n   *@return {boolean} Returns true if access is allowed false otherwise\n   */\n\n  has_module_permission() {\n    return true;\n  }\n  /*\n    _order_state(field)\n    {\n\n\tlet index=_.findIndex(this._sort_fields,item=> item.hasOwnProperty(field));\n\t\n\tif(index<0)\n\t{\n\t    return 'sort-not-active';\n\n\t}\n\tif(this._sort_fields[index][field]=='desc')\n\t{\n\t   \n\t    return 'sort-reverse-active';\n\t}\n\treturn 'sort-active';\n\t}*/\n\n  /**\n     * This method adds up/down arrows to field headers on the list display page table\n     *\n     * @private \n     * @param {string} field -  the field/property name\n     \n     \n     */\n\n  _order_state_arrow(field) {\n    let index = _.findIndex(this.sort_fields, item =>\n      item.hasOwnProperty(field)\n    );\n\n    if (index < 0) {\n      return null;\n    }\n    if (this.sort_fields[index][field] == \"desc\") {\n      return <span>&#8681;</span>;\n    }\n    return <span> &#8679;</span>;\n  }\n  /**\n   *  This method  should be overriden and called after saving an object in the add/change view.       *  This method is not called at all here but provides hints on what to do after saving\n   *  an object. Change the state display_type to \"list\", object to \"null\" and refresh the quer         *  yset.\n   */\n\n  response_add() {\n    this._display_will_change();\n    this.setState(\n      {\n        display_type: display_type.list,\n        object: null,\n        queryset: this.get_queryset(\n          this.state.page_number,\n          this.get_list_per_page(),\n          this.state.queryset\n        )\n      },\n      this._display_changed\n    );\n\n    return true;\n  }\n  /**\n   *  This method should be overriden and called after saving an object in the add/change view.         *  This method is not called at all here but provides hints on what to do after saving\n   *  an object. Change the state display_type to \"list\", object to \"null\" and refresh the quer         *  yset.\n   */\n\n  response_change() {\n    this._display_will_change();\n    this.setState(\n      {\n        display_type: display_type.list,\n        object: null,\n        queryset: this.get_queryset(\n          this.state.page_number,\n          this.get_list_per_page(),\n          this.state.queryset\n        )\n      },\n      this._display_changed\n    );\n\n    return true;\n  }\n  /**\n     * A private method to wrap a table entry in an <a></a> tag in the display page.\n     * The method checks if permission is given to display links using the has_change_permission method\n     * @private\n     * @param {object} object - the current object to be displayed as a table\n     * entry in the display page\n     * @param {string} label - the name of the field \n     \n     */\n\n  _create_object_link(object, label) {\n    if (this.has_change_permission(object)) {\n      return (\n        <a onClick={this._object_link_clicked(object)} href=\"#\">\n          {\" \"}\n          {label}{\" \"}\n        </a>\n      );\n    } else {\n      return <span> {label} </span>;\n    }\n  }\n\n  set_queryset(queryset) {\n    this.setState({ queryset: queryset });\n  }\n\n  set_total(total) {\n    this.setState({ total: total });\n  }\n\n  _get_prop_label(label) {\n    let labels = label.split(\".\");\n    return labels[labels.length - 1];\n  }\n  _get_table_header() {\n    return this.get_list_display().map(item => {\n      return (\n        <th key={item} onClick={this._sort_handler(item)}>\n          {\" \"}\n          {this.get_header_transforms()[item]\n            ? this.get_header_transforms()[item](item)\n            : _.startCase(this._get_prop_label(item))}\n          {this._order_state_arrow(item)}{\" \"}\n        </th>\n      );\n    });\n  }\n  _display_changed() {\n    this.display_changed(this.state.display_type, this.state.object);\n  }\n  /**\n     * An event listener that listens to state changes in the display type i.e.\n     * from list to add/change. It is fired after state changes are made.\n     * \n     * @param {string} display_type - the current display type of the component either \"list\" or \"change\" \n     * @param {object} object - the current object or null\n     \n     */\n\n  display_changed(display_type, object) {}\n  _display_will_change() {\n    this.display_will_change(this.state.display_type, this.state.object);\n  }\n  /**\n     * An event listener that listens to state changes in the display type i.e.\n     * from list to add/change . It is fired before state changes are made.\n     * \n     * @param {string} display_type - the current display type of the component either \"list\" or \"change\" \n     * @param {object} object - the current object or null\n     \n     */\n\n  display_will_change(display_type, object) {}\n  _object_link_clicked(object) {\n    return event => {\n      this._display_will_change();\n      this.setState(\n        { display_type: display_type.change, object: object },\n        this._display_changed\n      );\n      event.preventDefault();\n    };\n  }\n\n  _display_field(object, item) {\n    let label = _.at(object, item)[\"0\"];\n\n    if (_.has(this.get_field_transforms(), item)) {\n      return this.get_field_transforms()[item](label, object);\n    }\n\n    if (_.at(this.get_extra_fields(), item)) {\n      if (this.get_extra_fields()[item]) {\n        label = this.get_extra_fields()[item](object, item);\n      }\n    }\n\n    return label;\n  }\n\n  set_filter_options(filter_name, options) {\n    let t = {};\n    t[filter_name] = options.map(option => {\n      option._filter_ = filter_name;\n      return option;\n    });\n    this.setState({ filter_options: _.assign(this.state.filter_options, t) });\n  }\n\n  get_filter_values() {\n    return this.state.filter_values;\n  }\n  get_filters() {\n    /*\n\treturn {\n\n\t    \"by_id\" : { \"options\" : [\n\t\t\t    { value: 'one', label: 'One' },\n\t    { value: 'two', label: 'Two' },\n\n\t\t\n\t    ],\n\t     \"filter_function\" : (option,queryset)=>\n\t     {\n\n\n\t\t return queryset;\n\t     }\n           }\n\t    \n\t}*/\n  }\n  _handle_filter_change(values) {\n    if (!(values instanceof Array) && values != null) {\n      values = [values];\n    }\n\n    this.setState({ filter_values: values || [] });\n\n    if (values == null || values.length <= 0) {\n      this.set_queryset(\n        this.get_queryset(\n          this.state.page_number,\n          this.get_list_per_page(),\n          this.state.queryset\n        )\n      );\n      return;\n    }\n\n    let filters = this.get_filters();\n    for (let value of values) {\n      let queryset = filters[value._filter_].filter_function(\n        value,\n        this.state.queryset\n      );\n      this.setState({ queryset: queryset });\n    }\n  }\n  render_filters() {\n    let options = [];\n    let filters = this.get_filters();\n    for (let filter of _.keys(filters)) {\n      options.push({\n        label: _.startCase(filter),\n        value: filter,\n        disabled: true,\n        filter: null\n      });\n\n      if (filters[filter].options.length > 0) {\n        for (let option of filters[filter].options) {\n          option._filter_ = filter;\n          options.push(option);\n        }\n      }\n      if (this.state.filter_options[filter]) {\n        for (let option of this.state.filter_options[filter]) {\n          option._filter_ = filter;\n          options.push(option);\n        }\n      }\n    }\n\n    return (\n      <div style={{ marginLeft: \"10px\", width: \"100%\" }}>\n        <Select\n          name=\"filter-form\"\n          multi={true}\n          onChange={this._handle_filter_change.bind(this)}\n          closeOnSelect={true}\n          value={this.state.filter_values}\n          removeSelected={true}\n          placeholder={\"Select a filter\"}\n          options={options}\n        />\n      </div>\n    );\n  }\n  sort_by(sort_fields) {\n    return this.state.queryset ? this.state.queryset : [];\n  }\n\n  _sort_handler(field) {\n    return event => {\n      let index = _.findIndex(this.sort_fields, item =>\n        item.hasOwnProperty(field)\n      );\n      if (index >= 0) {\n        if (this.sort_fields[index][field] == \"asc\") {\n          this.sort_fields[index][field] = \"desc\";\n        } else {\n          this.sort_fields = _.filter(\n            this.sort_fields,\n            item => !item.hasOwnProperty(field)\n          );\n        }\n      } else {\n        let temp = {};\n        temp[field] = \"asc\";\n        this.sort_fields.push(temp);\n      }\n\n      this.sort_by(this.sort_fields);\n      this.forceUpdate();\n    };\n  }\n  /**\n   * This method is an event handler that listens to when all objects of the queryset\n   * displayed within a single display page are selected\n   */\n\n  _select_all(event) {\n    if (this._all_selected) {\n      this.setState({ selected_objects: new Set([], this.is_object_equal) });\n    } else {\n      this.setState({\n        selected_objects: new Set(this.state.queryset, this.is_object_equal)\n      });\n    }\n    this._all_selected = !this._all_selected;\n  }\n  /**\n   * This method is an event handler that listens when a single objects of the queryset\n   * displayed is selected\n   */\n\n  _select_one(object) {\n    return event => {\n      if (this.state.selected_objects.contains(object)) {\n        this.state.selected_objects.remove(object);\n\n        this.setState({ selected_objects: this.state.selected_objects });\n      } else {\n        this.state.selected_objects.add(object);\n        this.setState({ selected_objects: this.state.selected_objects });\n      }\n    };\n  }\n\n  /**\n   * Generate the table body for the list display page\n   *\n   * @return  An array of table rows <tr/>\n   */\n\n  _get_table_body() {\n    return this._get_ordered_queryset().map((object, i) => {\n      return (\n        <tr key={\"row-\" + i}>\n          <td>\n            {\" \"}\n            <input\n              type=\"checkbox\"\n              id={i + \"_checkbox\"}\n              onChange={this._select_one(object)}\n              checked={this.state.selected_objects.contains(object)}\n            />{\" \"}\n            <label htmlFor={i + \"_checkbox\"}>&nbsp;</label>{\" \"}\n          </td>\n          {this.get_list_display().map(item => {\n            return (\n              <td key={item}>\n                {\" \"}\n                {this.get_list_display_links().find(a => {\n                  return item == a;\n                })\n                  ? this._create_object_link(\n                      object,\n                      this._display_field(object, item)\n                    )\n                  : this._display_field(object, item)}{\" \"}\n              </td>\n            );\n          })}\n        </tr>\n      );\n    });\n  }\n  /**\n   * Changes the state property \"loading\" to true. The state property can be used to show a\n   * progress indicator.\n   */\n\n  show_progress() {\n    this.setState({ loading: true });\n  }\n  /**\n   * Changes the state property \"loading\" to false. This method  can be used to hide a\n   * progress indicator by inspecting the \"loading\" property of the state object.\n   */\n\n  hide_progress() {\n    this.setState({ loading: false });\n  }\n  /**\n   * The default progress indicator. Can be overriden.\n   * @return A progress indicator component\n   */\n\n  render_progress(loading) {\n    if (loading) {\n      return (\n        <div className=\"fetch-progress\">\n          <progress />\n        </div>\n      );\n    }\n  }\n  /**\n   * An event listener that listens to the search event. This method calls search method which\n   * implements a custom search. The method uses the \"live_search\" property to implement live\n   * search or not.\n   * @private\n   * @param {object} event The search onChange event\n   */\n\n  _handle_search(event) {\n    let term = event.target.value;\n\n    if (term) {\n      let key = event.which || event.keyCode;\n\n      if (this.get_live_search() || key === 13) {\n        let queryset = this.search(term, this.state.queryset);\n        this.setState({ queryset: queryset, total: queryset.length });\n      }\n    } else {\n      this.setState({\n        queryset: this.get_queryset(\n          this.state.page_number,\n          this.get_list_per_page(),\n          this.state.queryset\n        ),\n        total: this.get_queryset(\n          this.state.page_number,\n          this.list_per_page,\n          this.state.queryset\n        ).length\n      });\n    }\n  }\n  /**\n   * Renders the search component\n   *\n   * @return A search input field\n   */\n\n  render_search_field() {\n    return (\n      <div>\n        <input\n          name=\"search\"\n          type=\"text\"\n          className=\"ra-search-field\"\n          placeholder=\"Search\"\n          onChange={this._handle_search}\n          onKeyUp={this._handle_search}\n        />\n      </div>\n    );\n  }\n  /**\n   * Renders the add object button. Checks to see if permission is given by has_add_permission\n   *\n   * @return An add button component\n   */\n\n  render_add_button() {\n    if (this.has_add_permission()) {\n      return (\n        <button\n          className={\"ra-add-button\"}\n          onClick={this._object_link_clicked(null)}\n        >\n          {\" \"}\n          Add {_.startCase(this.name)}\n        </button>\n      );\n    }\n  }\n  /**\n   * Renders the table in the display page. This calls _get_table_header and _get_table_body\n   *\n   * @return An a table displaying the state queryset set objects\n   */\n\n  render_table() {\n    return (\n      <table className=\"table\">\n        <thead>\n          <tr key=\"header\">\n            <th>\n              <input\n                type=\"checkbox\"\n                id=\"all_boxes\"\n                onChange={this._select_all}\n              />{\" \"}\n              <label htmlFor=\"all_boxes\">&nbsp;</label>\n            </th>\n            {this._get_table_header()}\n          </tr>\n        </thead>\n        <tbody>{this._get_table_body()}</tbody>\n      </table>\n    );\n  }\n  /**\n   * An event listener that listens to actions selected.\n   *\n   *@param {object} event -  the DOM on-change event\n   */\n\n  action_selected(event) {\n    let action = event.target.value;\n\n    console.log(this.state.selected_objects.getItems());\n    this.get_actions()[action](this.state.selected_objects.getItems());\n    this.get_queryset(this.state.page_number, this.get_list_per_page());\n  }\n  /**\n   * An event listener that listens when a page is  selected.\n   *\n   *@param {number} page -  the page number selected\n   */\n\n  selectPage(page) {\n    return event => {\n      this.setState({ page_number: page.page }, () => {\n        this.setState({\n          queryset: this.get_queryset(\n            this.state.page_number,\n            this.get_list_per_page(),\n            this.state.queryset\n          )\n        });\n      });\n      event.preventDefault();\n    };\n  }\n  /**\n   * An event listener that listens when the next page is  selected.\n   *\n   */\n\n  nextPage() {\n    this.setState({\n      page_number: Math.min(this.state.page_number + 1, this.state.total)\n    });\n  }\n  /**\n   * An event listener that listens when the previous page is  selected.\n   *\n   */\n\n  prevPage() {\n    this.setState({ page_number: Math.max(this.state.page_number - 1, 1) });\n  }\n  /**\n   * Renders the pagination UI\n   *\n   * @return A component that renders the pagination controls\n   */\n\n  render_pagination() {\n    let pages = [];\n    if (this.state.total) {\n      let numpages = Math.ceil(this.state.total / this.get_list_per_page());\n      let pages_in_pagination =\n        numpages < this.pages_in_pagination\n          ? numpages\n          : this.pages_in_pagination;\n\n      if (this.state.page_number == 1) {\n        for (let i = 0; i < pages_in_pagination; i++) {\n          pages.push(i + 1);\n        }\n      } else if (this.state.page_number == numpages) {\n        for (let i = 0; i < pages_in_pagination; i++) {\n          pages.push(numpages - i);\n        }\n      } else {\n        for (let i = 0; i < pages_in_pagination; i++) {\n          pages.push(this.state.page_number + i);\n        }\n      }\n      /*\n\t\tfor(var i=0;i<numpages;i++)\n\t    {\n\t\tpages.push(i+1);\n\n\t    }*/\n    }\n\n    return (\n      <div className=\"pull-right\">\n        <span className=\"summary\">\n          {this.get_list_per_page() * (this.state.page_number - 1) + 1}-\n          {Math.min(\n            this.get_list_per_page() * (this.state.page_number - 1) +\n              this.get_list_per_page(),\n            this.state.total\n          )}{\" \"}\n          of {this.state.total}{\" \"}\n        </span>\n\n        <nav aria-label=\"Page navigation\">\n          <ul className=\"pagination\">\n            <li key={\"left\"} className=\"page-item\">\n              <a\n                href=\"#\"\n                aria-label=\"Previous\"\n                onClick={this.prevPage.bind(this)}\n                className=\"page-link\"\n              >\n                <span aria-hidden=\"true\">&laquo;</span>\n              </a>\n            </li>\n\n            {pages.map(page => {\n              return (\n                <li key={page} className=\"page-item\">\n                  <a\n                    href=\"#\"\n                    className=\"page-link\"\n                    onClick={this.selectPage({ page })}\n                  >\n                    {page}\n                  </a>\n                </li>\n              );\n            })}\n            <li className=\"page-item\">\n              <a\n                href=\"#\"\n                key={\"right\"}\n                onClick={this.nextPage.bind(this)}\n                aria-label=\"Next\"\n                className=\"page-link\"\n              >\n                <span aria-hidden=\"true\">&raquo;</span>\n              </a>\n            </li>\n          </ul>\n        </nav>\n      </div>\n    );\n  }\n  /**\n   * Renders the actions select component\n   *\n   * @return A component that renders a select input for all actions in the list display page\n   */\n\n  render_actions() {\n    return (\n      <select\n        className=\"ra-action-button\"\n        onChange={this.action_selected.bind(this)}\n        defaultValue=\"\"\n      >\n        <option key=\"key\" value=\"\" disabled={true}>\n          Choose an action\n        </option>\n        {_.keys(this.get_actions()).map(action => {\n          return (\n            <option key={action} value={action}>\n              {\" \"}\n              {_.startCase(action)}\n            </option>\n          );\n        })}\n      </select>\n    );\n  }\n  /**\n   * Renders the back button component in the add/change view\n   * @ignore\n   * @return A component that renders a back button\n   */\n\n  render_back_button() {\n    return (\n      <div>\n        <button\n          className={\"ra-back-button\"}\n          onClick={() => {\n            this.setState({ display_type: display_type.list, object: null });\n            this.get_queryset(\n              this.state.page_number,\n              this.get_list_per_page(),\n              this.state.queryset\n            );\n          }}\n        >\n          {\" \"}\n          Back{\" \"}\n        </button>\n      </div>\n    );\n  }\n  /**\n   * Renders the admin interface component\n   *\n   * @return A component that renders the admin interface\n   */\n  render_list_view() {\n    return (\n      <div>\n        {this.render_add_button()}\n        {this.render_below_add_button()}\n        {this.render_search_field()}\n        {this.render_below_search_field()}\n        {this.render_actions()}\n        {this.render_below_actions()}\n        {this.render_filters()}\n        {this.render_below_filters()}\n\n        {this.render_table()}\n        {this.render_below_table()}\n        {this.render_progress(this.state.loading)}\n        {this.render_below_progress()}\n\n        {this.render_pagination()}\n      </div>\n    );\n  }\n  render_below_add_button() {}\n  render_below_search_field() {}\n\n  render_below_actions() {}\n\n  render_below_filters() {}\n\n  render_below_table() {}\n\n  render_below_progress() {}\n\n  render_change_view() {\n    return (\n      <div>\n        {this.render_progress(this.state.loading)}\n        {this.render_back_button()}\n        {this.get_form(this.state.object)}\n      </div>\n    );\n  }\n  render_above_change_view() {}\n  render_below_change_view() {}\n  render_above_list_view() {}\n  render_below_list_view() {}\n  render_list_page() {\n    return (\n      <div>\n        {this.render_above_list_view()}\n        {this.render_list_view()}\n        {this.render_below_list_view()}\n      </div>\n    );\n  }\n  render_change_page() {\n    return (\n      <div>\n        {this.render_above_change_view()}\n        {this.render_change_view()}\n        {this.render_below_change_view()}\n      </div>\n    );\n  }\n  render() {\n    if (!this.has_module_permission()) {\n      return (\n        <div>\n          {\" \"}\n          <h1> Permission Denied </h1>\n        </div>\n      );\n    }\n\n    if (this.state.display_type == display_type.list) {\n      return this.render_list_page();\n    } else {\n      //Important: the next two lines are for URL navigation and handling the browser back button\n      this._change_uuid = uuidv1();\n      window.history.pushState(\n        {},\n        \"Change View\",\n        window.location.hash + \"/change/\" + this._change_uuid\n      );\n\n      return this.render_change_page();\n    }\n  }\n  show_list_view() {\n    this._display_will_change();\n    this.setState({ display_type: display_type.list }, this._display_changed);\n  }\n\n  register_listener() {\n    this._hash_change_listener = event => {\n      if (\n        this &&\n        this.state.display_type != display_type.list &&\n        !_.endsWith(window.location.hash, this._change_uuid)\n      ) {\n        this.show_list_view();\n      }\n    };\n    window.addEventListener(\"hashchange\", this._hash_change_listener);\n  }\n\n  componentWillUnmount() {\n    if (this._hash_change_listener) {\n      window.removeEventListener(\n        \"hashchange\",\n        this._hash_change_listener,\n        true\n      );\n    }\n  }\n}\n\nexport default Admin;\n",
     "static": true,
@@ -636,7 +575,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 53,
+    "__docId__": 49,
     "kind": "variable",
     "name": "uuidv1",
     "memberof": "src/admin.js",
@@ -657,7 +596,7 @@
     "ignore": true
   },
   {
-    "__docId__": 54,
+    "__docId__": 50,
     "kind": "variable",
     "name": "display_type",
     "memberof": "src/admin.js",
@@ -677,7 +616,7 @@
     }
   },
   {
-    "__docId__": 55,
+    "__docId__": 51,
     "kind": "class",
     "name": "Admin",
     "memberof": "src/admin.js",
@@ -695,7 +634,7 @@
     ]
   },
   {
-    "__docId__": 56,
+    "__docId__": 52,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/admin.js~Admin",
@@ -709,7 +648,7 @@
     "undocument": true
   },
   {
-    "__docId__": 57,
+    "__docId__": 53,
     "kind": "member",
     "name": "name",
     "memberof": "src/admin.js~Admin",
@@ -726,7 +665,7 @@
     }
   },
   {
-    "__docId__": 58,
+    "__docId__": 54,
     "kind": "member",
     "name": "name_plural",
     "memberof": "src/admin.js~Admin",
@@ -743,7 +682,7 @@
     }
   },
   {
-    "__docId__": 59,
+    "__docId__": 55,
     "kind": "member",
     "name": "live_search",
     "memberof": "src/admin.js~Admin",
@@ -760,7 +699,7 @@
     }
   },
   {
-    "__docId__": 60,
+    "__docId__": 56,
     "kind": "member",
     "name": "field_transforms",
     "memberof": "src/admin.js~Admin",
@@ -777,7 +716,7 @@
     }
   },
   {
-    "__docId__": 61,
+    "__docId__": 57,
     "kind": "member",
     "name": "header_transforms",
     "memberof": "src/admin.js~Admin",
@@ -794,7 +733,7 @@
     }
   },
   {
-    "__docId__": 62,
+    "__docId__": 58,
     "kind": "member",
     "name": "extra_fields",
     "memberof": "src/admin.js~Admin",
@@ -811,7 +750,7 @@
     }
   },
   {
-    "__docId__": 63,
+    "__docId__": 59,
     "kind": "member",
     "name": "list_display",
     "memberof": "src/admin.js~Admin",
@@ -828,7 +767,7 @@
     }
   },
   {
-    "__docId__": 64,
+    "__docId__": 60,
     "kind": "member",
     "name": "list_display_links",
     "memberof": "src/admin.js~Admin",
@@ -845,7 +784,7 @@
     }
   },
   {
-    "__docId__": 65,
+    "__docId__": 61,
     "kind": "member",
     "name": "list_per_page",
     "memberof": "src/admin.js~Admin",
@@ -862,7 +801,7 @@
     }
   },
   {
-    "__docId__": 66,
+    "__docId__": 62,
     "kind": "member",
     "name": "sort_fields",
     "memberof": "src/admin.js~Admin",
@@ -879,7 +818,7 @@
     }
   },
   {
-    "__docId__": 67,
+    "__docId__": 63,
     "kind": "member",
     "name": "is_object_equal",
     "memberof": "src/admin.js~Admin",
@@ -896,7 +835,7 @@
     }
   },
   {
-    "__docId__": 68,
+    "__docId__": 64,
     "kind": "member",
     "name": "pages_in_pagination",
     "memberof": "src/admin.js~Admin",
@@ -913,7 +852,7 @@
     }
   },
   {
-    "__docId__": 69,
+    "__docId__": 65,
     "kind": "member",
     "name": "actions",
     "memberof": "src/admin.js~Admin",
@@ -930,7 +869,7 @@
     }
   },
   {
-    "__docId__": 70,
+    "__docId__": 66,
     "kind": "member",
     "name": "queryset",
     "memberof": "src/admin.js~Admin",
@@ -947,7 +886,7 @@
     }
   },
   {
-    "__docId__": 71,
+    "__docId__": 67,
     "kind": "member",
     "name": "_all_selected",
     "memberof": "src/admin.js~Admin",
@@ -964,7 +903,7 @@
     }
   },
   {
-    "__docId__": 72,
+    "__docId__": 68,
     "kind": "member",
     "name": "bind_exclude",
     "memberof": "src/admin.js~Admin",
@@ -981,7 +920,7 @@
     }
   },
   {
-    "__docId__": 73,
+    "__docId__": 69,
     "kind": "member",
     "name": "[key]",
     "memberof": "src/admin.js~Admin",
@@ -998,7 +937,7 @@
     }
   },
   {
-    "__docId__": 75,
+    "__docId__": 71,
     "kind": "member",
     "name": "state",
     "memberof": "src/admin.js~Admin",
@@ -1014,7 +953,7 @@
     }
   },
   {
-    "__docId__": 81,
+    "__docId__": 77,
     "kind": "method",
     "name": "get_queryset",
     "memberof": "src/admin.js~Admin",
@@ -1073,7 +1012,7 @@
     }
   },
   {
-    "__docId__": 82,
+    "__docId__": 78,
     "kind": "method",
     "name": "get_form",
     "memberof": "src/admin.js~Admin",
@@ -1112,7 +1051,7 @@
     }
   },
   {
-    "__docId__": 83,
+    "__docId__": 79,
     "kind": "method",
     "name": "get_live_search",
     "memberof": "src/admin.js~Admin",
@@ -1134,7 +1073,7 @@
     "params": []
   },
   {
-    "__docId__": 84,
+    "__docId__": 80,
     "kind": "method",
     "name": "get_field_transforms",
     "memberof": "src/admin.js~Admin",
@@ -1159,7 +1098,7 @@
     "params": []
   },
   {
-    "__docId__": 85,
+    "__docId__": 81,
     "kind": "method",
     "name": "get_header_transforms",
     "memberof": "src/admin.js~Admin",
@@ -1184,7 +1123,7 @@
     "params": []
   },
   {
-    "__docId__": 86,
+    "__docId__": 82,
     "kind": "method",
     "name": "get_extra_fields",
     "memberof": "src/admin.js~Admin",
@@ -1209,7 +1148,7 @@
     "params": []
   },
   {
-    "__docId__": 87,
+    "__docId__": 83,
     "kind": "method",
     "name": "get_list_per_page",
     "memberof": "src/admin.js~Admin",
@@ -1231,7 +1170,7 @@
     "params": []
   },
   {
-    "__docId__": 88,
+    "__docId__": 84,
     "kind": "method",
     "name": "get_actions",
     "memberof": "src/admin.js~Admin",
@@ -1256,7 +1195,7 @@
     "params": []
   },
   {
-    "__docId__": 89,
+    "__docId__": 85,
     "kind": "method",
     "name": "get_list_display_links",
     "memberof": "src/admin.js~Admin",
@@ -1281,7 +1220,7 @@
     "params": []
   },
   {
-    "__docId__": 90,
+    "__docId__": 86,
     "kind": "method",
     "name": "get_list_display",
     "memberof": "src/admin.js~Admin",
@@ -1306,7 +1245,7 @@
     "params": []
   },
   {
-    "__docId__": 91,
+    "__docId__": 87,
     "kind": "method",
     "name": "_get_ordered_queryset",
     "memberof": "src/admin.js~Admin",
@@ -1328,7 +1267,7 @@
     "params": []
   },
   {
-    "__docId__": 92,
+    "__docId__": 88,
     "kind": "method",
     "name": "search",
     "memberof": "src/admin.js~Admin",
@@ -1371,7 +1310,7 @@
     }
   },
   {
-    "__docId__": 93,
+    "__docId__": 89,
     "kind": "method",
     "name": "has_delete_permission",
     "memberof": "src/admin.js~Admin",
@@ -1404,7 +1343,7 @@
     }
   },
   {
-    "__docId__": 94,
+    "__docId__": 90,
     "kind": "method",
     "name": "has_add_permission",
     "memberof": "src/admin.js~Admin",
@@ -1426,7 +1365,7 @@
     "params": []
   },
   {
-    "__docId__": 95,
+    "__docId__": 91,
     "kind": "method",
     "name": "has_change_permission",
     "memberof": "src/admin.js~Admin",
@@ -1457,7 +1396,7 @@
     ]
   },
   {
-    "__docId__": 96,
+    "__docId__": 92,
     "kind": "method",
     "name": "has_module_permission",
     "memberof": "src/admin.js~Admin",
@@ -1479,7 +1418,7 @@
     "params": []
   },
   {
-    "__docId__": 97,
+    "__docId__": 93,
     "kind": "method",
     "name": "_order_state_arrow",
     "memberof": "src/admin.js~Admin",
@@ -1509,7 +1448,7 @@
     }
   },
   {
-    "__docId__": 98,
+    "__docId__": 94,
     "kind": "method",
     "name": "response_add",
     "memberof": "src/admin.js~Admin",
@@ -1528,7 +1467,7 @@
     }
   },
   {
-    "__docId__": 99,
+    "__docId__": 95,
     "kind": "method",
     "name": "response_change",
     "memberof": "src/admin.js~Admin",
@@ -1547,7 +1486,7 @@
     }
   },
   {
-    "__docId__": 100,
+    "__docId__": 96,
     "kind": "method",
     "name": "_create_object_link",
     "memberof": "src/admin.js~Admin",
@@ -1587,7 +1526,7 @@
     }
   },
   {
-    "__docId__": 101,
+    "__docId__": 97,
     "kind": "method",
     "name": "set_queryset",
     "memberof": "src/admin.js~Admin",
@@ -1610,7 +1549,7 @@
     "return": null
   },
   {
-    "__docId__": 102,
+    "__docId__": 98,
     "kind": "method",
     "name": "set_total",
     "memberof": "src/admin.js~Admin",
@@ -1633,7 +1572,7 @@
     "return": null
   },
   {
-    "__docId__": 103,
+    "__docId__": 99,
     "kind": "method",
     "name": "_get_prop_label",
     "memberof": "src/admin.js~Admin",
@@ -1660,7 +1599,7 @@
     }
   },
   {
-    "__docId__": 104,
+    "__docId__": 100,
     "kind": "method",
     "name": "_get_table_header",
     "memberof": "src/admin.js~Admin",
@@ -1680,7 +1619,7 @@
     }
   },
   {
-    "__docId__": 105,
+    "__docId__": 101,
     "kind": "method",
     "name": "_display_changed",
     "memberof": "src/admin.js~Admin",
@@ -1696,7 +1635,7 @@
     "return": null
   },
   {
-    "__docId__": 106,
+    "__docId__": 102,
     "kind": "method",
     "name": "display_changed",
     "memberof": "src/admin.js~Admin",
@@ -1732,7 +1671,7 @@
     "return": null
   },
   {
-    "__docId__": 107,
+    "__docId__": 103,
     "kind": "method",
     "name": "_display_will_change",
     "memberof": "src/admin.js~Admin",
@@ -1748,7 +1687,7 @@
     "return": null
   },
   {
-    "__docId__": 108,
+    "__docId__": 104,
     "kind": "method",
     "name": "display_will_change",
     "memberof": "src/admin.js~Admin",
@@ -1784,7 +1723,7 @@
     "return": null
   },
   {
-    "__docId__": 109,
+    "__docId__": 105,
     "kind": "method",
     "name": "_object_link_clicked",
     "memberof": "src/admin.js~Admin",
@@ -1811,7 +1750,7 @@
     }
   },
   {
-    "__docId__": 110,
+    "__docId__": 106,
     "kind": "method",
     "name": "_display_field",
     "memberof": "src/admin.js~Admin",
@@ -1844,7 +1783,7 @@
     }
   },
   {
-    "__docId__": 111,
+    "__docId__": 107,
     "kind": "method",
     "name": "set_filter_options",
     "memberof": "src/admin.js~Admin",
@@ -1873,7 +1812,7 @@
     "return": null
   },
   {
-    "__docId__": 112,
+    "__docId__": 108,
     "kind": "method",
     "name": "get_filter_values",
     "memberof": "src/admin.js~Admin",
@@ -1893,7 +1832,7 @@
     }
   },
   {
-    "__docId__": 113,
+    "__docId__": 109,
     "kind": "method",
     "name": "get_filters",
     "memberof": "src/admin.js~Admin",
@@ -1909,7 +1848,7 @@
     "return": null
   },
   {
-    "__docId__": 114,
+    "__docId__": 110,
     "kind": "method",
     "name": "_handle_filter_change",
     "memberof": "src/admin.js~Admin",
@@ -1932,7 +1871,7 @@
     "return": null
   },
   {
-    "__docId__": 115,
+    "__docId__": 111,
     "kind": "method",
     "name": "render_filters",
     "memberof": "src/admin.js~Admin",
@@ -1952,7 +1891,7 @@
     }
   },
   {
-    "__docId__": 116,
+    "__docId__": 112,
     "kind": "method",
     "name": "sort_by",
     "memberof": "src/admin.js~Admin",
@@ -1979,7 +1918,7 @@
     }
   },
   {
-    "__docId__": 117,
+    "__docId__": 113,
     "kind": "method",
     "name": "_sort_handler",
     "memberof": "src/admin.js~Admin",
@@ -2006,7 +1945,7 @@
     }
   },
   {
-    "__docId__": 119,
+    "__docId__": 115,
     "kind": "method",
     "name": "_select_all",
     "memberof": "src/admin.js~Admin",
@@ -2028,7 +1967,7 @@
     "return": null
   },
   {
-    "__docId__": 121,
+    "__docId__": 117,
     "kind": "method",
     "name": "_select_one",
     "memberof": "src/admin.js~Admin",
@@ -2054,7 +1993,7 @@
     }
   },
   {
-    "__docId__": 122,
+    "__docId__": 118,
     "kind": "method",
     "name": "_get_table_body",
     "memberof": "src/admin.js~Admin",
@@ -2076,7 +2015,7 @@
     "params": []
   },
   {
-    "__docId__": 123,
+    "__docId__": 119,
     "kind": "method",
     "name": "show_progress",
     "memberof": "src/admin.js~Admin",
@@ -2091,7 +2030,7 @@
     "return": null
   },
   {
-    "__docId__": 124,
+    "__docId__": 120,
     "kind": "method",
     "name": "hide_progress",
     "memberof": "src/admin.js~Admin",
@@ -2106,7 +2045,7 @@
     "return": null
   },
   {
-    "__docId__": 125,
+    "__docId__": 121,
     "kind": "method",
     "name": "render_progress",
     "memberof": "src/admin.js~Admin",
@@ -2135,7 +2074,7 @@
     ]
   },
   {
-    "__docId__": 126,
+    "__docId__": 122,
     "kind": "method",
     "name": "_handle_search",
     "memberof": "src/admin.js~Admin",
@@ -2161,7 +2100,7 @@
     "return": null
   },
   {
-    "__docId__": 127,
+    "__docId__": 123,
     "kind": "method",
     "name": "render_search_field",
     "memberof": "src/admin.js~Admin",
@@ -2183,7 +2122,7 @@
     "params": []
   },
   {
-    "__docId__": 128,
+    "__docId__": 124,
     "kind": "method",
     "name": "render_add_button",
     "memberof": "src/admin.js~Admin",
@@ -2205,7 +2144,7 @@
     "params": []
   },
   {
-    "__docId__": 129,
+    "__docId__": 125,
     "kind": "method",
     "name": "render_table",
     "memberof": "src/admin.js~Admin",
@@ -2227,7 +2166,7 @@
     "params": []
   },
   {
-    "__docId__": 130,
+    "__docId__": 126,
     "kind": "method",
     "name": "action_selected",
     "memberof": "src/admin.js~Admin",
@@ -2253,7 +2192,7 @@
     "return": null
   },
   {
-    "__docId__": 131,
+    "__docId__": 127,
     "kind": "method",
     "name": "selectPage",
     "memberof": "src/admin.js~Admin",
@@ -2283,7 +2222,7 @@
     }
   },
   {
-    "__docId__": 132,
+    "__docId__": 128,
     "kind": "method",
     "name": "nextPage",
     "memberof": "src/admin.js~Admin",
@@ -2298,7 +2237,7 @@
     "return": null
   },
   {
-    "__docId__": 133,
+    "__docId__": 129,
     "kind": "method",
     "name": "prevPage",
     "memberof": "src/admin.js~Admin",
@@ -2313,7 +2252,7 @@
     "return": null
   },
   {
-    "__docId__": 134,
+    "__docId__": 130,
     "kind": "method",
     "name": "render_pagination",
     "memberof": "src/admin.js~Admin",
@@ -2335,7 +2274,7 @@
     "params": []
   },
   {
-    "__docId__": 135,
+    "__docId__": 131,
     "kind": "method",
     "name": "render_actions",
     "memberof": "src/admin.js~Admin",
@@ -2357,7 +2296,7 @@
     "params": []
   },
   {
-    "__docId__": 136,
+    "__docId__": 132,
     "kind": "method",
     "name": "render_back_button",
     "memberof": "src/admin.js~Admin",
@@ -2380,7 +2319,7 @@
     "params": []
   },
   {
-    "__docId__": 137,
+    "__docId__": 133,
     "kind": "method",
     "name": "render_list_view",
     "memberof": "src/admin.js~Admin",
@@ -2402,7 +2341,7 @@
     "params": []
   },
   {
-    "__docId__": 138,
+    "__docId__": 134,
     "kind": "method",
     "name": "render_below_add_button",
     "memberof": "src/admin.js~Admin",
@@ -2418,7 +2357,7 @@
     "return": null
   },
   {
-    "__docId__": 139,
+    "__docId__": 135,
     "kind": "method",
     "name": "render_below_search_field",
     "memberof": "src/admin.js~Admin",
@@ -2434,7 +2373,7 @@
     "return": null
   },
   {
-    "__docId__": 140,
+    "__docId__": 136,
     "kind": "method",
     "name": "render_below_actions",
     "memberof": "src/admin.js~Admin",
@@ -2450,7 +2389,7 @@
     "return": null
   },
   {
-    "__docId__": 141,
+    "__docId__": 137,
     "kind": "method",
     "name": "render_below_filters",
     "memberof": "src/admin.js~Admin",
@@ -2466,7 +2405,7 @@
     "return": null
   },
   {
-    "__docId__": 142,
+    "__docId__": 138,
     "kind": "method",
     "name": "render_below_table",
     "memberof": "src/admin.js~Admin",
@@ -2482,7 +2421,7 @@
     "return": null
   },
   {
-    "__docId__": 143,
+    "__docId__": 139,
     "kind": "method",
     "name": "render_below_progress",
     "memberof": "src/admin.js~Admin",
@@ -2498,7 +2437,7 @@
     "return": null
   },
   {
-    "__docId__": 144,
+    "__docId__": 140,
     "kind": "method",
     "name": "render_change_view",
     "memberof": "src/admin.js~Admin",
@@ -2518,7 +2457,7 @@
     }
   },
   {
-    "__docId__": 145,
+    "__docId__": 141,
     "kind": "method",
     "name": "render_above_change_view",
     "memberof": "src/admin.js~Admin",
@@ -2534,7 +2473,7 @@
     "return": null
   },
   {
-    "__docId__": 146,
+    "__docId__": 142,
     "kind": "method",
     "name": "render_below_change_view",
     "memberof": "src/admin.js~Admin",
@@ -2550,7 +2489,7 @@
     "return": null
   },
   {
-    "__docId__": 147,
+    "__docId__": 143,
     "kind": "method",
     "name": "render_above_list_view",
     "memberof": "src/admin.js~Admin",
@@ -2566,7 +2505,7 @@
     "return": null
   },
   {
-    "__docId__": 148,
+    "__docId__": 144,
     "kind": "method",
     "name": "render_below_list_view",
     "memberof": "src/admin.js~Admin",
@@ -2582,7 +2521,7 @@
     "return": null
   },
   {
-    "__docId__": 149,
+    "__docId__": 145,
     "kind": "method",
     "name": "render_list_page",
     "memberof": "src/admin.js~Admin",
@@ -2602,7 +2541,7 @@
     }
   },
   {
-    "__docId__": 150,
+    "__docId__": 146,
     "kind": "method",
     "name": "render_change_page",
     "memberof": "src/admin.js~Admin",
@@ -2622,7 +2561,7 @@
     }
   },
   {
-    "__docId__": 151,
+    "__docId__": 147,
     "kind": "method",
     "name": "render",
     "memberof": "src/admin.js~Admin",
@@ -2642,7 +2581,7 @@
     }
   },
   {
-    "__docId__": 152,
+    "__docId__": 148,
     "kind": "member",
     "name": "_change_uuid",
     "memberof": "src/admin.js~Admin",
@@ -2659,7 +2598,7 @@
     }
   },
   {
-    "__docId__": 153,
+    "__docId__": 149,
     "kind": "method",
     "name": "show_list_view",
     "memberof": "src/admin.js~Admin",
@@ -2675,7 +2614,7 @@
     "return": null
   },
   {
-    "__docId__": 154,
+    "__docId__": 150,
     "kind": "method",
     "name": "register_listener",
     "memberof": "src/admin.js~Admin",
@@ -2691,7 +2630,7 @@
     "return": null
   },
   {
-    "__docId__": 155,
+    "__docId__": 151,
     "kind": "member",
     "name": "_hash_change_listener",
     "memberof": "src/admin.js~Admin",
@@ -2708,7 +2647,7 @@
     }
   },
   {
-    "__docId__": 156,
+    "__docId__": 152,
     "kind": "method",
     "name": "componentWillUnmount",
     "memberof": "src/admin.js~Admin",
@@ -2724,7 +2663,7 @@
     "return": null
   },
   {
-    "__docId__": 157,
+    "__docId__": 153,
     "kind": "file",
     "name": "src/index.js",
     "content": "import React from \"react\";\nimport ReactDOM from \"react-dom\";\n//import exampleComponent from \"./example5.js\";\nimport Example from \"./example4.js\";\n//import { Voter } from \"./voter.js\";\n//import Evoting from './evoting.js';\n\nclass ErrorBoundary extends React.Component {\n  constructor(props) {\n    super(props);\n    this.state = { hasError: false };\n  }\n\n  componentDidCatch(error, info) {\n    // Display fallback UI\n    this.setState({ hasError: true });\n    // You can also log the error to an error reporting service\n    //   logErrorToMyService(error, info);\n  }\n\n  render() {\n    if (this.state.hasError) {\n      // You can render any custom fallback UI\n      return <h1>Something went wrong.</h1>;\n    }\n    return this.props.children;\n  }\n}\nReactDOM.render(\n  <Example />,\n\n  document.getElementById(\"app\")\n);\n",
@@ -2735,7 +2674,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 158,
+    "__docId__": 154,
     "kind": "class",
     "name": "ErrorBoundary",
     "memberof": "src/index.js",
@@ -2755,7 +2694,7 @@
     "ignore": true
   },
   {
-    "__docId__": 159,
+    "__docId__": 155,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/index.js~ErrorBoundary",
@@ -2769,7 +2708,7 @@
     "undocument": true
   },
   {
-    "__docId__": 160,
+    "__docId__": 156,
     "kind": "member",
     "name": "state",
     "memberof": "src/index.js~ErrorBoundary",
@@ -2786,7 +2725,7 @@
     }
   },
   {
-    "__docId__": 161,
+    "__docId__": 157,
     "kind": "method",
     "name": "componentDidCatch",
     "memberof": "src/index.js~ErrorBoundary",
@@ -2815,7 +2754,7 @@
     "return": null
   },
   {
-    "__docId__": 162,
+    "__docId__": 158,
     "kind": "method",
     "name": "render",
     "memberof": "src/index.js~ErrorBoundary",
@@ -2835,150 +2774,7 @@
     }
   },
   {
-    "__docId__": 163,
-    "kind": "file",
-    "name": "src/serviceWorker.js",
-    "content": "// This optional code is used to register a service worker.\n// register() is not called by default.\n\n// This lets the app load faster on subsequent visits in production, and gives\n// it offline capabilities. However, it also means that developers (and users)\n// will only see deployed updates on subsequent visits to a page, after all the\n// existing tabs open on the page have been closed, since previously cached\n// resources are updated in the background.\n\n// To learn more about the benefits of this model and instructions on how to\n// opt-in, read http://bit.ly/CRA-PWA\n\nconst isLocalhost = Boolean(\n  window.location.hostname === 'localhost' ||\n    // [::1] is the IPv6 localhost address.\n    window.location.hostname === '[::1]' ||\n    // 127.0.0.1/8 is considered localhost for IPv4.\n    window.location.hostname.match(\n      /^127(?:\\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/\n    )\n);\n\nexport function register(config) {\n  if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {\n    // The URL constructor is available in all browsers that support SW.\n    const publicUrl = new URL(process.env.PUBLIC_URL, window.location.href);\n    if (publicUrl.origin !== window.location.origin) {\n      // Our service worker won't work if PUBLIC_URL is on a different origin\n      // from what our page is served on. This might happen if a CDN is used to\n      // serve assets; see https://github.com/facebook/create-react-app/issues/2374\n      return;\n    }\n\n    window.addEventListener('load', () => {\n      const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;\n\n      if (isLocalhost) {\n        // This is running on localhost. Let's check if a service worker still exists or not.\n        checkValidServiceWorker(swUrl, config);\n\n        // Add some additional logging to localhost, pointing developers to the\n        // service worker/PWA documentation.\n        navigator.serviceWorker.ready.then(() => {\n          console.log(\n            'This web app is being served cache-first by a service ' +\n              'worker. To learn more, visit http://bit.ly/CRA-PWA'\n          );\n        });\n      } else {\n        // Is not localhost. Just register service worker\n        registerValidSW(swUrl, config);\n      }\n    });\n  }\n}\n\nfunction registerValidSW(swUrl, config) {\n  navigator.serviceWorker\n    .register(swUrl)\n    .then(registration => {\n      registration.onupdatefound = () => {\n        const installingWorker = registration.installing;\n        if (installingWorker == null) {\n          return;\n        }\n        installingWorker.onstatechange = () => {\n          if (installingWorker.state === 'installed') {\n            if (navigator.serviceWorker.controller) {\n              // At this point, the updated precached content has been fetched,\n              // but the previous service worker will still serve the older\n              // content until all client tabs are closed.\n              console.log(\n                'New content is available and will be used when all ' +\n                  'tabs for this page are closed. See http://bit.ly/CRA-PWA.'\n              );\n\n              // Execute callback\n              if (config && config.onUpdate) {\n                config.onUpdate(registration);\n              }\n            } else {\n              // At this point, everything has been precached.\n              // It's the perfect time to display a\n              // \"Content is cached for offline use.\" message.\n              console.log('Content is cached for offline use.');\n\n              // Execute callback\n              if (config && config.onSuccess) {\n                config.onSuccess(registration);\n              }\n            }\n          }\n        };\n      };\n    })\n    .catch(error => {\n      console.error('Error during service worker registration:', error);\n    });\n}\n\nfunction checkValidServiceWorker(swUrl, config) {\n  // Check if the service worker can be found. If it can't reload the page.\n  fetch(swUrl)\n    .then(response => {\n      // Ensure service worker exists, and that we really are getting a JS file.\n      const contentType = response.headers.get('content-type');\n      if (\n        response.status === 404 ||\n        (contentType != null && contentType.indexOf('javascript') === -1)\n      ) {\n        // No service worker found. Probably a different app. Reload the page.\n        navigator.serviceWorker.ready.then(registration => {\n          registration.unregister().then(() => {\n            window.location.reload();\n          });\n        });\n      } else {\n        // Service worker found. Proceed as normal.\n        registerValidSW(swUrl, config);\n      }\n    })\n    .catch(() => {\n      console.log(\n        'No internet connection found. App is running in offline mode.'\n      );\n    });\n}\n\nexport function unregister() {\n  if ('serviceWorker' in navigator) {\n    navigator.serviceWorker.ready.then(registration => {\n      registration.unregister();\n    });\n  }\n}\n",
-    "static": true,
-    "longname": "/home/mubarak/Dropbox/Projects/react-crud-admin/src/serviceWorker.js",
-    "access": "public",
-    "description": null,
-    "lineNumber": 1
-  },
-  {
-    "__docId__": 164,
-    "kind": "variable",
-    "name": "isLocalhost",
-    "memberof": "src/serviceWorker.js",
-    "static": true,
-    "longname": "src/serviceWorker.js~isLocalhost",
-    "access": "public",
-    "export": false,
-    "importPath": "react-crud-admin/src/serviceWorker.js",
-    "importStyle": null,
-    "description": null,
-    "lineNumber": 13,
-    "undocument": true,
-    "type": {
-      "types": [
-        "*"
-      ]
-    },
-    "ignore": true
-  },
-  {
-    "__docId__": 165,
-    "kind": "function",
-    "name": "register",
-    "memberof": "src/serviceWorker.js",
-    "generator": false,
-    "async": false,
-    "static": true,
-    "longname": "src/serviceWorker.js~register",
-    "access": "public",
-    "export": true,
-    "importPath": "react-crud-admin/src/serviceWorker.js",
-    "importStyle": "{register}",
-    "description": null,
-    "lineNumber": 23,
-    "undocument": true,
-    "params": [
-      {
-        "name": "config",
-        "types": [
-          "*"
-        ]
-      }
-    ],
-    "return": null
-  },
-  {
-    "__docId__": 166,
-    "kind": "function",
-    "name": "registerValidSW",
-    "memberof": "src/serviceWorker.js",
-    "generator": false,
-    "async": false,
-    "static": true,
-    "longname": "src/serviceWorker.js~registerValidSW",
-    "access": "public",
-    "export": false,
-    "importPath": "react-crud-admin/src/serviceWorker.js",
-    "importStyle": null,
-    "description": null,
-    "lineNumber": 57,
-    "undocument": true,
-    "params": [
-      {
-        "name": "swUrl",
-        "types": [
-          "*"
-        ]
-      },
-      {
-        "name": "config",
-        "types": [
-          "*"
-        ]
-      }
-    ],
-    "return": null,
-    "ignore": true
-  },
-  {
-    "__docId__": 167,
-    "kind": "function",
-    "name": "checkValidServiceWorker",
-    "memberof": "src/serviceWorker.js",
-    "generator": false,
-    "async": false,
-    "static": true,
-    "longname": "src/serviceWorker.js~checkValidServiceWorker",
-    "access": "public",
-    "export": false,
-    "importPath": "react-crud-admin/src/serviceWorker.js",
-    "importStyle": null,
-    "description": null,
-    "lineNumber": 101,
-    "undocument": true,
-    "params": [
-      {
-        "name": "swUrl",
-        "types": [
-          "*"
-        ]
-      },
-      {
-        "name": "config",
-        "types": [
-          "*"
-        ]
-      }
-    ],
-    "return": null,
-    "ignore": true
-  },
-  {
-    "__docId__": 168,
-    "kind": "function",
-    "name": "unregister",
-    "memberof": "src/serviceWorker.js",
-    "generator": false,
-    "async": false,
-    "static": true,
-    "longname": "src/serviceWorker.js~unregister",
-    "access": "public",
-    "export": true,
-    "importPath": "react-crud-admin/src/serviceWorker.js",
-    "importStyle": "{unregister}",
-    "description": null,
-    "lineNumber": 129,
-    "undocument": true,
-    "params": [],
-    "return": null
-  },
-  {
-    "__docId__": 169,
+    "__docId__": 159,
     "kind": "file",
     "name": "src/set.js",
     "content": "export default class Set {\n    constructor(items=[],isEqual=(a,b)=> a==b)\n    {\n\tthis.items=items\n\tthis.isEqual=isEqual\n    }\n    add(item)\n    {\n\tfor(let i=0;i<this.items.length;i++)\n\t{\n\t    if(this.isEqual(this.items[i],item))\n\t    {\n\t\treturn true\n\t    }\n\t}\n\tthis.items.push(item);\n\treturn true\n    }\n    remove(item)\n    {\n\tlet index=-1;\n\tfor(let i=0;i<this.items.length;i++)\n\t{\n\t    if(this.isEqual(this.items[i],item))\n\t    {\n\t\tindex=i;\n\t\tbreak;\n\t    }\n\t}\n\tif(index>=0)\n\t{\n\t    if(index>0 && index<this.items.length-1)\n\t    {\n\t\tlet array1=this.items.slice(index+1,this.items.length)\n\t\tlet array2=this.items.slice(0,index)\n\n\t\tfor(let i=0;i<array1.length;i++)\n\t\t{\n\t\t    array2.push(array1[i]);\n\t\t}\n\t\tthis.items=array2;\n\t\treturn true\n\t    }\n\n\t    if(index==0)\n\t    {\n\n\t\tthis.items=this.items.slice(1,this.items.length)\n\t\treturn true\n\t    }\n\t    if(index==this.items.length-1)\n\t    {\n\t\tthis.items=this.items.slice(0,this.items.length-1)\n\t\treturn true\n\t    }\n\t}\n\treturn true\n\t    \n    }\n    contains(item)\n    {\n\tfor(let i=0;i<this.items.length;i++)\n\t{\n\t    if(this.isEqual(this.items[i],item))\n\t    {\n\t\treturn true\n\t    }\n\t}\n\treturn false;\n    }\n    getItems()\n    {\n\treturn this.items.slice();\n    }\n\n}\n",
@@ -2989,7 +2785,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 170,
+    "__docId__": 160,
     "kind": "class",
     "name": "Set",
     "memberof": "src/set.js",
@@ -3005,7 +2801,7 @@
     "interface": false
   },
   {
-    "__docId__": 171,
+    "__docId__": 161,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/set.js~Set",
@@ -3019,7 +2815,7 @@
     "undocument": true
   },
   {
-    "__docId__": 172,
+    "__docId__": 162,
     "kind": "member",
     "name": "items",
     "memberof": "src/set.js~Set",
@@ -3036,7 +2832,7 @@
     }
   },
   {
-    "__docId__": 173,
+    "__docId__": 163,
     "kind": "member",
     "name": "isEqual",
     "memberof": "src/set.js~Set",
@@ -3053,7 +2849,7 @@
     }
   },
   {
-    "__docId__": 174,
+    "__docId__": 164,
     "kind": "method",
     "name": "add",
     "memberof": "src/set.js~Set",
@@ -3080,7 +2876,7 @@
     }
   },
   {
-    "__docId__": 175,
+    "__docId__": 165,
     "kind": "method",
     "name": "remove",
     "memberof": "src/set.js~Set",
@@ -3107,7 +2903,7 @@
     }
   },
   {
-    "__docId__": 179,
+    "__docId__": 169,
     "kind": "method",
     "name": "contains",
     "memberof": "src/set.js~Set",
@@ -3134,7 +2930,7 @@
     }
   },
   {
-    "__docId__": 180,
+    "__docId__": 170,
     "kind": "method",
     "name": "getItems",
     "memberof": "src/set.js~Set",

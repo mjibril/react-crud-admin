@@ -6,12 +6,6 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "react-crud-admin/src/app.js~app",
-    "class/src/App.js~App.html",
-    "<span>App</span> <span class=\"search-result-import-path\">react-crud-admin/src/App.js</span>",
-    "class"
-  ],
-  [
     "react-crud-admin/src/set.js~set",
     "class/src/set.js~Set.html",
     "<span>Set</span> <span class=\"search-result-import-path\">react-crud-admin/src/set.js</span>",
@@ -22,18 +16,6 @@ window.esdocSearchIndex = [
     "variable/index.html#static-variable-display_type",
     "<span>display_type</span> <span class=\"search-result-import-path\">react-crud-admin/src/admin.js</span>",
     "variable"
-  ],
-  [
-    "react-crud-admin/src/serviceworker.js~register",
-    "function/index.html#static-function-register",
-    "<span>register</span> <span class=\"search-result-import-path\">react-crud-admin/src/serviceWorker.js</span>",
-    "function"
-  ],
-  [
-    "react-crud-admin/src/serviceworker.js~unregister",
-    "function/index.html#static-function-unregister",
-    "<span>unregister</span> <span class=\"search-result-import-path\">react-crud-admin/src/serviceWorker.js</span>",
-    "function"
   ],
   [
     "src/.external-ecmascript.js~array",
@@ -316,24 +298,6 @@ window.esdocSearchIndex = [
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined",
     "src/.external-ecmascript.js~undefined",
     "external"
-  ],
-  [
-    "src/app.js",
-    "file/src/App.js.html",
-    "src/App.js",
-    "file"
-  ],
-  [
-    "src/app.js~app#render",
-    "class/src/App.js~App.html#instance-method-render",
-    "src/App.js~App#render",
-    "method"
-  ],
-  [
-    "src/app.test.js",
-    "file/src/App.test.js.html",
-    "src/App.test.js",
-    "file"
   ],
   [
     "src/admin.js",
@@ -897,12 +861,6 @@ window.esdocSearchIndex = [
     "src/index.js",
     "file/src/index.js.html",
     "src/index.js",
-    "file"
-  ],
-  [
-    "src/serviceworker.js",
-    "file/src/serviceWorker.js.html",
-    "src/serviceWorker.js",
     "file"
   ],
   [
