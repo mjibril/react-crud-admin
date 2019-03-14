@@ -1,6 +1,6 @@
 {
   "name": "react-crud-admin",
-  "version": "1.0.42",
+  "version": "1.0.43",
   "private": false,
   "main": "build/static/js/main.js",
   "description": "React Admin inspired by DjangoAdmin",
@@ -131,5 +131,11 @@
     "presets": [
       "react-app"
     ]
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mjibril/react-crud-admin.git"
+  },
+  "author": "Mubarak Jibril",
+  "license": "ISC"
 }
