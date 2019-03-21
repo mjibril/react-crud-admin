@@ -30,7 +30,7 @@ class Admin extends React.Component {
     this.actions = {
       delete: selected_objects => {}
     };
-
+    this._change_uuid = uuidv1();
     this.queryset = [];
     this._all_selected = false;
     this.register_listener();
