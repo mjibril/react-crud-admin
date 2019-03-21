@@ -1127,7 +1127,7 @@ class Admin extends React.Component {
     } else {
       //Important: the next two lines are for URL navigation and handling the browser back button
 
-      if (!_.endsWith(window.location.hash, this._change_uuid)) {
+      if (window.location.hash.search(new RegExp(this._change_uuid)) < 0) {
         this._change_uuid = uuidv1();
         window.history.pushState(
           {},
