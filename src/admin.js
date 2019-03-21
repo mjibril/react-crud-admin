@@ -1126,13 +1126,15 @@ class Admin extends React.Component {
       return this.render_list_page();
     } else {
       //Important: the next two lines are for URL navigation and handling the browser back button
-      this._change_uuid = uuidv1();
-      window.history.pushState(
-        {},
-        "Change View",
-        window.location.hash + "/change/" + this._change_uuid
-      );
 
+      if (!_.endsWith(window.location.hash, this._change_uuid)) {
+        this._change_uuid = uuidv1();
+        window.history.pushState(
+          {},
+          "Change View",
+          window.location.hash + "/change/" + this._change_uuid
+        );
+      }
       return this.render_change_page();
     }
   }

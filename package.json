@@ -1,6 +1,6 @@
 {
   "name": "react-crud-admin",
-  "version": "1.0.43",
+  "version": "1.0.44",
   "private": false,
   "main": "build/static/js/main.js",
   "description": "React Admin inspired by DjangoAdmin",
