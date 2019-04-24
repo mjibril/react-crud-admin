@@ -2,7 +2,6 @@ import React from "react";
 import _ from "lodash";
 import Set from "./set.js";
 import Select from "react-select";
-import Modal from "react-modal";
 const uuidv1 = require("uuid/v1");
 
 //require("./admin.scss");
@@ -10,16 +9,7 @@ export const display_type = {
   list: "list",
   change: "change"
 };
-const customStyles = {
-  content: {
-    top: "50%",
-    left: "50%",
-    right: "auto",
-    bottom: "auto",
-    marginRight: "-50%",
-    transform: "translate(-50%, -50%)"
-  }
-};
+
 /** Admin Class extends React.Component. To implement a CRUD interface similar to Django Admin you need to extend the Admin class. */
 class Admin extends React.Component {
   constructor(props) {
@@ -43,7 +33,7 @@ class Admin extends React.Component {
     this._change_uuid = uuidv1();
     this.queryset = [];
     this._all_selected = false;
-
+    this.register_listener();
     if (props) {
       this.bind_exclude = props.bind_exclude ? props.bind_exclude : [];
       _.keys(props).map(key => {
@@ -510,7 +500,7 @@ class Admin extends React.Component {
     return event => {
       this._display_will_change();
       this.setState(
-        { display_type: display_type.change, object: object, loading: false },
+        { display_type: display_type.change, object: object },
         this._display_changed
       );
       event.preventDefault();
@@ -1110,43 +1100,70 @@ class Admin extends React.Component {
         {this.render_above_list_view()}
         {this.render_list_view()}
         {this.render_below_list_view()}
-        {this.render_change_modal()}
       </div>
     );
   }
-
-  render_change_modal() {
+  render_change_page() {
     return (
-      <Modal
-        isOpen={this.state.display_type != display_type.list}
-        contentLabel={this.name || ""}
-        parentSelector={() => document.querySelector("#react-crud-admin")}
-        styles={customStyles}
-      >
+      <div>
         {this.render_above_change_view()}
         {this.render_change_view()}
         {this.render_below_change_view()}
-      </Modal>
-    );
-  }
-  render_permission_denied() {
-    return (
-      <div>
-        {" "}
-        <h1> Permission Denied </h1>
       </div>
     );
   }
   render() {
     if (!this.has_module_permission()) {
-      return this.render_permission_denied();
+      return (
+        <div>
+          {" "}
+          <h1> Permission Denied </h1>
+        </div>
+      );
     }
 
-    return <div id="react-crud-admin">{this.render_list_page()}</div>;
+    if (this.state.display_type == display_type.list) {
+      return this.render_list_page();
+    } else {
+      //Important: the next two lines are for URL navigation and handling the browser back button
+
+      if (window.location.hash.search(new RegExp(this._change_uuid)) < 0) {
+        this._change_uuid = uuidv1();
+        window.history.pushState(
+          {},
+          "Change View",
+          window.location.hash + "/change/" + this._change_uuid
+        );
+      }
+      return this.render_change_page();
+    }
   }
   show_list_view() {
     this._display_will_change();
     this.setState({ display_type: display_type.list }, this._display_changed);
+  }
+
+  register_listener() {
+    this._hash_change_listener = event => {
+      if (
+        this &&
+        this.state.display_type != display_type.list &&
+        !_.endsWith(window.location.hash, this._change_uuid)
+      ) {
+        this.show_list_view();
+      }
+    };
+    window.addEventListener("hashchange", this._hash_change_listener);
+  }
+
+  componentWillUnmount() {
+    if (this._hash_change_listener) {
+      window.removeEventListener(
+        "hashchange",
+        this._hash_change_listener,
+        true
+      );
+    }
   }
 }
 

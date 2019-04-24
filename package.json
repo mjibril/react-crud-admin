@@ -8,6 +8,7 @@
     "lodash": "",
     "react": "",
     "react-jsonschema-form": "",
+    "react-modal": "",
     "react-select": "",
     "uuid": ""
   },
