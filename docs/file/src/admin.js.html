@@ -24,7 +24,7 @@
   </span>
     <ul class="search-result"></ul>
   </div>
-</header>
+<a style="position:relative; top:3px;" href="https://github.com/mjibril/react-crud-admin.git"><img width="20px" src="./image/github.png"></a></header>
 
 <nav class="navigation" data-ice="nav"><div>
   <ul>
@@ -41,6 +41,7 @@
 import _ from &quot;lodash&quot;;
 import Set from &quot;./set.js&quot;;
 import Select from &quot;react-select&quot;;
+import Modal from &quot;react-modal&quot;;
 const uuidv1 = require(&quot;uuid/v1&quot;);
 
 //require(&quot;./admin.scss&quot;);
@@ -48,7 +49,16 @@ export const display_type = {
   list: &quot;list&quot;,
   change: &quot;change&quot;
 };
-
+const customStyles = {
+  content: {
+    top: &quot;50%&quot;,
+    left: &quot;50%&quot;,
+    right: &quot;auto&quot;,
+    bottom: &quot;auto&quot;,
+    marginRight: &quot;-50%&quot;,
+    transform: &quot;translate(-50%, -50%)&quot;
+  }
+};
 /** Admin Class extends React.Component. To implement a CRUD interface similar to Django Admin you need to extend the Admin class. */
 class Admin extends React.Component {
   constructor(props) {
@@ -69,10 +79,10 @@ class Admin extends React.Component {
     this.actions = {
       delete: selected_objects =&gt; {}
     };
-
+    this._change_uuid = uuidv1();
     this.queryset = [];
     this._all_selected = false;
-    this.register_listener();
+
     if (props) {
       this.bind_exclude = props.bind_exclude ? props.bind_exclude : [];
       _.keys(props).map(key =&gt; {
@@ -539,8 +549,8 @@ class Admin extends React.Component {
     return event =&gt; {
       this._display_will_change();
       this.setState(
-        { display_type: display_type.change, object: object },
-        this._display_changed
+        { display_type: display_type.change, object: object, loading: false },
+        this._display_changed()
       );
       event.preventDefault();
     };
@@ -1139,68 +1149,43 @@ class Admin extends React.Component {
         {this.render_above_list_view()}
         {this.render_list_view()}
         {this.render_below_list_view()}
+        {this.render_change_modal()}
       &lt;/div&gt;
     );
   }
-  render_change_page() {
+
+  render_change_modal() {
     return (
-      &lt;div&gt;
+      &lt;Modal
+        isOpen={this.state.display_type != display_type.list}
+        contentLabel={this.name || &quot;&quot;}
+        parentSelector={() =&gt; document.querySelector(&quot;#react-crud-admin&quot;)}
+        styles={customStyles}
+      &gt;
         {this.render_above_change_view()}
         {this.render_change_view()}
         {this.render_below_change_view()}
+      &lt;/Modal&gt;
+    );
+  }
+  render_permission_denied() {
+    return (
+      &lt;div&gt;
+        {&quot; &quot;}
+        &lt;h1&gt; Permission Denied &lt;/h1&gt;
       &lt;/div&gt;
     );
   }
   render() {
     if (!this.has_module_permission()) {
-      return (
-        &lt;div&gt;
-          {&quot; &quot;}
-          &lt;h1&gt; Permission Denied &lt;/h1&gt;
-        &lt;/div&gt;
-      );
+      return this.render_permission_denied();
     }
 
-    if (this.state.display_type == display_type.list) {
-      return this.render_list_page();
-    } else {
-      //Important: the next two lines are for URL navigation and handling the browser back button
-      this._change_uuid = uuidv1();
-      window.history.pushState(
-        {},
-        &quot;Change View&quot;,
-        window.location.hash + &quot;/change/&quot; + this._change_uuid
-      );
-
-      return this.render_change_page();
-    }
+    return &lt;div id=&quot;react-crud-admin&quot;&gt;{this.render_list_page()}&lt;/div&gt;;
   }
   show_list_view() {
     this._display_will_change();
     this.setState({ display_type: display_type.list }, this._display_changed);
-  }
-
-  register_listener() {
-    this._hash_change_listener = event =&gt; {
-      if (
-        this &amp;&amp;
-        this.state.display_type != display_type.list &amp;&amp;
-        !_.endsWith(window.location.hash, this._change_uuid)
-      ) {
-        this.show_list_view();
-      }
-    };
-    window.addEventListener(&quot;hashchange&quot;, this._hash_change_listener);
-  }
-
-  componentWillUnmount() {
-    if (this._hash_change_listener) {
-      window.removeEventListener(
-        &quot;hashchange&quot;,
-        this._hash_change_listener,
-        true
-      );
-    }
   }
 }
 

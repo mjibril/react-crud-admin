@@ -24,7 +24,7 @@
   </span>
     <ul class="search-result"></ul>
   </div>
-</header>
+<a style="position:relative; top:3px;" href="https://github.com/mjibril/react-crud-admin.git"><img width="20px" src="./image/github.png"></a></header>
 
 <nav class="navigation" data-ice="nav"><div>
   <ul>
@@ -525,7 +525,8 @@ export default class Example extends Admin
 <p>the name of the filter and the options array of the filter.</p>
 <p>The <code>&quot;filter_function&quot;</code> is a function that performs filtering. It has two arguments, <code>&quot;option&quot;</code> which is the selected <code>&quot;option&quot;</code> and the current queryset. It must return a queryset. <code>&quot;option&quot;</code> is one of <code>&quot;options&quot;</code> array. For asynchronous cases, <code>set_queryset</code> and <code>set_total</code> methods can be used to set the queryset after backend filtering.</p>
 <p>The second filter <code>&quot;by_id&quot;</code> filters the queryset by even and odd <code>id</code> property. The filter UI uses <a href="https://github.com/JedWatson/react-select">React Select</a> component.</p>
-<h2 id="add-change-view">Add/Change View</h2><h3 id="forms">Forms</h3><p>We can add submit handlers for the form in our example,</p>
+<h2 id="add-change-view">Add/Change View</h2><p>Starting from version 1.0.48 the add/change view is presented in a modal. </p>
+<h3 id="forms">Forms</h3><p>We can add submit handlers for the form in our example,</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">....
 ....
 ....
@@ -640,10 +641,11 @@ export default class Example extends Admin
 <tr>
 <td><code>selected_objects</code></td>
 <td>Empty set</td>
-<td>The <code>Set</code> class a wrapper around <code>array</code> that implements set</td>
+<td>The <code>Set</code> class a wrapper around <code>array</code> that implements set logic</td>
 </tr>
 </tbody>
 </table>
+<p>Care must be taken note to override the state object values especially at initialization stages e.g. in the constructor or <code>component_will_mount</code> .</p>
 <h3 id="progress-indicator">Progress Indicator</h3><p><code>show_progress</code> and <code>hide_progress</code> can be used in the both the list display and add/change view to display and hide a progress indicator. <code>render_progress</code> can be used to override the default progress indicator component to be rendered. <code>render_progress</code> has one argument which is a boolean denoting whether or not to render a progress indicator. For example,</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">render_progress(loading);
 {
@@ -703,6 +705,19 @@ export default class Example extends Admin
   }
 }</code>
 </code></pre>
+<p>You can also listen to events that are triggered when the display is about to change or has changed,</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">display_will_change(display_type,object)
+{
+
+}</code>
+</code></pre>
+<p>and</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">display_changed(display_type,object)
+{
+
+}</code>
+</code></pre>
+<p><code>display_type</code> is either <code>&quot;list&quot;</code> or <code>&quot;change&quot;</code>.</p>
 <h3 id="list-page">List Page</h3><p>It is possible to add components above and below the list view using <code>render_above_list_view</code> and <code>render_below_list_view</code> methods. Both methods take no arguments and by default return <code>null</code>. These methods can be overridden to return components.</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">render_list_page();
 {

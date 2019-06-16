@@ -384,12 +384,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/admin.js~admin#_hash_change_listener",
-    "class/src/admin.js~Admin.html#instance-member-_hash_change_listener",
-    "src/admin.js~Admin#_hash_change_listener",
-    "member"
-  ],
-  [
     "src/admin.js~admin#_object_link_clicked",
     "class/src/admin.js~Admin.html#instance-method-_object_link_clicked",
     "src/admin.js~Admin#_object_link_clicked",
@@ -436,12 +430,6 @@ window.esdocSearchIndex = [
     "class/src/admin.js~Admin.html#instance-member-bind_exclude",
     "src/admin.js~Admin#bind_exclude",
     "member"
-  ],
-  [
-    "src/admin.js~admin#componentwillunmount",
-    "class/src/admin.js~Admin.html#instance-method-componentWillUnmount",
-    "src/admin.js~Admin#componentWillUnmount",
-    "method"
   ],
   [
     "src/admin.js~admin#constructor",
@@ -648,12 +636,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/admin.js~admin#register_listener",
-    "class/src/admin.js~Admin.html#instance-method-register_listener",
-    "src/admin.js~Admin#register_listener",
-    "method"
-  ],
-  [
     "src/admin.js~admin#render",
     "class/src/admin.js~Admin.html#instance-method-render",
     "src/admin.js~Admin#render",
@@ -732,9 +714,9 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/admin.js~admin#render_change_page",
-    "class/src/admin.js~Admin.html#instance-method-render_change_page",
-    "src/admin.js~Admin#render_change_page",
+    "src/admin.js~admin#render_change_modal",
+    "class/src/admin.js~Admin.html#instance-method-render_change_modal",
+    "src/admin.js~Admin#render_change_modal",
     "method"
   ],
   [
@@ -765,6 +747,12 @@ window.esdocSearchIndex = [
     "src/admin.js~admin#render_pagination",
     "class/src/admin.js~Admin.html#instance-method-render_pagination",
     "src/admin.js~Admin#render_pagination",
+    "method"
+  ],
+  [
+    "src/admin.js~admin#render_permission_denied",
+    "class/src/admin.js~Admin.html#instance-method-render_permission_denied",
+    "src/admin.js~Admin#render_permission_denied",
     "method"
   ],
   [

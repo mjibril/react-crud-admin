@@ -567,7 +567,7 @@
     "__docId__": 48,
     "kind": "file",
     "name": "src/admin.js",
-    "content": "import React from \"react\";\nimport _ from \"lodash\";\nimport Set from \"./set.js\";\nimport Select from \"react-select\";\nconst uuidv1 = require(\"uuid/v1\");\n\n//require(\"./admin.scss\");\nexport const display_type = {\n  list: \"list\",\n  change: \"change\"\n};\n\n/** Admin Class extends React.Component. To implement a CRUD interface similar to Django Admin you need to extend the Admin class. */\nclass Admin extends React.Component {\n  constructor(props) {\n    super(props);\n\n    this.name = \"default\";\n    this.name_plural = \"defaults\";\n    this.live_search = false;\n    this.field_transforms = {};\n    this.header_transforms = {};\n    this.extra_fields = {};\n    this.list_display = [];\n    this.list_display_links = [];\n    this.list_per_page = 10;\n    this.sort_fields = [];\n    this.is_object_equal = (a, b) => a == b;\n    this.pages_in_pagination = 3;\n    this.actions = {\n      delete: selected_objects => {}\n    };\n\n    this.queryset = [];\n    this._all_selected = false;\n    this.register_listener();\n    if (props) {\n      this.bind_exclude = props.bind_exclude ? props.bind_exclude : [];\n      _.keys(props).map(key => {\n        if (typeof props[key] == \"function\") {\n          if (_.includes(key, this.bind_exclude)) {\n            this[key] = props[key];\n\n            this[key].bind(this);\n          }\n        } else {\n          this[key] = props[key];\n        }\n      });\n    }\n\n    /**\n     * Initialize the state of the component\n     */\n    this.state = {\n      display_type: display_type.list,\n      page_number: 1,\n      object: null,\n      selected_objects: new Set([], this.is_object_equal),\n      total: 1,\n      filter_options: {},\n      filter_values: []\n    };\n\n    let queryset = this.get_queryset(\n      this.state.page_number,\n      this.list_per_page,\n      this.state.queryset\n    )\n      ? this.get_queryset(\n          this.state.page_number,\n          this.list_per_page,\n          this.state.queryset\n        )\n      : [];\n    this.state.queryset = queryset;\n    this.state.total = queryset.length;\n    this._handle_search = this._handle_search.bind(this);\n    this._select_all = this._select_all.bind(this);\n    this._select_one = this._select_one.bind(this);\n    this.response_change = this.response_change.bind(this);\n    this.response_add = this.response_add.bind(this);\n  }\n  /**\n   * This function returns an array of objects that will serve as the\n   * queryset for the admin interface. Typically involves an HTTP request\n   * to a backend.\n   * @param {number} page_number - The current page number\n   * @param {number} list_per_page - Number items to list per page. Defaults to `list_per_page`\n   * @param {object[]} queryset - The current queryset\n   * @returns {object[]} An array of objects. - Objects to display\n   */\n\n  get_queryset(\n    page_number = this.state.page_number,\n    list_per_page = this.get_list_per_page(),\n    queryset = this.state.queryset\n  ) {\n    return this.queryset;\n  }\n\n  /**\n   * This functions returns a JSON Schema Form for editing\n   * the objects in the array returned by get_queryset(). This method needs to be overridden to\n   * so as to return a Form Component for the object.  Learn more on\n   * JSON schema forms from https://github.com/mozilla-services/react-jsonschema-form\n   * and JSON Schema from https://spacetelescope.github.io/understanding-json-schema/\n   * @param {object} object - The current selected object.\n   * @returns  A JSON Schema Form Component.\n   */\n\n  get_form(object = null) {\n    return {};\n  }\n  /**\n   * Returns a true/false value. Controls wether search is implement on live input or not.\n   * Can be overriden by the live_search member variable. Default is false.\n   *\n   *@return {boolean}\n   */\n\n  get_live_search() {\n    return this.live_search;\n  }\n\n  /**\n   *Returns an object whose properties are field names corresponding to properties of any object\n   *in the queryset and whose values are transform functions. The example below will transform each \"name\"\n   *property of objects in the queryset to upper case in the list display view.\n   *@example\n   *get_field_transforms()\n   *{\n   * return { 'name' : function(name,object)\n   *                   {\n   *                       return name.toUpperCase()\n   *                   }\n   *         }\n   *\n   *}\n   *@return {object}\n   */\n\n  get_field_transforms() {\n    if (this.field_transforms) {\n      return this.field_transforms;\n    }\n    return {};\n  }\n\n  /**\n   *Returns an object whose properties are field names corresponding to properties of any object\n   *in the queryset and whose values are transform functions. The example below will transform the header \"name\" to upper case in the list display view.\n   *@example\n   *get_header_transforms()\n   *{\n   * return { 'name' : function(name)\n   *                   {\n   *                       return name.toUpperCase()\n   *                   }\n   *         }\n   *}\n   *\n   *@return {object}\n   */\n\n  get_header_transforms() {\n    if (this.header_transforms) {\n      return this.header_transforms;\n    }\n\n    return {};\n  }\n\n  /**\n   * Returns an object whose properties are extra  field names not corresponding to properties of any object\n   * in the queryset and whose values are display functions. This will create extra fields that are not tied to objects. Extra fields have to be manually included in the `list_display` in order to appear in the list display page. The display functions take the current object being rendered in the table row and  the field name\n   *@example\n   *get_extra_fields()\n   *{\n   * return { 'now' : function(object,label)\n   *                   {\n   *                      return moment(new Date()).format('LLL');\n   *                   }\n   *         }\n   *}\n   *\n   *@return {object}\n   */\n\n  get_extra_fields() {\n    if (this.extra_fields) {\n      return this.extra_fields;\n    }\n\n    return {};\n  }\n  /**\n   * Returns the number of items to be listed in a page. Can be overridden by `list_per_page`.\n   *@return {number} The number of objects in a page\n   */\n\n  get_list_per_page() {\n    if (this.list_per_page) {\n      return this.list_per_page;\n    }\n    return 10;\n  }\n\n  /**\n     * Gets an actions object whose properties are action names and values are action methods.\n     * This can be overridden by the action member variable. The default \"delete\" method is not\n     * implemented.\n     *\n     * Each actions object property (e.g. \"delete\") is passed an array of selected objects. One\n     * can then handle those objects. Actions will appear on the list display page within a\n     * dropdown. Selecting an action should have the action method applied to all currently \n     * selected objects.\n     * @example\n     *\n     * actions = { \"delete\" : (selected_objects)=>{ } }\n\n     *@return {object} An actions object\n     */\n\n  get_actions() {\n    if (this.actions) {\n      return this.actions;\n    }\n\n    return {};\n  }\n  /**\n   *   Gets the list/array of properties of the objects in the queryset that are clickable\n   *    when displayed on the list display page. It can be overridden by the member variable\n   *   `list_display_links`. A property is any string that should exist as a property in the objects within\n   *   a queryset and works with lodash's `_.at` function.\n   *\n   *   The properties \"name\",\"address.street\" and \"emails[0]\" are all acceptable by `_.at` in the example below\n   *   @example\n   *   let object={ name : \"any name\",{ address : { street : \"any\"}},emails: [\"any@any.com\"]}\n   *\n   *\n   *\n   * @return {string[]} A list of properties of the object to be displayed\n   */\n\n  get_list_display_links() {\n    if (this.list_display_links) {\n      return this.list_display_links;\n    }\n    return [];\n  }\n  /**\n   *   Gets the list/array of properties/field names of the objects in the queryset to be\n   *   displayed on the list display page. It can be overridden by the member variable\n   *   list_display. A property is any string that should exist in the objects within\n   *   a queryset and works with lodash's _.at function. See more at\n   *   https://lodash.com/docs/#at\n   *\n   *   @example\n   *   let object={ name : \"any name\",{ address : { street : \"any\"}},emails: [\"any@any.com\"]}\n   *\n   *   The properties \"name\",\"address.street\" and \"emails[0]\" are all acceptable\n   *\n   * @return {string[]} A list of properties of the object to be displayed\n   */\n\n  get_list_display() {\n    if (this.list_display) {\n      return this.list_display;\n    }\n    return [];\n  }\n  /**\n   * Returns an ordered queryset. The method checks to see if sorting is active and sorts\n   * the current queryset based on the sort order.\n   * @private\n   * @return {object[]} An ordered queryset\n   */\n\n  _get_ordered_queryset() {\n    if (this.sort_fields.length > 0) {\n      return this.sort_by(this.sort_fields, this.state.queryset);\n    }\n\n    return this.state.queryset ? this.state.queryset : [];\n  }\n  /**\n   * Implements search. This method should be overridden to implement a custom search\n   *\n   *@param {string} term - the search term\n   *@param {object[]} queryset - the current queryset\n   *@return {object[]} the queryset as a result of the search\n   */\n\n  search(term, queryset) {\n    return queryset;\n  }\n  /**\n   * Grants permission to delete object. This method is not implemented and can be handled via\n   *  implementing actions.\n   *\n   *@param {object} object -\n   *@return {boolean} Returns true is the object has been deleted or false otherwise\n   */\n\n  has_delete_permission(object) {\n    return true;\n  }\n  /**\n   * Grants permission to add an object. This method controls rendering of the Add\n   * button\n   *\n   *\n   *@return {boolean} Returns true is the object can be added or false otherwise\n   */\n\n  has_add_permission() {\n    return true;\n  }\n  /**\n   * Grants permission to change an object. It disables all links to the add/change page when\n   * enabled\n   *\n   *@return {boolean} Returns true is the object can be changed or false otherwise\n   */\n\n  has_change_permission(object = null) {\n    return true;\n  }\n  /**\n   * Grants permission to the this admin interface.\n   *\n   *@return {boolean} Returns true if access is allowed false otherwise\n   */\n\n  has_module_permission() {\n    return true;\n  }\n  /*\n    _order_state(field)\n    {\n\n\tlet index=_.findIndex(this._sort_fields,item=> item.hasOwnProperty(field));\n\t\n\tif(index<0)\n\t{\n\t    return 'sort-not-active';\n\n\t}\n\tif(this._sort_fields[index][field]=='desc')\n\t{\n\t   \n\t    return 'sort-reverse-active';\n\t}\n\treturn 'sort-active';\n\t}*/\n\n  /**\n     * This method adds up/down arrows to field headers on the list display page table\n     *\n     * @private \n     * @param {string} field -  the field/property name\n     \n     \n     */\n\n  _order_state_arrow(field) {\n    let index = _.findIndex(this.sort_fields, item =>\n      item.hasOwnProperty(field)\n    );\n\n    if (index < 0) {\n      return null;\n    }\n    if (this.sort_fields[index][field] == \"desc\") {\n      return <span>&#8681;</span>;\n    }\n    return <span> &#8679;</span>;\n  }\n  /**\n   *  This method  should be overriden and called after saving an object in the add/change view.       *  This method is not called at all here but provides hints on what to do after saving\n   *  an object. Change the state display_type to \"list\", object to \"null\" and refresh the quer         *  yset.\n   */\n\n  response_add() {\n    this._display_will_change();\n    this.setState(\n      {\n        display_type: display_type.list,\n        object: null,\n        queryset: this.get_queryset(\n          this.state.page_number,\n          this.get_list_per_page(),\n          this.state.queryset\n        )\n      },\n      this._display_changed\n    );\n\n    return true;\n  }\n  /**\n   *  This method should be overriden and called after saving an object in the add/change view.         *  This method is not called at all here but provides hints on what to do after saving\n   *  an object. Change the state display_type to \"list\", object to \"null\" and refresh the quer         *  yset.\n   */\n\n  response_change() {\n    this._display_will_change();\n    this.setState(\n      {\n        display_type: display_type.list,\n        object: null,\n        queryset: this.get_queryset(\n          this.state.page_number,\n          this.get_list_per_page(),\n          this.state.queryset\n        )\n      },\n      this._display_changed\n    );\n\n    return true;\n  }\n  /**\n     * A private method to wrap a table entry in an <a></a> tag in the display page.\n     * The method checks if permission is given to display links using the has_change_permission method\n     * @private\n     * @param {object} object - the current object to be displayed as a table\n     * entry in the display page\n     * @param {string} label - the name of the field \n     \n     */\n\n  _create_object_link(object, label) {\n    if (this.has_change_permission(object)) {\n      return (\n        <a onClick={this._object_link_clicked(object)} href=\"#\">\n          {\" \"}\n          {label}{\" \"}\n        </a>\n      );\n    } else {\n      return <span> {label} </span>;\n    }\n  }\n\n  set_queryset(queryset) {\n    this.setState({ queryset: queryset });\n  }\n\n  set_total(total) {\n    this.setState({ total: total });\n  }\n\n  _get_prop_label(label) {\n    let labels = label.split(\".\");\n    return labels[labels.length - 1];\n  }\n  _get_table_header() {\n    return this.get_list_display().map(item => {\n      return (\n        <th key={item} onClick={this._sort_handler(item)}>\n          {\" \"}\n          {this.get_header_transforms()[item]\n            ? this.get_header_transforms()[item](item)\n            : _.startCase(this._get_prop_label(item))}\n          {this._order_state_arrow(item)}{\" \"}\n        </th>\n      );\n    });\n  }\n  _display_changed() {\n    this.display_changed(this.state.display_type, this.state.object);\n  }\n  /**\n     * An event listener that listens to state changes in the display type i.e.\n     * from list to add/change. It is fired after state changes are made.\n     * \n     * @param {string} display_type - the current display type of the component either \"list\" or \"change\" \n     * @param {object} object - the current object or null\n     \n     */\n\n  display_changed(display_type, object) {}\n  _display_will_change() {\n    this.display_will_change(this.state.display_type, this.state.object);\n  }\n  /**\n     * An event listener that listens to state changes in the display type i.e.\n     * from list to add/change . It is fired before state changes are made.\n     * \n     * @param {string} display_type - the current display type of the component either \"list\" or \"change\" \n     * @param {object} object - the current object or null\n     \n     */\n\n  display_will_change(display_type, object) {}\n  _object_link_clicked(object) {\n    return event => {\n      this._display_will_change();\n      this.setState(\n        { display_type: display_type.change, object: object },\n        this._display_changed\n      );\n      event.preventDefault();\n    };\n  }\n\n  _display_field(object, item) {\n    let label = _.at(object, item)[\"0\"];\n\n    if (_.has(this.get_field_transforms(), item)) {\n      return this.get_field_transforms()[item](label, object);\n    }\n\n    if (_.at(this.get_extra_fields(), item)) {\n      if (this.get_extra_fields()[item]) {\n        label = this.get_extra_fields()[item](object, item);\n      }\n    }\n\n    return label;\n  }\n\n  set_filter_options(filter_name, options) {\n    let t = {};\n    t[filter_name] = options.map(option => {\n      option._filter_ = filter_name;\n      return option;\n    });\n    this.setState({ filter_options: _.assign(this.state.filter_options, t) });\n  }\n\n  get_filter_values() {\n    return this.state.filter_values;\n  }\n  get_filters() {\n    /*\n\treturn {\n\n\t    \"by_id\" : { \"options\" : [\n\t\t\t    { value: 'one', label: 'One' },\n\t    { value: 'two', label: 'Two' },\n\n\t\t\n\t    ],\n\t     \"filter_function\" : (option,queryset)=>\n\t     {\n\n\n\t\t return queryset;\n\t     }\n           }\n\t    \n\t}*/\n  }\n  _handle_filter_change(values) {\n    if (!(values instanceof Array) && values != null) {\n      values = [values];\n    }\n\n    this.setState({ filter_values: values || [] });\n\n    if (values == null || values.length <= 0) {\n      this.set_queryset(\n        this.get_queryset(\n          this.state.page_number,\n          this.get_list_per_page(),\n          this.state.queryset\n        )\n      );\n      return;\n    }\n\n    let filters = this.get_filters();\n    for (let value of values) {\n      let queryset = filters[value._filter_].filter_function(\n        value,\n        this.state.queryset\n      );\n      this.setState({ queryset: queryset });\n    }\n  }\n  render_filters() {\n    let options = [];\n    let filters = this.get_filters();\n    for (let filter of _.keys(filters)) {\n      options.push({\n        label: _.startCase(filter),\n        value: filter,\n        disabled: true,\n        filter: null\n      });\n\n      if (filters[filter].options.length > 0) {\n        for (let option of filters[filter].options) {\n          option._filter_ = filter;\n          options.push(option);\n        }\n      }\n      if (this.state.filter_options[filter]) {\n        for (let option of this.state.filter_options[filter]) {\n          option._filter_ = filter;\n          options.push(option);\n        }\n      }\n    }\n\n    return (\n      <div style={{ marginLeft: \"10px\", width: \"100%\" }}>\n        <Select\n          name=\"filter-form\"\n          multi={true}\n          onChange={this._handle_filter_change.bind(this)}\n          closeOnSelect={true}\n          value={this.state.filter_values}\n          removeSelected={true}\n          placeholder={\"Select a filter\"}\n          options={options}\n        />\n      </div>\n    );\n  }\n  sort_by(sort_fields) {\n    return this.state.queryset ? this.state.queryset : [];\n  }\n\n  _sort_handler(field) {\n    return event => {\n      let index = _.findIndex(this.sort_fields, item =>\n        item.hasOwnProperty(field)\n      );\n      if (index >= 0) {\n        if (this.sort_fields[index][field] == \"asc\") {\n          this.sort_fields[index][field] = \"desc\";\n        } else {\n          this.sort_fields = _.filter(\n            this.sort_fields,\n            item => !item.hasOwnProperty(field)\n          );\n        }\n      } else {\n        let temp = {};\n        temp[field] = \"asc\";\n        this.sort_fields.push(temp);\n      }\n\n      this.sort_by(this.sort_fields);\n      this.forceUpdate();\n    };\n  }\n  /**\n   * This method is an event handler that listens to when all objects of the queryset\n   * displayed within a single display page are selected\n   */\n\n  _select_all(event) {\n    if (this._all_selected) {\n      this.setState({ selected_objects: new Set([], this.is_object_equal) });\n    } else {\n      this.setState({\n        selected_objects: new Set(this.state.queryset, this.is_object_equal)\n      });\n    }\n    this._all_selected = !this._all_selected;\n  }\n  /**\n   * This method is an event handler that listens when a single objects of the queryset\n   * displayed is selected\n   */\n\n  _select_one(object) {\n    return event => {\n      if (this.state.selected_objects.contains(object)) {\n        this.state.selected_objects.remove(object);\n\n        this.setState({ selected_objects: this.state.selected_objects });\n      } else {\n        this.state.selected_objects.add(object);\n        this.setState({ selected_objects: this.state.selected_objects });\n      }\n    };\n  }\n\n  /**\n   * Generate the table body for the list display page\n   *\n   * @return  An array of table rows <tr/>\n   */\n\n  _get_table_body() {\n    return this._get_ordered_queryset().map((object, i) => {\n      return (\n        <tr key={\"row-\" + i}>\n          <td>\n            {\" \"}\n            <input\n              type=\"checkbox\"\n              id={i + \"_checkbox\"}\n              onChange={this._select_one(object)}\n              checked={this.state.selected_objects.contains(object)}\n            />{\" \"}\n            <label htmlFor={i + \"_checkbox\"}>&nbsp;</label>{\" \"}\n          </td>\n          {this.get_list_display().map(item => {\n            return (\n              <td key={item}>\n                {\" \"}\n                {this.get_list_display_links().find(a => {\n                  return item == a;\n                })\n                  ? this._create_object_link(\n                      object,\n                      this._display_field(object, item)\n                    )\n                  : this._display_field(object, item)}{\" \"}\n              </td>\n            );\n          })}\n        </tr>\n      );\n    });\n  }\n  /**\n   * Changes the state property \"loading\" to true. The state property can be used to show a\n   * progress indicator.\n   */\n\n  show_progress() {\n    this.setState({ loading: true });\n  }\n  /**\n   * Changes the state property \"loading\" to false. This method  can be used to hide a\n   * progress indicator by inspecting the \"loading\" property of the state object.\n   */\n\n  hide_progress() {\n    this.setState({ loading: false });\n  }\n  /**\n   * The default progress indicator. Can be overriden.\n   * @return A progress indicator component\n   */\n\n  render_progress(loading) {\n    if (loading) {\n      return (\n        <div className=\"fetch-progress\">\n          <progress />\n        </div>\n      );\n    }\n  }\n  /**\n   * An event listener that listens to the search event. This method calls search method which\n   * implements a custom search. The method uses the \"live_search\" property to implement live\n   * search or not.\n   * @private\n   * @param {object} event The search onChange event\n   */\n\n  _handle_search(event) {\n    let term = event.target.value;\n\n    if (term) {\n      let key = event.which || event.keyCode;\n\n      if (this.get_live_search() || key === 13) {\n        let queryset = this.search(term, this.state.queryset);\n        this.setState({ queryset: queryset, total: queryset.length });\n      }\n    } else {\n      this.setState({\n        queryset: this.get_queryset(\n          this.state.page_number,\n          this.get_list_per_page(),\n          this.state.queryset\n        ),\n        total: this.get_queryset(\n          this.state.page_number,\n          this.list_per_page,\n          this.state.queryset\n        ).length\n      });\n    }\n  }\n  /**\n   * Renders the search component\n   *\n   * @return A search input field\n   */\n\n  render_search_field() {\n    return (\n      <div>\n        <input\n          name=\"search\"\n          type=\"text\"\n          className=\"ra-search-field\"\n          placeholder=\"Search\"\n          onChange={this._handle_search}\n          onKeyUp={this._handle_search}\n        />\n      </div>\n    );\n  }\n  /**\n   * Renders the add object button. Checks to see if permission is given by has_add_permission\n   *\n   * @return An add button component\n   */\n\n  render_add_button() {\n    if (this.has_add_permission()) {\n      return (\n        <button\n          className={\"ra-add-button\"}\n          onClick={this._object_link_clicked(null)}\n        >\n          {\" \"}\n          Add {_.startCase(this.name)}\n        </button>\n      );\n    }\n  }\n  /**\n   * Renders the table in the display page. This calls _get_table_header and _get_table_body\n   *\n   * @return An a table displaying the state queryset set objects\n   */\n\n  render_table() {\n    return (\n      <table className=\"table\">\n        <thead>\n          <tr key=\"header\">\n            <th>\n              <input\n                type=\"checkbox\"\n                id=\"all_boxes\"\n                onChange={this._select_all}\n              />{\" \"}\n              <label htmlFor=\"all_boxes\">&nbsp;</label>\n            </th>\n            {this._get_table_header()}\n          </tr>\n        </thead>\n        <tbody>{this._get_table_body()}</tbody>\n      </table>\n    );\n  }\n  /**\n   * An event listener that listens to actions selected.\n   *\n   *@param {object} event -  the DOM on-change event\n   */\n\n  action_selected(event) {\n    let action = event.target.value;\n\n    console.log(this.state.selected_objects.getItems());\n    this.get_actions()[action](this.state.selected_objects.getItems());\n    this.get_queryset(this.state.page_number, this.get_list_per_page());\n  }\n  /**\n   * An event listener that listens when a page is  selected.\n   *\n   *@param {number} page -  the page number selected\n   */\n\n  selectPage(page) {\n    return event => {\n      this.setState({ page_number: page.page }, () => {\n        this.setState({\n          queryset: this.get_queryset(\n            this.state.page_number,\n            this.get_list_per_page(),\n            this.state.queryset\n          )\n        });\n      });\n      event.preventDefault();\n    };\n  }\n  /**\n   * An event listener that listens when the next page is  selected.\n   *\n   */\n\n  nextPage() {\n    this.setState({\n      page_number: Math.min(this.state.page_number + 1, this.state.total)\n    });\n  }\n  /**\n   * An event listener that listens when the previous page is  selected.\n   *\n   */\n\n  prevPage() {\n    this.setState({ page_number: Math.max(this.state.page_number - 1, 1) });\n  }\n  /**\n   * Renders the pagination UI\n   *\n   * @return A component that renders the pagination controls\n   */\n\n  render_pagination() {\n    let pages = [];\n    if (this.state.total) {\n      let numpages = Math.ceil(this.state.total / this.get_list_per_page());\n      let pages_in_pagination =\n        numpages < this.pages_in_pagination\n          ? numpages\n          : this.pages_in_pagination;\n\n      if (this.state.page_number == 1) {\n        for (let i = 0; i < pages_in_pagination; i++) {\n          pages.push(i + 1);\n        }\n      } else if (this.state.page_number == numpages) {\n        for (let i = 0; i < pages_in_pagination; i++) {\n          pages.push(numpages - i);\n        }\n      } else {\n        for (let i = 0; i < pages_in_pagination; i++) {\n          pages.push(this.state.page_number + i);\n        }\n      }\n      /*\n\t\tfor(var i=0;i<numpages;i++)\n\t    {\n\t\tpages.push(i+1);\n\n\t    }*/\n    }\n\n    return (\n      <div className=\"pull-right\">\n        <span className=\"summary\">\n          {this.get_list_per_page() * (this.state.page_number - 1) + 1}-\n          {Math.min(\n            this.get_list_per_page() * (this.state.page_number - 1) +\n              this.get_list_per_page(),\n            this.state.total\n          )}{\" \"}\n          of {this.state.total}{\" \"}\n        </span>\n\n        <nav aria-label=\"Page navigation\">\n          <ul className=\"pagination\">\n            <li key={\"left\"} className=\"page-item\">\n              <a\n                href=\"#\"\n                aria-label=\"Previous\"\n                onClick={this.prevPage.bind(this)}\n                className=\"page-link\"\n              >\n                <span aria-hidden=\"true\">&laquo;</span>\n              </a>\n            </li>\n\n            {pages.map(page => {\n              return (\n                <li key={page} className=\"page-item\">\n                  <a\n                    href=\"#\"\n                    className=\"page-link\"\n                    onClick={this.selectPage({ page })}\n                  >\n                    {page}\n                  </a>\n                </li>\n              );\n            })}\n            <li className=\"page-item\">\n              <a\n                href=\"#\"\n                key={\"right\"}\n                onClick={this.nextPage.bind(this)}\n                aria-label=\"Next\"\n                className=\"page-link\"\n              >\n                <span aria-hidden=\"true\">&raquo;</span>\n              </a>\n            </li>\n          </ul>\n        </nav>\n      </div>\n    );\n  }\n  /**\n   * Renders the actions select component\n   *\n   * @return A component that renders a select input for all actions in the list display page\n   */\n\n  render_actions() {\n    return (\n      <select\n        className=\"ra-action-button\"\n        onChange={this.action_selected.bind(this)}\n        defaultValue=\"\"\n      >\n        <option key=\"key\" value=\"\" disabled={true}>\n          Choose an action\n        </option>\n        {_.keys(this.get_actions()).map(action => {\n          return (\n            <option key={action} value={action}>\n              {\" \"}\n              {_.startCase(action)}\n            </option>\n          );\n        })}\n      </select>\n    );\n  }\n  /**\n   * Renders the back button component in the add/change view\n   * @ignore\n   * @return A component that renders a back button\n   */\n\n  render_back_button() {\n    return (\n      <div>\n        <button\n          className={\"ra-back-button\"}\n          onClick={() => {\n            this.setState({ display_type: display_type.list, object: null });\n            this.get_queryset(\n              this.state.page_number,\n              this.get_list_per_page(),\n              this.state.queryset\n            );\n          }}\n        >\n          {\" \"}\n          Back{\" \"}\n        </button>\n      </div>\n    );\n  }\n  /**\n   * Renders the admin interface component\n   *\n   * @return A component that renders the admin interface\n   */\n  render_list_view() {\n    return (\n      <div>\n        {this.render_add_button()}\n        {this.render_below_add_button()}\n        {this.render_search_field()}\n        {this.render_below_search_field()}\n        {this.render_actions()}\n        {this.render_below_actions()}\n        {this.render_filters()}\n        {this.render_below_filters()}\n\n        {this.render_table()}\n        {this.render_below_table()}\n        {this.render_progress(this.state.loading)}\n        {this.render_below_progress()}\n\n        {this.render_pagination()}\n      </div>\n    );\n  }\n  render_below_add_button() {}\n  render_below_search_field() {}\n\n  render_below_actions() {}\n\n  render_below_filters() {}\n\n  render_below_table() {}\n\n  render_below_progress() {}\n\n  render_change_view() {\n    return (\n      <div>\n        {this.render_progress(this.state.loading)}\n        {this.render_back_button()}\n        {this.get_form(this.state.object)}\n      </div>\n    );\n  }\n  render_above_change_view() {}\n  render_below_change_view() {}\n  render_above_list_view() {}\n  render_below_list_view() {}\n  render_list_page() {\n    return (\n      <div>\n        {this.render_above_list_view()}\n        {this.render_list_view()}\n        {this.render_below_list_view()}\n      </div>\n    );\n  }\n  render_change_page() {\n    return (\n      <div>\n        {this.render_above_change_view()}\n        {this.render_change_view()}\n        {this.render_below_change_view()}\n      </div>\n    );\n  }\n  render() {\n    if (!this.has_module_permission()) {\n      return (\n        <div>\n          {\" \"}\n          <h1> Permission Denied </h1>\n        </div>\n      );\n    }\n\n    if (this.state.display_type == display_type.list) {\n      return this.render_list_page();\n    } else {\n      //Important: the next two lines are for URL navigation and handling the browser back button\n      this._change_uuid = uuidv1();\n      window.history.pushState(\n        {},\n        \"Change View\",\n        window.location.hash + \"/change/\" + this._change_uuid\n      );\n\n      return this.render_change_page();\n    }\n  }\n  show_list_view() {\n    this._display_will_change();\n    this.setState({ display_type: display_type.list }, this._display_changed);\n  }\n\n  register_listener() {\n    this._hash_change_listener = event => {\n      if (\n        this &&\n        this.state.display_type != display_type.list &&\n        !_.endsWith(window.location.hash, this._change_uuid)\n      ) {\n        this.show_list_view();\n      }\n    };\n    window.addEventListener(\"hashchange\", this._hash_change_listener);\n  }\n\n  componentWillUnmount() {\n    if (this._hash_change_listener) {\n      window.removeEventListener(\n        \"hashchange\",\n        this._hash_change_listener,\n        true\n      );\n    }\n  }\n}\n\nexport default Admin;\n",
+    "content": "import React from \"react\";\nimport _ from \"lodash\";\nimport Set from \"./set.js\";\nimport Select from \"react-select\";\nimport Modal from \"react-modal\";\nconst uuidv1 = require(\"uuid/v1\");\n\n//require(\"./admin.scss\");\nexport const display_type = {\n  list: \"list\",\n  change: \"change\"\n};\nconst customStyles = {\n  content: {\n    top: \"50%\",\n    left: \"50%\",\n    right: \"auto\",\n    bottom: \"auto\",\n    marginRight: \"-50%\",\n    transform: \"translate(-50%, -50%)\"\n  }\n};\n/** Admin Class extends React.Component. To implement a CRUD interface similar to Django Admin you need to extend the Admin class. */\nclass Admin extends React.Component {\n  constructor(props) {\n    super(props);\n\n    this.name = \"default\";\n    this.name_plural = \"defaults\";\n    this.live_search = false;\n    this.field_transforms = {};\n    this.header_transforms = {};\n    this.extra_fields = {};\n    this.list_display = [];\n    this.list_display_links = [];\n    this.list_per_page = 10;\n    this.sort_fields = [];\n    this.is_object_equal = (a, b) => a == b;\n    this.pages_in_pagination = 3;\n    this.actions = {\n      delete: selected_objects => {}\n    };\n    this._change_uuid = uuidv1();\n    this.queryset = [];\n    this._all_selected = false;\n\n    if (props) {\n      this.bind_exclude = props.bind_exclude ? props.bind_exclude : [];\n      _.keys(props).map(key => {\n        if (typeof props[key] == \"function\") {\n          if (_.includes(key, this.bind_exclude)) {\n            this[key] = props[key];\n\n            this[key].bind(this);\n          }\n        } else {\n          this[key] = props[key];\n        }\n      });\n    }\n\n    /**\n     * Initialize the state of the component\n     */\n    this.state = {\n      display_type: display_type.list,\n      page_number: 1,\n      object: null,\n      selected_objects: new Set([], this.is_object_equal),\n      total: 1,\n      filter_options: {},\n      filter_values: []\n    };\n\n    let queryset = this.get_queryset(\n      this.state.page_number,\n      this.list_per_page,\n      this.state.queryset\n    )\n      ? this.get_queryset(\n          this.state.page_number,\n          this.list_per_page,\n          this.state.queryset\n        )\n      : [];\n    this.state.queryset = queryset;\n    this.state.total = queryset.length;\n    this._handle_search = this._handle_search.bind(this);\n    this._select_all = this._select_all.bind(this);\n    this._select_one = this._select_one.bind(this);\n    this.response_change = this.response_change.bind(this);\n    this.response_add = this.response_add.bind(this);\n  }\n  /**\n   * This function returns an array of objects that will serve as the\n   * queryset for the admin interface. Typically involves an HTTP request\n   * to a backend.\n   * @param {number} page_number - The current page number\n   * @param {number} list_per_page - Number items to list per page. Defaults to `list_per_page`\n   * @param {object[]} queryset - The current queryset\n   * @returns {object[]} An array of objects. - Objects to display\n   */\n\n  get_queryset(\n    page_number = this.state.page_number,\n    list_per_page = this.get_list_per_page(),\n    queryset = this.state.queryset\n  ) {\n    return this.queryset;\n  }\n\n  /**\n   * This functions returns a JSON Schema Form for editing\n   * the objects in the array returned by get_queryset(). This method needs to be overridden to\n   * so as to return a Form Component for the object.  Learn more on\n   * JSON schema forms from https://github.com/mozilla-services/react-jsonschema-form\n   * and JSON Schema from https://spacetelescope.github.io/understanding-json-schema/\n   * @param {object} object - The current selected object.\n   * @returns  A JSON Schema Form Component.\n   */\n\n  get_form(object = null) {\n    return {};\n  }\n  /**\n   * Returns a true/false value. Controls wether search is implement on live input or not.\n   * Can be overriden by the live_search member variable. Default is false.\n   *\n   *@return {boolean}\n   */\n\n  get_live_search() {\n    return this.live_search;\n  }\n\n  /**\n   *Returns an object whose properties are field names corresponding to properties of any object\n   *in the queryset and whose values are transform functions. The example below will transform each \"name\"\n   *property of objects in the queryset to upper case in the list display view.\n   *@example\n   *get_field_transforms()\n   *{\n   * return { 'name' : function(name,object)\n   *                   {\n   *                       return name.toUpperCase()\n   *                   }\n   *         }\n   *\n   *}\n   *@return {object}\n   */\n\n  get_field_transforms() {\n    if (this.field_transforms) {\n      return this.field_transforms;\n    }\n    return {};\n  }\n\n  /**\n   *Returns an object whose properties are field names corresponding to properties of any object\n   *in the queryset and whose values are transform functions. The example below will transform the header \"name\" to upper case in the list display view.\n   *@example\n   *get_header_transforms()\n   *{\n   * return { 'name' : function(name)\n   *                   {\n   *                       return name.toUpperCase()\n   *                   }\n   *         }\n   *}\n   *\n   *@return {object}\n   */\n\n  get_header_transforms() {\n    if (this.header_transforms) {\n      return this.header_transforms;\n    }\n\n    return {};\n  }\n\n  /**\n   * Returns an object whose properties are extra  field names not corresponding to properties of any object\n   * in the queryset and whose values are display functions. This will create extra fields that are not tied to objects. Extra fields have to be manually included in the `list_display` in order to appear in the list display page. The display functions take the current object being rendered in the table row and  the field name\n   *@example\n   *get_extra_fields()\n   *{\n   * return { 'now' : function(object,label)\n   *                   {\n   *                      return moment(new Date()).format('LLL');\n   *                   }\n   *         }\n   *}\n   *\n   *@return {object}\n   */\n\n  get_extra_fields() {\n    if (this.extra_fields) {\n      return this.extra_fields;\n    }\n\n    return {};\n  }\n  /**\n   * Returns the number of items to be listed in a page. Can be overridden by `list_per_page`.\n   *@return {number} The number of objects in a page\n   */\n\n  get_list_per_page() {\n    if (this.list_per_page) {\n      return this.list_per_page;\n    }\n    return 10;\n  }\n\n  /**\n     * Gets an actions object whose properties are action names and values are action methods.\n     * This can be overridden by the action member variable. The default \"delete\" method is not\n     * implemented.\n     *\n     * Each actions object property (e.g. \"delete\") is passed an array of selected objects. One\n     * can then handle those objects. Actions will appear on the list display page within a\n     * dropdown. Selecting an action should have the action method applied to all currently \n     * selected objects.\n     * @example\n     *\n     * actions = { \"delete\" : (selected_objects)=>{ } }\n\n     *@return {object} An actions object\n     */\n\n  get_actions() {\n    if (this.actions) {\n      return this.actions;\n    }\n\n    return {};\n  }\n  /**\n   *   Gets the list/array of properties of the objects in the queryset that are clickable\n   *    when displayed on the list display page. It can be overridden by the member variable\n   *   `list_display_links`. A property is any string that should exist as a property in the objects within\n   *   a queryset and works with lodash's `_.at` function.\n   *\n   *   The properties \"name\",\"address.street\" and \"emails[0]\" are all acceptable by `_.at` in the example below\n   *   @example\n   *   let object={ name : \"any name\",{ address : { street : \"any\"}},emails: [\"any@any.com\"]}\n   *\n   *\n   *\n   * @return {string[]} A list of properties of the object to be displayed\n   */\n\n  get_list_display_links() {\n    if (this.list_display_links) {\n      return this.list_display_links;\n    }\n    return [];\n  }\n  /**\n   *   Gets the list/array of properties/field names of the objects in the queryset to be\n   *   displayed on the list display page. It can be overridden by the member variable\n   *   list_display. A property is any string that should exist in the objects within\n   *   a queryset and works with lodash's _.at function. See more at\n   *   https://lodash.com/docs/#at\n   *\n   *   @example\n   *   let object={ name : \"any name\",{ address : { street : \"any\"}},emails: [\"any@any.com\"]}\n   *\n   *   The properties \"name\",\"address.street\" and \"emails[0]\" are all acceptable\n   *\n   * @return {string[]} A list of properties of the object to be displayed\n   */\n\n  get_list_display() {\n    if (this.list_display) {\n      return this.list_display;\n    }\n    return [];\n  }\n  /**\n   * Returns an ordered queryset. The method checks to see if sorting is active and sorts\n   * the current queryset based on the sort order.\n   * @private\n   * @return {object[]} An ordered queryset\n   */\n\n  _get_ordered_queryset() {\n    if (this.sort_fields.length > 0) {\n      return this.sort_by(this.sort_fields, this.state.queryset);\n    }\n\n    return this.state.queryset ? this.state.queryset : [];\n  }\n  /**\n   * Implements search. This method should be overridden to implement a custom search\n   *\n   *@param {string} term - the search term\n   *@param {object[]} queryset - the current queryset\n   *@return {object[]} the queryset as a result of the search\n   */\n\n  search(term, queryset) {\n    return queryset;\n  }\n  /**\n   * Grants permission to delete object. This method is not implemented and can be handled via\n   *  implementing actions.\n   *\n   *@param {object} object -\n   *@return {boolean} Returns true is the object has been deleted or false otherwise\n   */\n\n  has_delete_permission(object) {\n    return true;\n  }\n  /**\n   * Grants permission to add an object. This method controls rendering of the Add\n   * button\n   *\n   *\n   *@return {boolean} Returns true is the object can be added or false otherwise\n   */\n\n  has_add_permission() {\n    return true;\n  }\n  /**\n   * Grants permission to change an object. It disables all links to the add/change page when\n   * enabled\n   *\n   *@return {boolean} Returns true is the object can be changed or false otherwise\n   */\n\n  has_change_permission(object = null) {\n    return true;\n  }\n  /**\n   * Grants permission to the this admin interface.\n   *\n   *@return {boolean} Returns true if access is allowed false otherwise\n   */\n\n  has_module_permission() {\n    return true;\n  }\n  /*\n    _order_state(field)\n    {\n\n\tlet index=_.findIndex(this._sort_fields,item=> item.hasOwnProperty(field));\n\t\n\tif(index<0)\n\t{\n\t    return 'sort-not-active';\n\n\t}\n\tif(this._sort_fields[index][field]=='desc')\n\t{\n\t   \n\t    return 'sort-reverse-active';\n\t}\n\treturn 'sort-active';\n\t}*/\n\n  /**\n     * This method adds up/down arrows to field headers on the list display page table\n     *\n     * @private \n     * @param {string} field -  the field/property name\n     \n     \n     */\n\n  _order_state_arrow(field) {\n    let index = _.findIndex(this.sort_fields, item =>\n      item.hasOwnProperty(field)\n    );\n\n    if (index < 0) {\n      return null;\n    }\n    if (this.sort_fields[index][field] == \"desc\") {\n      return <span>&#8681;</span>;\n    }\n    return <span> &#8679;</span>;\n  }\n  /**\n   *  This method  should be overriden and called after saving an object in the add/change view.       *  This method is not called at all here but provides hints on what to do after saving\n   *  an object. Change the state display_type to \"list\", object to \"null\" and refresh the quer         *  yset.\n   */\n\n  response_add() {\n    this._display_will_change();\n    this.setState(\n      {\n        display_type: display_type.list,\n        object: null,\n        queryset: this.get_queryset(\n          this.state.page_number,\n          this.get_list_per_page(),\n          this.state.queryset\n        )\n      },\n      this._display_changed\n    );\n\n    return true;\n  }\n  /**\n   *  This method should be overriden and called after saving an object in the add/change view.         *  This method is not called at all here but provides hints on what to do after saving\n   *  an object. Change the state display_type to \"list\", object to \"null\" and refresh the quer         *  yset.\n   */\n\n  response_change() {\n    this._display_will_change();\n    this.setState(\n      {\n        display_type: display_type.list,\n        object: null,\n        queryset: this.get_queryset(\n          this.state.page_number,\n          this.get_list_per_page(),\n          this.state.queryset\n        )\n      },\n      this._display_changed\n    );\n\n    return true;\n  }\n  /**\n     * A private method to wrap a table entry in an <a></a> tag in the display page.\n     * The method checks if permission is given to display links using the has_change_permission method\n     * @private\n     * @param {object} object - the current object to be displayed as a table\n     * entry in the display page\n     * @param {string} label - the name of the field \n     \n     */\n\n  _create_object_link(object, label) {\n    if (this.has_change_permission(object)) {\n      return (\n        <a onClick={this._object_link_clicked(object)} href=\"#\">\n          {\" \"}\n          {label}{\" \"}\n        </a>\n      );\n    } else {\n      return <span> {label} </span>;\n    }\n  }\n\n  set_queryset(queryset) {\n    this.setState({ queryset: queryset });\n  }\n\n  set_total(total) {\n    this.setState({ total: total });\n  }\n\n  _get_prop_label(label) {\n    let labels = label.split(\".\");\n    return labels[labels.length - 1];\n  }\n  _get_table_header() {\n    return this.get_list_display().map(item => {\n      return (\n        <th key={item} onClick={this._sort_handler(item)}>\n          {\" \"}\n          {this.get_header_transforms()[item]\n            ? this.get_header_transforms()[item](item)\n            : _.startCase(this._get_prop_label(item))}\n          {this._order_state_arrow(item)}{\" \"}\n        </th>\n      );\n    });\n  }\n  _display_changed() {\n    this.display_changed(this.state.display_type, this.state.object);\n  }\n  /**\n     * An event listener that listens to state changes in the display type i.e.\n     * from list to add/change. It is fired after state changes are made.\n     * \n     * @param {string} display_type - the current display type of the component either \"list\" or \"change\" \n     * @param {object} object - the current object or null\n     \n     */\n\n  display_changed(display_type, object) {}\n  _display_will_change() {\n    this.display_will_change(this.state.display_type, this.state.object);\n  }\n  /**\n     * An event listener that listens to state changes in the display type i.e.\n     * from list to add/change . It is fired before state changes are made.\n     * \n     * @param {string} display_type - the current display type of the component either \"list\" or \"change\" \n     * @param {object} object - the current object or null\n     \n     */\n\n  display_will_change(display_type, object) {}\n  _object_link_clicked(object) {\n    return event => {\n      this._display_will_change();\n      this.setState(\n        { display_type: display_type.change, object: object, loading: false },\n        this._display_changed()\n      );\n      event.preventDefault();\n    };\n  }\n\n  _display_field(object, item) {\n    let label = _.at(object, item)[\"0\"];\n\n    if (_.has(this.get_field_transforms(), item)) {\n      return this.get_field_transforms()[item](label, object);\n    }\n\n    if (_.at(this.get_extra_fields(), item)) {\n      if (this.get_extra_fields()[item]) {\n        label = this.get_extra_fields()[item](object, item);\n      }\n    }\n\n    return label;\n  }\n\n  set_filter_options(filter_name, options) {\n    let t = {};\n    t[filter_name] = options.map(option => {\n      option._filter_ = filter_name;\n      return option;\n    });\n    this.setState({ filter_options: _.assign(this.state.filter_options, t) });\n  }\n\n  get_filter_values() {\n    return this.state.filter_values;\n  }\n  get_filters() {\n    /*\n\treturn {\n\n\t    \"by_id\" : { \"options\" : [\n\t\t\t    { value: 'one', label: 'One' },\n\t    { value: 'two', label: 'Two' },\n\n\t\t\n\t    ],\n\t     \"filter_function\" : (option,queryset)=>\n\t     {\n\n\n\t\t return queryset;\n\t     }\n           }\n\t    \n\t}*/\n  }\n  _handle_filter_change(values) {\n    if (!(values instanceof Array) && values != null) {\n      values = [values];\n    }\n\n    this.setState({ filter_values: values || [] });\n\n    if (values == null || values.length <= 0) {\n      this.set_queryset(\n        this.get_queryset(\n          this.state.page_number,\n          this.get_list_per_page(),\n          this.state.queryset\n        )\n      );\n      return;\n    }\n\n    let filters = this.get_filters();\n    for (let value of values) {\n      let queryset = filters[value._filter_].filter_function(\n        value,\n        this.state.queryset\n      );\n      this.setState({ queryset: queryset });\n    }\n  }\n  render_filters() {\n    let options = [];\n    let filters = this.get_filters();\n    for (let filter of _.keys(filters)) {\n      options.push({\n        label: _.startCase(filter),\n        value: filter,\n        disabled: true,\n        filter: null\n      });\n\n      if (filters[filter].options.length > 0) {\n        for (let option of filters[filter].options) {\n          option._filter_ = filter;\n          options.push(option);\n        }\n      }\n      if (this.state.filter_options[filter]) {\n        for (let option of this.state.filter_options[filter]) {\n          option._filter_ = filter;\n          options.push(option);\n        }\n      }\n    }\n\n    return (\n      <div style={{ marginLeft: \"10px\", width: \"100%\" }}>\n        <Select\n          name=\"filter-form\"\n          multi={true}\n          onChange={this._handle_filter_change.bind(this)}\n          closeOnSelect={true}\n          value={this.state.filter_values}\n          removeSelected={true}\n          placeholder={\"Select a filter\"}\n          options={options}\n        />\n      </div>\n    );\n  }\n  sort_by(sort_fields) {\n    return this.state.queryset ? this.state.queryset : [];\n  }\n\n  _sort_handler(field) {\n    return event => {\n      let index = _.findIndex(this.sort_fields, item =>\n        item.hasOwnProperty(field)\n      );\n      if (index >= 0) {\n        if (this.sort_fields[index][field] == \"asc\") {\n          this.sort_fields[index][field] = \"desc\";\n        } else {\n          this.sort_fields = _.filter(\n            this.sort_fields,\n            item => !item.hasOwnProperty(field)\n          );\n        }\n      } else {\n        let temp = {};\n        temp[field] = \"asc\";\n        this.sort_fields.push(temp);\n      }\n\n      this.sort_by(this.sort_fields);\n      this.forceUpdate();\n    };\n  }\n  /**\n   * This method is an event handler that listens to when all objects of the queryset\n   * displayed within a single display page are selected\n   */\n\n  _select_all(event) {\n    if (this._all_selected) {\n      this.setState({ selected_objects: new Set([], this.is_object_equal) });\n    } else {\n      this.setState({\n        selected_objects: new Set(this.state.queryset, this.is_object_equal)\n      });\n    }\n    this._all_selected = !this._all_selected;\n  }\n  /**\n   * This method is an event handler that listens when a single objects of the queryset\n   * displayed is selected\n   */\n\n  _select_one(object) {\n    return event => {\n      if (this.state.selected_objects.contains(object)) {\n        this.state.selected_objects.remove(object);\n\n        this.setState({ selected_objects: this.state.selected_objects });\n      } else {\n        this.state.selected_objects.add(object);\n        this.setState({ selected_objects: this.state.selected_objects });\n      }\n    };\n  }\n\n  /**\n   * Generate the table body for the list display page\n   *\n   * @return  An array of table rows <tr/>\n   */\n\n  _get_table_body() {\n    return this._get_ordered_queryset().map((object, i) => {\n      return (\n        <tr key={\"row-\" + i}>\n          <td>\n            {\" \"}\n            <input\n              type=\"checkbox\"\n              id={i + \"_checkbox\"}\n              onChange={this._select_one(object)}\n              checked={this.state.selected_objects.contains(object)}\n            />{\" \"}\n            <label htmlFor={i + \"_checkbox\"}>&nbsp;</label>{\" \"}\n          </td>\n          {this.get_list_display().map(item => {\n            return (\n              <td key={item}>\n                {\" \"}\n                {this.get_list_display_links().find(a => {\n                  return item == a;\n                })\n                  ? this._create_object_link(\n                      object,\n                      this._display_field(object, item)\n                    )\n                  : this._display_field(object, item)}{\" \"}\n              </td>\n            );\n          })}\n        </tr>\n      );\n    });\n  }\n  /**\n   * Changes the state property \"loading\" to true. The state property can be used to show a\n   * progress indicator.\n   */\n\n  show_progress() {\n    this.setState({ loading: true });\n  }\n  /**\n   * Changes the state property \"loading\" to false. This method  can be used to hide a\n   * progress indicator by inspecting the \"loading\" property of the state object.\n   */\n\n  hide_progress() {\n    this.setState({ loading: false });\n  }\n  /**\n   * The default progress indicator. Can be overriden.\n   * @return A progress indicator component\n   */\n\n  render_progress(loading) {\n    if (loading) {\n      return (\n        <div className=\"fetch-progress\">\n          <progress />\n        </div>\n      );\n    }\n  }\n  /**\n   * An event listener that listens to the search event. This method calls search method which\n   * implements a custom search. The method uses the \"live_search\" property to implement live\n   * search or not.\n   * @private\n   * @param {object} event The search onChange event\n   */\n\n  _handle_search(event) {\n    let term = event.target.value;\n\n    if (term) {\n      let key = event.which || event.keyCode;\n\n      if (this.get_live_search() || key === 13) {\n        let queryset = this.search(term, this.state.queryset);\n        this.setState({ queryset: queryset, total: queryset.length });\n      }\n    } else {\n      this.setState({\n        queryset: this.get_queryset(\n          this.state.page_number,\n          this.get_list_per_page(),\n          this.state.queryset\n        ),\n        total: this.get_queryset(\n          this.state.page_number,\n          this.list_per_page,\n          this.state.queryset\n        ).length\n      });\n    }\n  }\n  /**\n   * Renders the search component\n   *\n   * @return A search input field\n   */\n\n  render_search_field() {\n    return (\n      <div>\n        <input\n          name=\"search\"\n          type=\"text\"\n          className=\"ra-search-field\"\n          placeholder=\"Search\"\n          onChange={this._handle_search}\n          onKeyUp={this._handle_search}\n        />\n      </div>\n    );\n  }\n  /**\n   * Renders the add object button. Checks to see if permission is given by has_add_permission\n   *\n   * @return An add button component\n   */\n\n  render_add_button() {\n    if (this.has_add_permission()) {\n      return (\n        <button\n          className={\"ra-add-button\"}\n          onClick={this._object_link_clicked(null)}\n        >\n          {\" \"}\n          Add {_.startCase(this.name)}\n        </button>\n      );\n    }\n  }\n  /**\n   * Renders the table in the display page. This calls _get_table_header and _get_table_body\n   *\n   * @return An a table displaying the state queryset set objects\n   */\n\n  render_table() {\n    return (\n      <table className=\"table\">\n        <thead>\n          <tr key=\"header\">\n            <th>\n              <input\n                type=\"checkbox\"\n                id=\"all_boxes\"\n                onChange={this._select_all}\n              />{\" \"}\n              <label htmlFor=\"all_boxes\">&nbsp;</label>\n            </th>\n            {this._get_table_header()}\n          </tr>\n        </thead>\n        <tbody>{this._get_table_body()}</tbody>\n      </table>\n    );\n  }\n  /**\n   * An event listener that listens to actions selected.\n   *\n   *@param {object} event -  the DOM on-change event\n   */\n\n  action_selected(event) {\n    let action = event.target.value;\n\n    console.log(this.state.selected_objects.getItems());\n    this.get_actions()[action](this.state.selected_objects.getItems());\n    this.get_queryset(this.state.page_number, this.get_list_per_page());\n  }\n  /**\n   * An event listener that listens when a page is  selected.\n   *\n   *@param {number} page -  the page number selected\n   */\n\n  selectPage(page) {\n    return event => {\n      this.setState({ page_number: page.page }, () => {\n        this.setState({\n          queryset: this.get_queryset(\n            this.state.page_number,\n            this.get_list_per_page(),\n            this.state.queryset\n          )\n        });\n      });\n      event.preventDefault();\n    };\n  }\n  /**\n   * An event listener that listens when the next page is  selected.\n   *\n   */\n\n  nextPage() {\n    this.setState({\n      page_number: Math.min(this.state.page_number + 1, this.state.total)\n    });\n  }\n  /**\n   * An event listener that listens when the previous page is  selected.\n   *\n   */\n\n  prevPage() {\n    this.setState({ page_number: Math.max(this.state.page_number - 1, 1) });\n  }\n  /**\n   * Renders the pagination UI\n   *\n   * @return A component that renders the pagination controls\n   */\n\n  render_pagination() {\n    let pages = [];\n    if (this.state.total) {\n      let numpages = Math.ceil(this.state.total / this.get_list_per_page());\n      let pages_in_pagination =\n        numpages < this.pages_in_pagination\n          ? numpages\n          : this.pages_in_pagination;\n\n      if (this.state.page_number == 1) {\n        for (let i = 0; i < pages_in_pagination; i++) {\n          pages.push(i + 1);\n        }\n      } else if (this.state.page_number == numpages) {\n        for (let i = 0; i < pages_in_pagination; i++) {\n          pages.push(numpages - i);\n        }\n      } else {\n        for (let i = 0; i < pages_in_pagination; i++) {\n          pages.push(this.state.page_number + i);\n        }\n      }\n      /*\n\t\tfor(var i=0;i<numpages;i++)\n\t    {\n\t\tpages.push(i+1);\n\n\t    }*/\n    }\n\n    return (\n      <div className=\"pull-right\">\n        <span className=\"summary\">\n          {this.get_list_per_page() * (this.state.page_number - 1) + 1}-\n          {Math.min(\n            this.get_list_per_page() * (this.state.page_number - 1) +\n              this.get_list_per_page(),\n            this.state.total\n          )}{\" \"}\n          of {this.state.total}{\" \"}\n        </span>\n\n        <nav aria-label=\"Page navigation\">\n          <ul className=\"pagination\">\n            <li key={\"left\"} className=\"page-item\">\n              <a\n                href=\"#\"\n                aria-label=\"Previous\"\n                onClick={this.prevPage.bind(this)}\n                className=\"page-link\"\n              >\n                <span aria-hidden=\"true\">&laquo;</span>\n              </a>\n            </li>\n\n            {pages.map(page => {\n              return (\n                <li key={page} className=\"page-item\">\n                  <a\n                    href=\"#\"\n                    className=\"page-link\"\n                    onClick={this.selectPage({ page })}\n                  >\n                    {page}\n                  </a>\n                </li>\n              );\n            })}\n            <li className=\"page-item\">\n              <a\n                href=\"#\"\n                key={\"right\"}\n                onClick={this.nextPage.bind(this)}\n                aria-label=\"Next\"\n                className=\"page-link\"\n              >\n                <span aria-hidden=\"true\">&raquo;</span>\n              </a>\n            </li>\n          </ul>\n        </nav>\n      </div>\n    );\n  }\n  /**\n   * Renders the actions select component\n   *\n   * @return A component that renders a select input for all actions in the list display page\n   */\n\n  render_actions() {\n    return (\n      <select\n        className=\"ra-action-button\"\n        onChange={this.action_selected.bind(this)}\n        defaultValue=\"\"\n      >\n        <option key=\"key\" value=\"\" disabled={true}>\n          Choose an action\n        </option>\n        {_.keys(this.get_actions()).map(action => {\n          return (\n            <option key={action} value={action}>\n              {\" \"}\n              {_.startCase(action)}\n            </option>\n          );\n        })}\n      </select>\n    );\n  }\n  /**\n   * Renders the back button component in the add/change view\n   * @ignore\n   * @return A component that renders a back button\n   */\n\n  render_back_button() {\n    return (\n      <div>\n        <button\n          className={\"ra-back-button\"}\n          onClick={() => {\n            this.setState({ display_type: display_type.list, object: null });\n            this.get_queryset(\n              this.state.page_number,\n              this.get_list_per_page(),\n              this.state.queryset\n            );\n          }}\n        >\n          {\" \"}\n          Back{\" \"}\n        </button>\n      </div>\n    );\n  }\n  /**\n   * Renders the admin interface component\n   *\n   * @return A component that renders the admin interface\n   */\n  render_list_view() {\n    return (\n      <div>\n        {this.render_add_button()}\n        {this.render_below_add_button()}\n        {this.render_search_field()}\n        {this.render_below_search_field()}\n        {this.render_actions()}\n        {this.render_below_actions()}\n        {this.render_filters()}\n        {this.render_below_filters()}\n\n        {this.render_table()}\n        {this.render_below_table()}\n        {this.render_progress(this.state.loading)}\n        {this.render_below_progress()}\n\n        {this.render_pagination()}\n      </div>\n    );\n  }\n  render_below_add_button() {}\n  render_below_search_field() {}\n\n  render_below_actions() {}\n\n  render_below_filters() {}\n\n  render_below_table() {}\n\n  render_below_progress() {}\n\n  render_change_view() {\n    return (\n      <div>\n        {this.render_progress(this.state.loading)}\n        {this.render_back_button()}\n        {this.get_form(this.state.object)}\n      </div>\n    );\n  }\n  render_above_change_view() {}\n  render_below_change_view() {}\n  render_above_list_view() {}\n  render_below_list_view() {}\n  render_list_page() {\n    return (\n      <div>\n        {this.render_above_list_view()}\n        {this.render_list_view()}\n        {this.render_below_list_view()}\n        {this.render_change_modal()}\n      </div>\n    );\n  }\n\n  render_change_modal() {\n    return (\n      <Modal\n        isOpen={this.state.display_type != display_type.list}\n        contentLabel={this.name || \"\"}\n        parentSelector={() => document.querySelector(\"#react-crud-admin\")}\n        styles={customStyles}\n      >\n        {this.render_above_change_view()}\n        {this.render_change_view()}\n        {this.render_below_change_view()}\n      </Modal>\n    );\n  }\n  render_permission_denied() {\n    return (\n      <div>\n        {\" \"}\n        <h1> Permission Denied </h1>\n      </div>\n    );\n  }\n  render() {\n    if (!this.has_module_permission()) {\n      return this.render_permission_denied();\n    }\n\n    return <div id=\"react-crud-admin\">{this.render_list_page()}</div>;\n  }\n  show_list_view() {\n    this._display_will_change();\n    this.setState({ display_type: display_type.list }, this._display_changed);\n  }\n}\n\nexport default Admin;\n",
     "static": true,
     "longname": "/home/mubarak/Dropbox/Projects/react-crud-admin/src/admin.js",
     "access": "public",
@@ -586,7 +586,7 @@
     "importPath": "react-crud-admin/src/admin.js",
     "importStyle": null,
     "description": null,
-    "lineNumber": 5,
+    "lineNumber": 6,
     "undocument": true,
     "type": {
       "types": [
@@ -607,7 +607,7 @@
     "importPath": "react-crud-admin/src/admin.js",
     "importStyle": "{display_type}",
     "description": null,
-    "lineNumber": 8,
+    "lineNumber": 9,
     "undocument": true,
     "type": {
       "types": [
@@ -617,6 +617,27 @@
   },
   {
     "__docId__": 51,
+    "kind": "variable",
+    "name": "customStyles",
+    "memberof": "src/admin.js",
+    "static": true,
+    "longname": "src/admin.js~customStyles",
+    "access": "public",
+    "export": false,
+    "importPath": "react-crud-admin/src/admin.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 13,
+    "undocument": true,
+    "type": {
+      "types": [
+        "{\"content\": *}"
+      ]
+    },
+    "ignore": true
+  },
+  {
+    "__docId__": 52,
     "kind": "class",
     "name": "Admin",
     "memberof": "src/admin.js",
@@ -627,14 +648,14 @@
     "importPath": "react-crud-admin/src/admin.js",
     "importStyle": "Admin",
     "description": "Admin Class extends React.Component. To implement a CRUD interface similar to Django Admin you need to extend the Admin class.",
-    "lineNumber": 14,
+    "lineNumber": 24,
     "interface": false,
     "extends": [
       "react~React.Component"
     ]
   },
   {
-    "__docId__": 52,
+    "__docId__": 53,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/admin.js~Admin",
@@ -644,11 +665,11 @@
     "longname": "src/admin.js~Admin#constructor",
     "access": "public",
     "description": null,
-    "lineNumber": 15,
+    "lineNumber": 25,
     "undocument": true
   },
   {
-    "__docId__": 53,
+    "__docId__": 54,
     "kind": "member",
     "name": "name",
     "memberof": "src/admin.js~Admin",
@@ -656,24 +677,7 @@
     "longname": "src/admin.js~Admin#name",
     "access": "public",
     "description": null,
-    "lineNumber": 18,
-    "undocument": true,
-    "type": {
-      "types": [
-        "string"
-      ]
-    }
-  },
-  {
-    "__docId__": 54,
-    "kind": "member",
-    "name": "name_plural",
-    "memberof": "src/admin.js~Admin",
-    "static": false,
-    "longname": "src/admin.js~Admin#name_plural",
-    "access": "public",
-    "description": null,
-    "lineNumber": 19,
+    "lineNumber": 28,
     "undocument": true,
     "type": {
       "types": [
@@ -684,13 +688,30 @@
   {
     "__docId__": 55,
     "kind": "member",
+    "name": "name_plural",
+    "memberof": "src/admin.js~Admin",
+    "static": false,
+    "longname": "src/admin.js~Admin#name_plural",
+    "access": "public",
+    "description": null,
+    "lineNumber": 29,
+    "undocument": true,
+    "type": {
+      "types": [
+        "string"
+      ]
+    }
+  },
+  {
+    "__docId__": 56,
+    "kind": "member",
     "name": "live_search",
     "memberof": "src/admin.js~Admin",
     "static": false,
     "longname": "src/admin.js~Admin#live_search",
     "access": "public",
     "description": null,
-    "lineNumber": 20,
+    "lineNumber": 30,
     "undocument": true,
     "type": {
       "types": [
@@ -699,7 +720,7 @@
     }
   },
   {
-    "__docId__": 56,
+    "__docId__": 57,
     "kind": "member",
     "name": "field_transforms",
     "memberof": "src/admin.js~Admin",
@@ -707,24 +728,7 @@
     "longname": "src/admin.js~Admin#field_transforms",
     "access": "public",
     "description": null,
-    "lineNumber": 21,
-    "undocument": true,
-    "type": {
-      "types": [
-        "{}"
-      ]
-    }
-  },
-  {
-    "__docId__": 57,
-    "kind": "member",
-    "name": "header_transforms",
-    "memberof": "src/admin.js~Admin",
-    "static": false,
-    "longname": "src/admin.js~Admin#header_transforms",
-    "access": "public",
-    "description": null,
-    "lineNumber": 22,
+    "lineNumber": 31,
     "undocument": true,
     "type": {
       "types": [
@@ -735,13 +739,13 @@
   {
     "__docId__": 58,
     "kind": "member",
-    "name": "extra_fields",
+    "name": "header_transforms",
     "memberof": "src/admin.js~Admin",
     "static": false,
-    "longname": "src/admin.js~Admin#extra_fields",
+    "longname": "src/admin.js~Admin#header_transforms",
     "access": "public",
     "description": null,
-    "lineNumber": 23,
+    "lineNumber": 32,
     "undocument": true,
     "type": {
       "types": [
@@ -752,129 +756,27 @@
   {
     "__docId__": 59,
     "kind": "member",
-    "name": "list_display",
+    "name": "extra_fields",
     "memberof": "src/admin.js~Admin",
     "static": false,
-    "longname": "src/admin.js~Admin#list_display",
+    "longname": "src/admin.js~Admin#extra_fields",
     "access": "public",
     "description": null,
-    "lineNumber": 24,
+    "lineNumber": 33,
     "undocument": true,
     "type": {
       "types": [
-        "*[]"
+        "{}"
       ]
     }
   },
   {
     "__docId__": 60,
     "kind": "member",
-    "name": "list_display_links",
+    "name": "list_display",
     "memberof": "src/admin.js~Admin",
     "static": false,
-    "longname": "src/admin.js~Admin#list_display_links",
-    "access": "public",
-    "description": null,
-    "lineNumber": 25,
-    "undocument": true,
-    "type": {
-      "types": [
-        "*[]"
-      ]
-    }
-  },
-  {
-    "__docId__": 61,
-    "kind": "member",
-    "name": "list_per_page",
-    "memberof": "src/admin.js~Admin",
-    "static": false,
-    "longname": "src/admin.js~Admin#list_per_page",
-    "access": "public",
-    "description": null,
-    "lineNumber": 26,
-    "undocument": true,
-    "type": {
-      "types": [
-        "number"
-      ]
-    }
-  },
-  {
-    "__docId__": 62,
-    "kind": "member",
-    "name": "sort_fields",
-    "memberof": "src/admin.js~Admin",
-    "static": false,
-    "longname": "src/admin.js~Admin#sort_fields",
-    "access": "public",
-    "description": null,
-    "lineNumber": 27,
-    "undocument": true,
-    "type": {
-      "types": [
-        "*[]"
-      ]
-    }
-  },
-  {
-    "__docId__": 63,
-    "kind": "member",
-    "name": "is_object_equal",
-    "memberof": "src/admin.js~Admin",
-    "static": false,
-    "longname": "src/admin.js~Admin#is_object_equal",
-    "access": "public",
-    "description": null,
-    "lineNumber": 28,
-    "undocument": true,
-    "type": {
-      "types": [
-        "*"
-      ]
-    }
-  },
-  {
-    "__docId__": 64,
-    "kind": "member",
-    "name": "pages_in_pagination",
-    "memberof": "src/admin.js~Admin",
-    "static": false,
-    "longname": "src/admin.js~Admin#pages_in_pagination",
-    "access": "public",
-    "description": null,
-    "lineNumber": 29,
-    "undocument": true,
-    "type": {
-      "types": [
-        "number"
-      ]
-    }
-  },
-  {
-    "__docId__": 65,
-    "kind": "member",
-    "name": "actions",
-    "memberof": "src/admin.js~Admin",
-    "static": false,
-    "longname": "src/admin.js~Admin#actions",
-    "access": "public",
-    "description": null,
-    "lineNumber": 30,
-    "undocument": true,
-    "type": {
-      "types": [
-        "{\"delete\": *}"
-      ]
-    }
-  },
-  {
-    "__docId__": 66,
-    "kind": "member",
-    "name": "queryset",
-    "memberof": "src/admin.js~Admin",
-    "static": false,
-    "longname": "src/admin.js~Admin#queryset",
+    "longname": "src/admin.js~Admin#list_display",
     "access": "public",
     "description": null,
     "lineNumber": 34,
@@ -886,29 +788,63 @@
     }
   },
   {
-    "__docId__": 67,
+    "__docId__": 61,
     "kind": "member",
-    "name": "_all_selected",
+    "name": "list_display_links",
     "memberof": "src/admin.js~Admin",
     "static": false,
-    "longname": "src/admin.js~Admin#_all_selected",
-    "access": "private",
+    "longname": "src/admin.js~Admin#list_display_links",
+    "access": "public",
     "description": null,
     "lineNumber": 35,
     "undocument": true,
     "type": {
       "types": [
-        "boolean"
+        "*[]"
       ]
     }
   },
   {
-    "__docId__": 68,
+    "__docId__": 62,
     "kind": "member",
-    "name": "bind_exclude",
+    "name": "list_per_page",
     "memberof": "src/admin.js~Admin",
     "static": false,
-    "longname": "src/admin.js~Admin#bind_exclude",
+    "longname": "src/admin.js~Admin#list_per_page",
+    "access": "public",
+    "description": null,
+    "lineNumber": 36,
+    "undocument": true,
+    "type": {
+      "types": [
+        "number"
+      ]
+    }
+  },
+  {
+    "__docId__": 63,
+    "kind": "member",
+    "name": "sort_fields",
+    "memberof": "src/admin.js~Admin",
+    "static": false,
+    "longname": "src/admin.js~Admin#sort_fields",
+    "access": "public",
+    "description": null,
+    "lineNumber": 37,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*[]"
+      ]
+    }
+  },
+  {
+    "__docId__": 64,
+    "kind": "member",
+    "name": "is_object_equal",
+    "memberof": "src/admin.js~Admin",
+    "static": false,
+    "longname": "src/admin.js~Admin#is_object_equal",
     "access": "public",
     "description": null,
     "lineNumber": 38,
@@ -920,15 +856,100 @@
     }
   },
   {
-    "__docId__": 69,
+    "__docId__": 65,
     "kind": "member",
-    "name": "[key]",
+    "name": "pages_in_pagination",
     "memberof": "src/admin.js~Admin",
     "static": false,
-    "longname": "src/admin.js~Admin#[key]",
+    "longname": "src/admin.js~Admin#pages_in_pagination",
     "access": "public",
     "description": null,
-    "lineNumber": 42,
+    "lineNumber": 39,
+    "undocument": true,
+    "type": {
+      "types": [
+        "number"
+      ]
+    }
+  },
+  {
+    "__docId__": 66,
+    "kind": "member",
+    "name": "actions",
+    "memberof": "src/admin.js~Admin",
+    "static": false,
+    "longname": "src/admin.js~Admin#actions",
+    "access": "public",
+    "description": null,
+    "lineNumber": 40,
+    "undocument": true,
+    "type": {
+      "types": [
+        "{\"delete\": *}"
+      ]
+    }
+  },
+  {
+    "__docId__": 67,
+    "kind": "member",
+    "name": "_change_uuid",
+    "memberof": "src/admin.js~Admin",
+    "static": false,
+    "longname": "src/admin.js~Admin#_change_uuid",
+    "access": "private",
+    "description": null,
+    "lineNumber": 43,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 68,
+    "kind": "member",
+    "name": "queryset",
+    "memberof": "src/admin.js~Admin",
+    "static": false,
+    "longname": "src/admin.js~Admin#queryset",
+    "access": "public",
+    "description": null,
+    "lineNumber": 44,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*[]"
+      ]
+    }
+  },
+  {
+    "__docId__": 69,
+    "kind": "member",
+    "name": "_all_selected",
+    "memberof": "src/admin.js~Admin",
+    "static": false,
+    "longname": "src/admin.js~Admin#_all_selected",
+    "access": "private",
+    "description": null,
+    "lineNumber": 45,
+    "undocument": true,
+    "type": {
+      "types": [
+        "boolean"
+      ]
+    }
+  },
+  {
+    "__docId__": 70,
+    "kind": "member",
+    "name": "bind_exclude",
+    "memberof": "src/admin.js~Admin",
+    "static": false,
+    "longname": "src/admin.js~Admin#bind_exclude",
+    "access": "public",
+    "description": null,
+    "lineNumber": 48,
     "undocument": true,
     "type": {
       "types": [
@@ -939,13 +960,30 @@
   {
     "__docId__": 71,
     "kind": "member",
+    "name": "[key]",
+    "memberof": "src/admin.js~Admin",
+    "static": false,
+    "longname": "src/admin.js~Admin#[key]",
+    "access": "public",
+    "description": null,
+    "lineNumber": 52,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 73,
+    "kind": "member",
     "name": "state",
     "memberof": "src/admin.js~Admin",
     "static": false,
     "longname": "src/admin.js~Admin#state",
     "access": "public",
     "description": "Initialize the state of the component",
-    "lineNumber": 55,
+    "lineNumber": 65,
     "type": {
       "types": [
         "{\"display_type\": *, \"page_number\": number, \"object\": *, \"selected_objects\": *, \"total\": number, \"filter_options\": *, \"filter_values\": *}"
@@ -953,7 +991,7 @@
     }
   },
   {
-    "__docId__": 77,
+    "__docId__": 79,
     "kind": "method",
     "name": "get_queryset",
     "memberof": "src/admin.js~Admin",
@@ -963,7 +1001,7 @@
     "longname": "src/admin.js~Admin#get_queryset",
     "access": "public",
     "description": "This function returns an array of objects that will serve as the\nqueryset for the admin interface. Typically involves an HTTP request\nto a backend.",
-    "lineNumber": 94,
+    "lineNumber": 104,
     "unknown": [
       {
         "tagName": "@returns",
@@ -1012,7 +1050,7 @@
     }
   },
   {
-    "__docId__": 78,
+    "__docId__": 80,
     "kind": "method",
     "name": "get_form",
     "memberof": "src/admin.js~Admin",
@@ -1022,7 +1060,7 @@
     "longname": "src/admin.js~Admin#get_form",
     "access": "public",
     "description": "This functions returns a JSON Schema Form for editing\nthe objects in the array returned by get_queryset(). This method needs to be overridden to\nso as to return a Form Component for the object.  Learn more on\nJSON schema forms from https://github.com/mozilla-services/react-jsonschema-form\nand JSON Schema from https://spacetelescope.github.io/understanding-json-schema/",
-    "lineNumber": 112,
+    "lineNumber": 122,
     "unknown": [
       {
         "tagName": "@returns",
@@ -1051,7 +1089,7 @@
     }
   },
   {
-    "__docId__": 79,
+    "__docId__": 81,
     "kind": "method",
     "name": "get_live_search",
     "memberof": "src/admin.js~Admin",
@@ -1061,7 +1099,7 @@
     "longname": "src/admin.js~Admin#get_live_search",
     "access": "public",
     "description": "Returns a true/false value. Controls wether search is implement on live input or not.\nCan be overriden by the live_search member variable. Default is false.",
-    "lineNumber": 122,
+    "lineNumber": 132,
     "return": {
       "nullable": null,
       "types": [
@@ -1073,7 +1111,7 @@
     "params": []
   },
   {
-    "__docId__": 80,
+    "__docId__": 82,
     "kind": "method",
     "name": "get_field_transforms",
     "memberof": "src/admin.js~Admin",
@@ -1086,57 +1124,7 @@
     "examples": [
       "get_field_transforms()\n{\nreturn { 'name' : function(name,object)\n                  {\n                      return name.toUpperCase()\n                  }\n        }\n\n}"
     ],
-    "lineNumber": 143,
-    "return": {
-      "nullable": null,
-      "types": [
-        "object"
-      ],
-      "spread": false,
-      "description": ""
-    },
-    "params": []
-  },
-  {
-    "__docId__": 81,
-    "kind": "method",
-    "name": "get_header_transforms",
-    "memberof": "src/admin.js~Admin",
-    "generator": false,
-    "async": false,
-    "static": false,
-    "longname": "src/admin.js~Admin#get_header_transforms",
-    "access": "public",
-    "description": "Returns an object whose properties are field names corresponding to properties of any object\nin the queryset and whose values are transform functions. The example below will transform the header \"name\" to upper case in the list display view.",
-    "examples": [
-      "get_header_transforms()\n{\nreturn { 'name' : function(name)\n                  {\n                      return name.toUpperCase()\n                  }\n        }\n}"
-    ],
-    "lineNumber": 166,
-    "return": {
-      "nullable": null,
-      "types": [
-        "object"
-      ],
-      "spread": false,
-      "description": ""
-    },
-    "params": []
-  },
-  {
-    "__docId__": 82,
-    "kind": "method",
-    "name": "get_extra_fields",
-    "memberof": "src/admin.js~Admin",
-    "generator": false,
-    "async": false,
-    "static": false,
-    "longname": "src/admin.js~Admin#get_extra_fields",
-    "access": "public",
-    "description": "Returns an object whose properties are extra  field names not corresponding to properties of any object\nin the queryset and whose values are display functions. This will create extra fields that are not tied to objects. Extra fields have to be manually included in the `list_display` in order to appear in the list display page. The display functions take the current object being rendered in the table row and  the field name",
-    "examples": [
-      "get_extra_fields()\n{\nreturn { 'now' : function(object,label)\n                  {\n                     return moment(new Date()).format('LLL');\n                  }\n        }\n}"
-    ],
-    "lineNumber": 190,
+    "lineNumber": 153,
     "return": {
       "nullable": null,
       "types": [
@@ -1150,6 +1138,56 @@
   {
     "__docId__": 83,
     "kind": "method",
+    "name": "get_header_transforms",
+    "memberof": "src/admin.js~Admin",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/admin.js~Admin#get_header_transforms",
+    "access": "public",
+    "description": "Returns an object whose properties are field names corresponding to properties of any object\nin the queryset and whose values are transform functions. The example below will transform the header \"name\" to upper case in the list display view.",
+    "examples": [
+      "get_header_transforms()\n{\nreturn { 'name' : function(name)\n                  {\n                      return name.toUpperCase()\n                  }\n        }\n}"
+    ],
+    "lineNumber": 176,
+    "return": {
+      "nullable": null,
+      "types": [
+        "object"
+      ],
+      "spread": false,
+      "description": ""
+    },
+    "params": []
+  },
+  {
+    "__docId__": 84,
+    "kind": "method",
+    "name": "get_extra_fields",
+    "memberof": "src/admin.js~Admin",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/admin.js~Admin#get_extra_fields",
+    "access": "public",
+    "description": "Returns an object whose properties are extra  field names not corresponding to properties of any object\nin the queryset and whose values are display functions. This will create extra fields that are not tied to objects. Extra fields have to be manually included in the `list_display` in order to appear in the list display page. The display functions take the current object being rendered in the table row and  the field name",
+    "examples": [
+      "get_extra_fields()\n{\nreturn { 'now' : function(object,label)\n                  {\n                     return moment(new Date()).format('LLL');\n                  }\n        }\n}"
+    ],
+    "lineNumber": 200,
+    "return": {
+      "nullable": null,
+      "types": [
+        "object"
+      ],
+      "spread": false,
+      "description": ""
+    },
+    "params": []
+  },
+  {
+    "__docId__": 85,
+    "kind": "method",
     "name": "get_list_per_page",
     "memberof": "src/admin.js~Admin",
     "generator": false,
@@ -1158,7 +1196,7 @@
     "longname": "src/admin.js~Admin#get_list_per_page",
     "access": "public",
     "description": "Returns the number of items to be listed in a page. Can be overridden by `list_per_page`.",
-    "lineNumber": 202,
+    "lineNumber": 212,
     "return": {
       "nullable": null,
       "types": [
@@ -1170,7 +1208,7 @@
     "params": []
   },
   {
-    "__docId__": 84,
+    "__docId__": 86,
     "kind": "method",
     "name": "get_actions",
     "memberof": "src/admin.js~Admin",
@@ -1183,7 +1221,7 @@
     "examples": [
       "\nactions = { \"delete\" : (selected_objects)=>{ } }"
     ],
-    "lineNumber": 225,
+    "lineNumber": 235,
     "return": {
       "nullable": null,
       "types": [
@@ -1195,7 +1233,7 @@
     "params": []
   },
   {
-    "__docId__": 85,
+    "__docId__": 87,
     "kind": "method",
     "name": "get_list_display_links",
     "memberof": "src/admin.js~Admin",
@@ -1208,7 +1246,7 @@
     "examples": [
       "  let object={ name : \"any name\",{ address : { street : \"any\"}},emails: [\"any@any.com\"]}"
     ],
-    "lineNumber": 247,
+    "lineNumber": 257,
     "return": {
       "nullable": null,
       "types": [
@@ -1220,7 +1258,7 @@
     "params": []
   },
   {
-    "__docId__": 86,
+    "__docId__": 88,
     "kind": "method",
     "name": "get_list_display",
     "memberof": "src/admin.js~Admin",
@@ -1233,7 +1271,7 @@
     "examples": [
       "  let object={ name : \"any name\",{ address : { street : \"any\"}},emails: [\"any@any.com\"]}\n\n  The properties \"name\",\"address.street\" and \"emails[0]\" are all acceptable"
     ],
-    "lineNumber": 268,
+    "lineNumber": 278,
     "return": {
       "nullable": null,
       "types": [
@@ -1245,7 +1283,7 @@
     "params": []
   },
   {
-    "__docId__": 87,
+    "__docId__": 89,
     "kind": "method",
     "name": "_get_ordered_queryset",
     "memberof": "src/admin.js~Admin",
@@ -1255,7 +1293,7 @@
     "longname": "src/admin.js~Admin#_get_ordered_queryset",
     "access": "private",
     "description": "Returns an ordered queryset. The method checks to see if sorting is active and sorts\nthe current queryset based on the sort order.",
-    "lineNumber": 281,
+    "lineNumber": 291,
     "return": {
       "nullable": null,
       "types": [
@@ -1267,7 +1305,7 @@
     "params": []
   },
   {
-    "__docId__": 88,
+    "__docId__": 90,
     "kind": "method",
     "name": "search",
     "memberof": "src/admin.js~Admin",
@@ -1277,7 +1315,7 @@
     "longname": "src/admin.js~Admin#search",
     "access": "public",
     "description": "Implements search. This method should be overridden to implement a custom search",
-    "lineNumber": 296,
+    "lineNumber": 306,
     "params": [
       {
         "nullable": null,
@@ -1310,7 +1348,7 @@
     }
   },
   {
-    "__docId__": 89,
+    "__docId__": 91,
     "kind": "method",
     "name": "has_delete_permission",
     "memberof": "src/admin.js~Admin",
@@ -1320,7 +1358,7 @@
     "longname": "src/admin.js~Admin#has_delete_permission",
     "access": "public",
     "description": "Grants permission to delete object. This method is not implemented and can be handled via\n implementing actions.",
-    "lineNumber": 307,
+    "lineNumber": 317,
     "params": [
       {
         "nullable": null,
@@ -1343,7 +1381,7 @@
     }
   },
   {
-    "__docId__": 90,
+    "__docId__": 92,
     "kind": "method",
     "name": "has_add_permission",
     "memberof": "src/admin.js~Admin",
@@ -1353,7 +1391,7 @@
     "longname": "src/admin.js~Admin#has_add_permission",
     "access": "public",
     "description": "Grants permission to add an object. This method controls rendering of the Add\nbutton",
-    "lineNumber": 318,
+    "lineNumber": 328,
     "return": {
       "nullable": null,
       "types": [
@@ -1365,7 +1403,7 @@
     "params": []
   },
   {
-    "__docId__": 91,
+    "__docId__": 93,
     "kind": "method",
     "name": "has_change_permission",
     "memberof": "src/admin.js~Admin",
@@ -1375,7 +1413,7 @@
     "longname": "src/admin.js~Admin#has_change_permission",
     "access": "public",
     "description": "Grants permission to change an object. It disables all links to the add/change page when\nenabled",
-    "lineNumber": 328,
+    "lineNumber": 338,
     "return": {
       "nullable": null,
       "types": [
@@ -1396,7 +1434,7 @@
     ]
   },
   {
-    "__docId__": 92,
+    "__docId__": 94,
     "kind": "method",
     "name": "has_module_permission",
     "memberof": "src/admin.js~Admin",
@@ -1406,7 +1444,7 @@
     "longname": "src/admin.js~Admin#has_module_permission",
     "access": "public",
     "description": "Grants permission to the this admin interface.",
-    "lineNumber": 337,
+    "lineNumber": 347,
     "return": {
       "nullable": null,
       "types": [
@@ -1418,7 +1456,7 @@
     "params": []
   },
   {
-    "__docId__": 93,
+    "__docId__": 95,
     "kind": "method",
     "name": "_order_state_arrow",
     "memberof": "src/admin.js~Admin",
@@ -1428,7 +1466,7 @@
     "longname": "src/admin.js~Admin#_order_state_arrow",
     "access": "private",
     "description": "This method adds up/down arrows to field headers on the list display page table",
-    "lineNumber": 368,
+    "lineNumber": 378,
     "params": [
       {
         "nullable": null,
@@ -1448,7 +1486,7 @@
     }
   },
   {
-    "__docId__": 94,
+    "__docId__": 96,
     "kind": "method",
     "name": "response_add",
     "memberof": "src/admin.js~Admin",
@@ -1458,7 +1496,7 @@
     "longname": "src/admin.js~Admin#response_add",
     "access": "public",
     "description": " This method  should be overriden and called after saving an object in the add/change view.       *  This method is not called at all here but provides hints on what to do after saving\n an object. Change the state display_type to \"list\", object to \"null\" and refresh the quer         *  yset.",
-    "lineNumber": 386,
+    "lineNumber": 396,
     "params": [],
     "return": {
       "types": [
@@ -1467,7 +1505,7 @@
     }
   },
   {
-    "__docId__": 95,
+    "__docId__": 97,
     "kind": "method",
     "name": "response_change",
     "memberof": "src/admin.js~Admin",
@@ -1477,7 +1515,7 @@
     "longname": "src/admin.js~Admin#response_change",
     "access": "public",
     "description": " This method should be overriden and called after saving an object in the add/change view.         *  This method is not called at all here but provides hints on what to do after saving\n an object. Change the state display_type to \"list\", object to \"null\" and refresh the quer         *  yset.",
-    "lineNumber": 408,
+    "lineNumber": 418,
     "params": [],
     "return": {
       "types": [
@@ -1486,7 +1524,7 @@
     }
   },
   {
-    "__docId__": 96,
+    "__docId__": 98,
     "kind": "method",
     "name": "_create_object_link",
     "memberof": "src/admin.js~Admin",
@@ -1496,7 +1534,7 @@
     "longname": "src/admin.js~Admin#_create_object_link",
     "access": "private",
     "description": "A private method to wrap a table entry in an <a></a> tag in the display page.\nThe method checks if permission is given to display links using the has_change_permission method",
-    "lineNumber": 435,
+    "lineNumber": 445,
     "params": [
       {
         "nullable": null,
@@ -1526,7 +1564,7 @@
     }
   },
   {
-    "__docId__": 97,
+    "__docId__": 99,
     "kind": "method",
     "name": "set_queryset",
     "memberof": "src/admin.js~Admin",
@@ -1536,7 +1574,7 @@
     "longname": "src/admin.js~Admin#set_queryset",
     "access": "public",
     "description": null,
-    "lineNumber": 448,
+    "lineNumber": 458,
     "undocument": true,
     "params": [
       {
@@ -1549,7 +1587,7 @@
     "return": null
   },
   {
-    "__docId__": 98,
+    "__docId__": 100,
     "kind": "method",
     "name": "set_total",
     "memberof": "src/admin.js~Admin",
@@ -1559,7 +1597,7 @@
     "longname": "src/admin.js~Admin#set_total",
     "access": "public",
     "description": null,
-    "lineNumber": 452,
+    "lineNumber": 462,
     "undocument": true,
     "params": [
       {
@@ -1572,7 +1610,7 @@
     "return": null
   },
   {
-    "__docId__": 99,
+    "__docId__": 101,
     "kind": "method",
     "name": "_get_prop_label",
     "memberof": "src/admin.js~Admin",
@@ -1582,7 +1620,7 @@
     "longname": "src/admin.js~Admin#_get_prop_label",
     "access": "private",
     "description": null,
-    "lineNumber": 456,
+    "lineNumber": 466,
     "undocument": true,
     "params": [
       {
@@ -1599,7 +1637,7 @@
     }
   },
   {
-    "__docId__": 100,
+    "__docId__": 102,
     "kind": "method",
     "name": "_get_table_header",
     "memberof": "src/admin.js~Admin",
@@ -1609,7 +1647,7 @@
     "longname": "src/admin.js~Admin#_get_table_header",
     "access": "private",
     "description": null,
-    "lineNumber": 460,
+    "lineNumber": 470,
     "undocument": true,
     "params": [],
     "return": {
@@ -1619,7 +1657,7 @@
     }
   },
   {
-    "__docId__": 101,
+    "__docId__": 103,
     "kind": "method",
     "name": "_display_changed",
     "memberof": "src/admin.js~Admin",
@@ -1629,13 +1667,13 @@
     "longname": "src/admin.js~Admin#_display_changed",
     "access": "private",
     "description": null,
-    "lineNumber": 473,
+    "lineNumber": 483,
     "undocument": true,
     "params": [],
     "return": null
   },
   {
-    "__docId__": 102,
+    "__docId__": 104,
     "kind": "method",
     "name": "display_changed",
     "memberof": "src/admin.js~Admin",
@@ -1645,59 +1683,7 @@
     "longname": "src/admin.js~Admin#display_changed",
     "access": "public",
     "description": "An event listener that listens to state changes in the display type i.e.\nfrom list to add/change. It is fired after state changes are made.",
-    "lineNumber": 485,
-    "params": [
-      {
-        "nullable": null,
-        "types": [
-          "string"
-        ],
-        "spread": false,
-        "optional": false,
-        "name": "display_type",
-        "description": "the current display type of the component either \"list\" or \"change\""
-      },
-      {
-        "nullable": null,
-        "types": [
-          "object"
-        ],
-        "spread": false,
-        "optional": false,
-        "name": "object",
-        "description": "the current object or null"
-      }
-    ],
-    "return": null
-  },
-  {
-    "__docId__": 103,
-    "kind": "method",
-    "name": "_display_will_change",
-    "memberof": "src/admin.js~Admin",
-    "generator": false,
-    "async": false,
-    "static": false,
-    "longname": "src/admin.js~Admin#_display_will_change",
-    "access": "private",
-    "description": null,
-    "lineNumber": 486,
-    "undocument": true,
-    "params": [],
-    "return": null
-  },
-  {
-    "__docId__": 104,
-    "kind": "method",
-    "name": "display_will_change",
-    "memberof": "src/admin.js~Admin",
-    "generator": false,
-    "async": false,
-    "static": false,
-    "longname": "src/admin.js~Admin#display_will_change",
-    "access": "public",
-    "description": "An event listener that listens to state changes in the display type i.e.\nfrom list to add/change . It is fired before state changes are made.",
-    "lineNumber": 498,
+    "lineNumber": 495,
     "params": [
       {
         "nullable": null,
@@ -1725,6 +1711,58 @@
   {
     "__docId__": 105,
     "kind": "method",
+    "name": "_display_will_change",
+    "memberof": "src/admin.js~Admin",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/admin.js~Admin#_display_will_change",
+    "access": "private",
+    "description": null,
+    "lineNumber": 496,
+    "undocument": true,
+    "params": [],
+    "return": null
+  },
+  {
+    "__docId__": 106,
+    "kind": "method",
+    "name": "display_will_change",
+    "memberof": "src/admin.js~Admin",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/admin.js~Admin#display_will_change",
+    "access": "public",
+    "description": "An event listener that listens to state changes in the display type i.e.\nfrom list to add/change . It is fired before state changes are made.",
+    "lineNumber": 508,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "display_type",
+        "description": "the current display type of the component either \"list\" or \"change\""
+      },
+      {
+        "nullable": null,
+        "types": [
+          "object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "object",
+        "description": "the current object or null"
+      }
+    ],
+    "return": null
+  },
+  {
+    "__docId__": 107,
+    "kind": "method",
     "name": "_object_link_clicked",
     "memberof": "src/admin.js~Admin",
     "generator": false,
@@ -1733,7 +1771,7 @@
     "longname": "src/admin.js~Admin#_object_link_clicked",
     "access": "private",
     "description": null,
-    "lineNumber": 499,
+    "lineNumber": 509,
     "undocument": true,
     "params": [
       {
@@ -1750,7 +1788,7 @@
     }
   },
   {
-    "__docId__": 106,
+    "__docId__": 108,
     "kind": "method",
     "name": "_display_field",
     "memberof": "src/admin.js~Admin",
@@ -1760,7 +1798,7 @@
     "longname": "src/admin.js~Admin#_display_field",
     "access": "private",
     "description": null,
-    "lineNumber": 510,
+    "lineNumber": 520,
     "undocument": true,
     "params": [
       {
@@ -1783,7 +1821,7 @@
     }
   },
   {
-    "__docId__": 107,
+    "__docId__": 109,
     "kind": "method",
     "name": "set_filter_options",
     "memberof": "src/admin.js~Admin",
@@ -1793,7 +1831,7 @@
     "longname": "src/admin.js~Admin#set_filter_options",
     "access": "public",
     "description": null,
-    "lineNumber": 526,
+    "lineNumber": 536,
     "undocument": true,
     "params": [
       {
@@ -1812,7 +1850,7 @@
     "return": null
   },
   {
-    "__docId__": 108,
+    "__docId__": 110,
     "kind": "method",
     "name": "get_filter_values",
     "memberof": "src/admin.js~Admin",
@@ -1822,7 +1860,7 @@
     "longname": "src/admin.js~Admin#get_filter_values",
     "access": "public",
     "description": null,
-    "lineNumber": 535,
+    "lineNumber": 545,
     "undocument": true,
     "params": [],
     "return": {
@@ -1832,7 +1870,7 @@
     }
   },
   {
-    "__docId__": 109,
+    "__docId__": 111,
     "kind": "method",
     "name": "get_filters",
     "memberof": "src/admin.js~Admin",
@@ -1842,13 +1880,13 @@
     "longname": "src/admin.js~Admin#get_filters",
     "access": "public",
     "description": null,
-    "lineNumber": 538,
+    "lineNumber": 548,
     "undocument": true,
     "params": [],
     "return": null
   },
   {
-    "__docId__": 110,
+    "__docId__": 112,
     "kind": "method",
     "name": "_handle_filter_change",
     "memberof": "src/admin.js~Admin",
@@ -1858,7 +1896,7 @@
     "longname": "src/admin.js~Admin#_handle_filter_change",
     "access": "private",
     "description": null,
-    "lineNumber": 558,
+    "lineNumber": 568,
     "undocument": true,
     "params": [
       {
@@ -1871,7 +1909,7 @@
     "return": null
   },
   {
-    "__docId__": 111,
+    "__docId__": 113,
     "kind": "method",
     "name": "render_filters",
     "memberof": "src/admin.js~Admin",
@@ -1881,7 +1919,7 @@
     "longname": "src/admin.js~Admin#render_filters",
     "access": "public",
     "description": null,
-    "lineNumber": 585,
+    "lineNumber": 595,
     "undocument": true,
     "params": [],
     "return": {
@@ -1891,7 +1929,7 @@
     }
   },
   {
-    "__docId__": 112,
+    "__docId__": 114,
     "kind": "method",
     "name": "sort_by",
     "memberof": "src/admin.js~Admin",
@@ -1901,7 +1939,7 @@
     "longname": "src/admin.js~Admin#sort_by",
     "access": "public",
     "description": null,
-    "lineNumber": 625,
+    "lineNumber": 635,
     "undocument": true,
     "params": [
       {
@@ -1918,7 +1956,7 @@
     }
   },
   {
-    "__docId__": 113,
+    "__docId__": 115,
     "kind": "method",
     "name": "_sort_handler",
     "memberof": "src/admin.js~Admin",
@@ -1928,7 +1966,7 @@
     "longname": "src/admin.js~Admin#_sort_handler",
     "access": "private",
     "description": null,
-    "lineNumber": 629,
+    "lineNumber": 639,
     "undocument": true,
     "params": [
       {
@@ -1945,7 +1983,7 @@
     }
   },
   {
-    "__docId__": 115,
+    "__docId__": 117,
     "kind": "method",
     "name": "_select_all",
     "memberof": "src/admin.js~Admin",
@@ -1955,7 +1993,7 @@
     "longname": "src/admin.js~Admin#_select_all",
     "access": "private",
     "description": "This method is an event handler that listens to when all objects of the queryset\ndisplayed within a single display page are selected",
-    "lineNumber": 658,
+    "lineNumber": 668,
     "params": [
       {
         "name": "event",
@@ -1967,7 +2005,7 @@
     "return": null
   },
   {
-    "__docId__": 117,
+    "__docId__": 119,
     "kind": "method",
     "name": "_select_one",
     "memberof": "src/admin.js~Admin",
@@ -1977,7 +2015,7 @@
     "longname": "src/admin.js~Admin#_select_one",
     "access": "private",
     "description": "This method is an event handler that listens when a single objects of the queryset\ndisplayed is selected",
-    "lineNumber": 673,
+    "lineNumber": 683,
     "params": [
       {
         "name": "object",
@@ -1993,7 +2031,7 @@
     }
   },
   {
-    "__docId__": 118,
+    "__docId__": 120,
     "kind": "method",
     "name": "_get_table_body",
     "memberof": "src/admin.js~Admin",
@@ -2003,7 +2041,7 @@
     "longname": "src/admin.js~Admin#_get_table_body",
     "access": "private",
     "description": "Generate the table body for the list display page",
-    "lineNumber": 692,
+    "lineNumber": 702,
     "return": {
       "nullable": null,
       "types": [
@@ -2015,7 +2053,7 @@
     "params": []
   },
   {
-    "__docId__": 119,
+    "__docId__": 121,
     "kind": "method",
     "name": "show_progress",
     "memberof": "src/admin.js~Admin",
@@ -2025,12 +2063,12 @@
     "longname": "src/admin.js~Admin#show_progress",
     "access": "public",
     "description": "Changes the state property \"loading\" to true. The state property can be used to show a\nprogress indicator.",
-    "lineNumber": 730,
+    "lineNumber": 740,
     "params": [],
     "return": null
   },
   {
-    "__docId__": 120,
+    "__docId__": 122,
     "kind": "method",
     "name": "hide_progress",
     "memberof": "src/admin.js~Admin",
@@ -2040,12 +2078,12 @@
     "longname": "src/admin.js~Admin#hide_progress",
     "access": "public",
     "description": "Changes the state property \"loading\" to false. This method  can be used to hide a\nprogress indicator by inspecting the \"loading\" property of the state object.",
-    "lineNumber": 738,
+    "lineNumber": 748,
     "params": [],
     "return": null
   },
   {
-    "__docId__": 121,
+    "__docId__": 123,
     "kind": "method",
     "name": "render_progress",
     "memberof": "src/admin.js~Admin",
@@ -2055,7 +2093,7 @@
     "longname": "src/admin.js~Admin#render_progress",
     "access": "public",
     "description": "The default progress indicator. Can be overriden.",
-    "lineNumber": 746,
+    "lineNumber": 756,
     "return": {
       "nullable": null,
       "types": [
@@ -2074,7 +2112,7 @@
     ]
   },
   {
-    "__docId__": 122,
+    "__docId__": 124,
     "kind": "method",
     "name": "_handle_search",
     "memberof": "src/admin.js~Admin",
@@ -2084,7 +2122,7 @@
     "longname": "src/admin.js~Admin#_handle_search",
     "access": "private",
     "description": "An event listener that listens to the search event. This method calls search method which\nimplements a custom search. The method uses the \"live_search\" property to implement live\nsearch or not.",
-    "lineNumber": 763,
+    "lineNumber": 773,
     "params": [
       {
         "nullable": null,
@@ -2100,7 +2138,7 @@
     "return": null
   },
   {
-    "__docId__": 123,
+    "__docId__": 125,
     "kind": "method",
     "name": "render_search_field",
     "memberof": "src/admin.js~Admin",
@@ -2110,7 +2148,7 @@
     "longname": "src/admin.js~Admin#render_search_field",
     "access": "public",
     "description": "Renders the search component",
-    "lineNumber": 794,
+    "lineNumber": 804,
     "return": {
       "nullable": null,
       "types": [
@@ -2122,7 +2160,7 @@
     "params": []
   },
   {
-    "__docId__": 124,
+    "__docId__": 126,
     "kind": "method",
     "name": "render_add_button",
     "memberof": "src/admin.js~Admin",
@@ -2132,7 +2170,7 @@
     "longname": "src/admin.js~Admin#render_add_button",
     "access": "public",
     "description": "Renders the add object button. Checks to see if permission is given by has_add_permission",
-    "lineNumber": 814,
+    "lineNumber": 824,
     "return": {
       "nullable": null,
       "types": [
@@ -2144,7 +2182,7 @@
     "params": []
   },
   {
-    "__docId__": 125,
+    "__docId__": 127,
     "kind": "method",
     "name": "render_table",
     "memberof": "src/admin.js~Admin",
@@ -2154,7 +2192,7 @@
     "longname": "src/admin.js~Admin#render_table",
     "access": "public",
     "description": "Renders the table in the display page. This calls _get_table_header and _get_table_body",
-    "lineNumber": 833,
+    "lineNumber": 843,
     "return": {
       "nullable": null,
       "types": [
@@ -2166,7 +2204,7 @@
     "params": []
   },
   {
-    "__docId__": 126,
+    "__docId__": 128,
     "kind": "method",
     "name": "action_selected",
     "memberof": "src/admin.js~Admin",
@@ -2176,7 +2214,7 @@
     "longname": "src/admin.js~Admin#action_selected",
     "access": "public",
     "description": "An event listener that listens to actions selected.",
-    "lineNumber": 859,
+    "lineNumber": 869,
     "params": [
       {
         "nullable": null,
@@ -2192,7 +2230,7 @@
     "return": null
   },
   {
-    "__docId__": 127,
+    "__docId__": 129,
     "kind": "method",
     "name": "selectPage",
     "memberof": "src/admin.js~Admin",
@@ -2202,7 +2240,7 @@
     "longname": "src/admin.js~Admin#selectPage",
     "access": "public",
     "description": "An event listener that listens when a page is  selected.",
-    "lineNumber": 872,
+    "lineNumber": 882,
     "params": [
       {
         "nullable": null,
@@ -2222,7 +2260,7 @@
     }
   },
   {
-    "__docId__": 128,
+    "__docId__": 130,
     "kind": "method",
     "name": "nextPage",
     "memberof": "src/admin.js~Admin",
@@ -2232,12 +2270,12 @@
     "longname": "src/admin.js~Admin#nextPage",
     "access": "public",
     "description": "An event listener that listens when the next page is  selected.",
-    "lineNumber": 891,
+    "lineNumber": 901,
     "params": [],
     "return": null
   },
   {
-    "__docId__": 129,
+    "__docId__": 131,
     "kind": "method",
     "name": "prevPage",
     "memberof": "src/admin.js~Admin",
@@ -2247,12 +2285,12 @@
     "longname": "src/admin.js~Admin#prevPage",
     "access": "public",
     "description": "An event listener that listens when the previous page is  selected.",
-    "lineNumber": 901,
+    "lineNumber": 911,
     "params": [],
     "return": null
   },
   {
-    "__docId__": 130,
+    "__docId__": 132,
     "kind": "method",
     "name": "render_pagination",
     "memberof": "src/admin.js~Admin",
@@ -2262,7 +2300,7 @@
     "longname": "src/admin.js~Admin#render_pagination",
     "access": "public",
     "description": "Renders the pagination UI",
-    "lineNumber": 910,
+    "lineNumber": 920,
     "return": {
       "nullable": null,
       "types": [
@@ -2274,7 +2312,7 @@
     "params": []
   },
   {
-    "__docId__": 131,
+    "__docId__": 133,
     "kind": "method",
     "name": "render_actions",
     "memberof": "src/admin.js~Admin",
@@ -2284,7 +2322,7 @@
     "longname": "src/admin.js~Admin#render_actions",
     "access": "public",
     "description": "Renders the actions select component",
-    "lineNumber": 1000,
+    "lineNumber": 1010,
     "return": {
       "nullable": null,
       "types": [
@@ -2296,7 +2334,7 @@
     "params": []
   },
   {
-    "__docId__": 132,
+    "__docId__": 134,
     "kind": "method",
     "name": "render_back_button",
     "memberof": "src/admin.js~Admin",
@@ -2306,7 +2344,7 @@
     "longname": "src/admin.js~Admin#render_back_button",
     "access": "public",
     "description": "Renders the back button component in the add/change view",
-    "lineNumber": 1027,
+    "lineNumber": 1037,
     "ignore": true,
     "return": {
       "nullable": null,
@@ -2319,7 +2357,7 @@
     "params": []
   },
   {
-    "__docId__": 133,
+    "__docId__": 135,
     "kind": "method",
     "name": "render_list_view",
     "memberof": "src/admin.js~Admin",
@@ -2329,7 +2367,7 @@
     "longname": "src/admin.js~Admin#render_list_view",
     "access": "public",
     "description": "Renders the admin interface component",
-    "lineNumber": 1052,
+    "lineNumber": 1062,
     "return": {
       "nullable": null,
       "types": [
@@ -2341,7 +2379,7 @@
     "params": []
   },
   {
-    "__docId__": 134,
+    "__docId__": 136,
     "kind": "method",
     "name": "render_below_add_button",
     "memberof": "src/admin.js~Admin",
@@ -2351,13 +2389,13 @@
     "longname": "src/admin.js~Admin#render_below_add_button",
     "access": "public",
     "description": null,
-    "lineNumber": 1073,
+    "lineNumber": 1083,
     "undocument": true,
     "params": [],
     "return": null
   },
   {
-    "__docId__": 135,
+    "__docId__": 137,
     "kind": "method",
     "name": "render_below_search_field",
     "memberof": "src/admin.js~Admin",
@@ -2367,13 +2405,13 @@
     "longname": "src/admin.js~Admin#render_below_search_field",
     "access": "public",
     "description": null,
-    "lineNumber": 1074,
+    "lineNumber": 1084,
     "undocument": true,
     "params": [],
     "return": null
   },
   {
-    "__docId__": 136,
+    "__docId__": 138,
     "kind": "method",
     "name": "render_below_actions",
     "memberof": "src/admin.js~Admin",
@@ -2383,13 +2421,13 @@
     "longname": "src/admin.js~Admin#render_below_actions",
     "access": "public",
     "description": null,
-    "lineNumber": 1076,
+    "lineNumber": 1086,
     "undocument": true,
     "params": [],
     "return": null
   },
   {
-    "__docId__": 137,
+    "__docId__": 139,
     "kind": "method",
     "name": "render_below_filters",
     "memberof": "src/admin.js~Admin",
@@ -2399,13 +2437,13 @@
     "longname": "src/admin.js~Admin#render_below_filters",
     "access": "public",
     "description": null,
-    "lineNumber": 1078,
+    "lineNumber": 1088,
     "undocument": true,
     "params": [],
     "return": null
   },
   {
-    "__docId__": 138,
+    "__docId__": 140,
     "kind": "method",
     "name": "render_below_table",
     "memberof": "src/admin.js~Admin",
@@ -2415,13 +2453,13 @@
     "longname": "src/admin.js~Admin#render_below_table",
     "access": "public",
     "description": null,
-    "lineNumber": 1080,
+    "lineNumber": 1090,
     "undocument": true,
     "params": [],
     "return": null
   },
   {
-    "__docId__": 139,
+    "__docId__": 141,
     "kind": "method",
     "name": "render_below_progress",
     "memberof": "src/admin.js~Admin",
@@ -2431,13 +2469,13 @@
     "longname": "src/admin.js~Admin#render_below_progress",
     "access": "public",
     "description": null,
-    "lineNumber": 1082,
+    "lineNumber": 1092,
     "undocument": true,
     "params": [],
     "return": null
   },
   {
-    "__docId__": 140,
+    "__docId__": 142,
     "kind": "method",
     "name": "render_change_view",
     "memberof": "src/admin.js~Admin",
@@ -2447,7 +2485,7 @@
     "longname": "src/admin.js~Admin#render_change_view",
     "access": "public",
     "description": null,
-    "lineNumber": 1084,
+    "lineNumber": 1094,
     "undocument": true,
     "params": [],
     "return": {
@@ -2457,7 +2495,7 @@
     }
   },
   {
-    "__docId__": 141,
+    "__docId__": 143,
     "kind": "method",
     "name": "render_above_change_view",
     "memberof": "src/admin.js~Admin",
@@ -2467,13 +2505,13 @@
     "longname": "src/admin.js~Admin#render_above_change_view",
     "access": "public",
     "description": null,
-    "lineNumber": 1093,
+    "lineNumber": 1103,
     "undocument": true,
     "params": [],
     "return": null
   },
   {
-    "__docId__": 142,
+    "__docId__": 144,
     "kind": "method",
     "name": "render_below_change_view",
     "memberof": "src/admin.js~Admin",
@@ -2483,13 +2521,13 @@
     "longname": "src/admin.js~Admin#render_below_change_view",
     "access": "public",
     "description": null,
-    "lineNumber": 1094,
+    "lineNumber": 1104,
     "undocument": true,
     "params": [],
     "return": null
   },
   {
-    "__docId__": 143,
+    "__docId__": 145,
     "kind": "method",
     "name": "render_above_list_view",
     "memberof": "src/admin.js~Admin",
@@ -2499,13 +2537,13 @@
     "longname": "src/admin.js~Admin#render_above_list_view",
     "access": "public",
     "description": null,
-    "lineNumber": 1095,
+    "lineNumber": 1105,
     "undocument": true,
     "params": [],
     "return": null
   },
   {
-    "__docId__": 144,
+    "__docId__": 146,
     "kind": "method",
     "name": "render_below_list_view",
     "memberof": "src/admin.js~Admin",
@@ -2515,13 +2553,13 @@
     "longname": "src/admin.js~Admin#render_below_list_view",
     "access": "public",
     "description": null,
-    "lineNumber": 1096,
+    "lineNumber": 1106,
     "undocument": true,
     "params": [],
     "return": null
   },
   {
-    "__docId__": 145,
+    "__docId__": 147,
     "kind": "method",
     "name": "render_list_page",
     "memberof": "src/admin.js~Admin",
@@ -2531,47 +2569,7 @@
     "longname": "src/admin.js~Admin#render_list_page",
     "access": "public",
     "description": null,
-    "lineNumber": 1097,
-    "undocument": true,
-    "params": [],
-    "return": {
-      "types": [
-        "*"
-      ]
-    }
-  },
-  {
-    "__docId__": 146,
-    "kind": "method",
-    "name": "render_change_page",
-    "memberof": "src/admin.js~Admin",
-    "generator": false,
-    "async": false,
-    "static": false,
-    "longname": "src/admin.js~Admin#render_change_page",
-    "access": "public",
-    "description": null,
-    "lineNumber": 1106,
-    "undocument": true,
-    "params": [],
-    "return": {
-      "types": [
-        "*"
-      ]
-    }
-  },
-  {
-    "__docId__": 147,
-    "kind": "method",
-    "name": "render",
-    "memberof": "src/admin.js~Admin",
-    "generator": false,
-    "async": false,
-    "static": false,
-    "longname": "src/admin.js~Admin#render",
-    "access": "public",
-    "description": null,
-    "lineNumber": 1115,
+    "lineNumber": 1107,
     "undocument": true,
     "params": [],
     "return": {
@@ -2582,16 +2580,19 @@
   },
   {
     "__docId__": 148,
-    "kind": "member",
-    "name": "_change_uuid",
+    "kind": "method",
+    "name": "render_change_modal",
     "memberof": "src/admin.js~Admin",
+    "generator": false,
+    "async": false,
     "static": false,
-    "longname": "src/admin.js~Admin#_change_uuid",
-    "access": "private",
+    "longname": "src/admin.js~Admin#render_change_modal",
+    "access": "public",
     "description": null,
-    "lineNumber": 1129,
+    "lineNumber": 1118,
     "undocument": true,
-    "type": {
+    "params": [],
+    "return": {
       "types": [
         "*"
       ]
@@ -2599,6 +2600,46 @@
   },
   {
     "__docId__": 149,
+    "kind": "method",
+    "name": "render_permission_denied",
+    "memberof": "src/admin.js~Admin",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/admin.js~Admin#render_permission_denied",
+    "access": "public",
+    "description": null,
+    "lineNumber": 1132,
+    "undocument": true,
+    "params": [],
+    "return": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 150,
+    "kind": "method",
+    "name": "render",
+    "memberof": "src/admin.js~Admin",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/admin.js~Admin#render",
+    "access": "public",
+    "description": null,
+    "lineNumber": 1140,
+    "undocument": true,
+    "params": [],
+    "return": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 151,
     "kind": "method",
     "name": "show_list_view",
     "memberof": "src/admin.js~Admin",
@@ -2608,65 +2649,16 @@
     "longname": "src/admin.js~Admin#show_list_view",
     "access": "public",
     "description": null,
-    "lineNumber": 1139,
+    "lineNumber": 1147,
     "undocument": true,
     "params": [],
     "return": null
-  },
-  {
-    "__docId__": 150,
-    "kind": "method",
-    "name": "register_listener",
-    "memberof": "src/admin.js~Admin",
-    "generator": false,
-    "async": false,
-    "static": false,
-    "longname": "src/admin.js~Admin#register_listener",
-    "access": "public",
-    "description": null,
-    "lineNumber": 1144,
-    "undocument": true,
-    "params": [],
-    "return": null
-  },
-  {
-    "__docId__": 151,
-    "kind": "member",
-    "name": "_hash_change_listener",
-    "memberof": "src/admin.js~Admin",
-    "static": false,
-    "longname": "src/admin.js~Admin#_hash_change_listener",
-    "access": "private",
-    "description": null,
-    "lineNumber": 1145,
-    "undocument": true,
-    "type": {
-      "types": [
-        "*"
-      ]
-    }
   },
   {
     "__docId__": 152,
-    "kind": "method",
-    "name": "componentWillUnmount",
-    "memberof": "src/admin.js~Admin",
-    "generator": false,
-    "async": false,
-    "static": false,
-    "longname": "src/admin.js~Admin#componentWillUnmount",
-    "access": "public",
-    "description": null,
-    "lineNumber": 1157,
-    "undocument": true,
-    "params": [],
-    "return": null
-  },
-  {
-    "__docId__": 153,
     "kind": "file",
     "name": "src/index.js",
-    "content": "import React from \"react\";\nimport ReactDOM from \"react-dom\";\n//import exampleComponent from \"./example5.js\";\nimport Example from \"./example4.js\";\n//import { Voter } from \"./voter.js\";\n//import Evoting from './evoting.js';\n\nclass ErrorBoundary extends React.Component {\n  constructor(props) {\n    super(props);\n    this.state = { hasError: false };\n  }\n\n  componentDidCatch(error, info) {\n    // Display fallback UI\n    this.setState({ hasError: true });\n    // You can also log the error to an error reporting service\n    //   logErrorToMyService(error, info);\n  }\n\n  render() {\n    if (this.state.hasError) {\n      // You can render any custom fallback UI\n      return <h1>Something went wrong.</h1>;\n    }\n    return this.props.children;\n  }\n}\nReactDOM.render(\n  <Example />,\n\n  document.getElementById(\"app\")\n);\n",
+    "content": "import React from \"react\";\nimport ReactDOM from \"react-dom\";\n//import exampleComponent from \"./example5.js\";\nimport Example from \"./example4.js\";\nimport { Voter } from \"./voter.js\";\n//import Evoting from './evoting.js';\n\nclass ErrorBoundary extends React.Component {\n  constructor(props) {\n    super(props);\n    this.state = { hasError: false };\n  }\n\n  componentDidCatch(error, info) {\n    // Display fallback UI\n    this.setState({ hasError: true });\n    // You can also log the error to an error reporting service\n    //   logErrorToMyService(error, info);\n  }\n\n  render() {\n    if (this.state.hasError) {\n      // You can render any custom fallback UI\n      return <h1>Something went wrong.</h1>;\n    }\n    return this.props.children;\n  }\n}\nReactDOM.render(\n  <Example />,\n\n  document.getElementById(\"app\")\n);\n",
     "static": true,
     "longname": "/home/mubarak/Dropbox/Projects/react-crud-admin/src/index.js",
     "access": "public",
@@ -2674,7 +2666,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 154,
+    "__docId__": 153,
     "kind": "class",
     "name": "ErrorBoundary",
     "memberof": "src/index.js",
@@ -2694,7 +2686,7 @@
     "ignore": true
   },
   {
-    "__docId__": 155,
+    "__docId__": 154,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/index.js~ErrorBoundary",
@@ -2708,7 +2700,7 @@
     "undocument": true
   },
   {
-    "__docId__": 156,
+    "__docId__": 155,
     "kind": "member",
     "name": "state",
     "memberof": "src/index.js~ErrorBoundary",
@@ -2725,7 +2717,7 @@
     }
   },
   {
-    "__docId__": 157,
+    "__docId__": 156,
     "kind": "method",
     "name": "componentDidCatch",
     "memberof": "src/index.js~ErrorBoundary",
@@ -2754,7 +2746,7 @@
     "return": null
   },
   {
-    "__docId__": 158,
+    "__docId__": 157,
     "kind": "method",
     "name": "render",
     "memberof": "src/index.js~ErrorBoundary",
@@ -2774,7 +2766,7 @@
     }
   },
   {
-    "__docId__": 159,
+    "__docId__": 158,
     "kind": "file",
     "name": "src/set.js",
     "content": "export default class Set {\n    constructor(items=[],isEqual=(a,b)=> a==b)\n    {\n\tthis.items=items\n\tthis.isEqual=isEqual\n    }\n    add(item)\n    {\n\tfor(let i=0;i<this.items.length;i++)\n\t{\n\t    if(this.isEqual(this.items[i],item))\n\t    {\n\t\treturn true\n\t    }\n\t}\n\tthis.items.push(item);\n\treturn true\n    }\n    remove(item)\n    {\n\tlet index=-1;\n\tfor(let i=0;i<this.items.length;i++)\n\t{\n\t    if(this.isEqual(this.items[i],item))\n\t    {\n\t\tindex=i;\n\t\tbreak;\n\t    }\n\t}\n\tif(index>=0)\n\t{\n\t    if(index>0 && index<this.items.length-1)\n\t    {\n\t\tlet array1=this.items.slice(index+1,this.items.length)\n\t\tlet array2=this.items.slice(0,index)\n\n\t\tfor(let i=0;i<array1.length;i++)\n\t\t{\n\t\t    array2.push(array1[i]);\n\t\t}\n\t\tthis.items=array2;\n\t\treturn true\n\t    }\n\n\t    if(index==0)\n\t    {\n\n\t\tthis.items=this.items.slice(1,this.items.length)\n\t\treturn true\n\t    }\n\t    if(index==this.items.length-1)\n\t    {\n\t\tthis.items=this.items.slice(0,this.items.length-1)\n\t\treturn true\n\t    }\n\t}\n\treturn true\n\t    \n    }\n    contains(item)\n    {\n\tfor(let i=0;i<this.items.length;i++)\n\t{\n\t    if(this.isEqual(this.items[i],item))\n\t    {\n\t\treturn true\n\t    }\n\t}\n\treturn false;\n    }\n    getItems()\n    {\n\treturn this.items.slice();\n    }\n\n}\n",
@@ -2785,7 +2777,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 160,
+    "__docId__": 159,
     "kind": "class",
     "name": "Set",
     "memberof": "src/set.js",
@@ -2801,7 +2793,7 @@
     "interface": false
   },
   {
-    "__docId__": 161,
+    "__docId__": 160,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/set.js~Set",
@@ -2815,7 +2807,7 @@
     "undocument": true
   },
   {
-    "__docId__": 162,
+    "__docId__": 161,
     "kind": "member",
     "name": "items",
     "memberof": "src/set.js~Set",
@@ -2832,7 +2824,7 @@
     }
   },
   {
-    "__docId__": 163,
+    "__docId__": 162,
     "kind": "member",
     "name": "isEqual",
     "memberof": "src/set.js~Set",
@@ -2849,7 +2841,7 @@
     }
   },
   {
-    "__docId__": 164,
+    "__docId__": 163,
     "kind": "method",
     "name": "add",
     "memberof": "src/set.js~Set",
@@ -2876,7 +2868,7 @@
     }
   },
   {
-    "__docId__": 165,
+    "__docId__": 164,
     "kind": "method",
     "name": "remove",
     "memberof": "src/set.js~Set",
@@ -2903,7 +2895,7 @@
     }
   },
   {
-    "__docId__": 169,
+    "__docId__": 168,
     "kind": "method",
     "name": "contains",
     "memberof": "src/set.js~Set",
@@ -2930,7 +2922,7 @@
     }
   },
   {
-    "__docId__": 170,
+    "__docId__": 169,
     "kind": "method",
     "name": "getItems",
     "memberof": "src/set.js~Set",
@@ -2951,7 +2943,7 @@
   },
   {
     "kind": "index",
-    "content": "# react-crud-admin\n\n**react-crud-admin** is inspired by the Django Admin Interface. In the spirit of Django admin it opts for component customization by inheritance. The create-read-update-delete pattern is something that is encountered in a lot of apps. By creating a single component that lists entries and allows adding/changing it becomes possible to implement a DRY approach.\n\nSince React is primarily a UI library and there are a litany of backends, **react-crud-admin** does not implement any backend specific features but allows the developer to provide custom implementations.\n\n# Getting Started\n\n## Installation\n\nInstall the library,\n\n    npm install react-crud-admin\n\n## Example\n\nIf you are starting a react project you can use **create-react-app** to speed up bootstrapping,\n\n    npm install create-react-app\n    npx create-react-app example\n    cd example\n\nthen within the `example` directory,\n\n    npm install react-crud-admin\n\nCreate a new file `example.js` in the `\\src` folder, in that file add the following lines\n\n```javascript\nimport React from \"react\";\nimport Admin from \"react-crud-admin\";\nimport \"react-crud-admin/css\"; //optional css import\n\nexport default class Example extends Admin {\n  constructor() {\n    super();\n    this.name = \"Contact\"; // name of the objects\n    this.name_plural = \"Contacts\"; // name of the objects in plural\n    this.list_display_links = [\"name\"]; // which property of the object is clickable\n    this.list_display = [\"name\", \"number\", \"address.street\"]; // a list of properties of the object to displayed on the list display page\n  }\n  get_queryset(page_number, list_per_page, queryset) {\n    // the actual array containing objects to be displayed\n    return [\n      {\n        id: 1,\n        name: \"Joe Next\",\n        number: \"08939303003\",\n        address: { street: \"Hallmark Street\" }\n      },\n      {\n        id: 2,\n        name: \"Isa Yoll\",\n        number: \"0908839202\",\n        address: { street: \"Barbican Street\" }\n      }\n    ];\n  }\n}\n```\n\nthen in `index.js` do\n\n```javascript\nimport React from \"react\";\nimport ReactDOM from \"react-dom\";\nimport Example from \"./example.js\";\n\nReactDOM.render(<Example />, document.getElementById(\"root\"));\n```\n\nThe output in your browser should be\n\n![example1](assets/example1.png)\n\nThis is the list display view. At this point adding and editing objects will not be possible since we have not configured the add/change view. To do that we need to import the `react-jsonschema-form` package.\n\nEdit `example.js` and add the following,\n\n```javascript\nimport React from \"react\";\nimport Admin from \"react-crud-admin\";\nimport Form from \"react-jsonschema-form\";\nimport \"react-crud-admin/css\"; //optional css import\n\nexport default class Example extends Admin {\n  constructor() {\n    super();\n    this.name = \"Contact\";\n    this.name_plural = \"Contacts\";\n    this.list_display_links = [\"name\"];\n    this.list_display = [\"name\", \"number\", \"address.street\"];\n  }\n  get_queryset(page_number, list_per_page, queryset) {\n    return [\n      {\n        id: 1,\n        name: \"Ken Next\",\n        number: \"08939303003\",\n        address: { street: \"Hallmark Street\" }\n      },\n      {\n        id: 2,\n        name: \"Isa Yoll\",\n        number: \"0908839202\",\n        address: { street: \"Barbican Street\" }\n      }\n    ];\n  }\n  get_form(object = null) {\n    let schema = {\n      title: this.name,\n      type: \"object\",\n      required: [\"name\"],\n      properties: {\n        id: {\n          type: \"number\",\n          title: \"id\",\n          default: Math.floor(1000 * Math.random()) + 1\n        },\n        name: { type: \"string\", title: \"Name\", default: \"\" },\n        number: { type: \"string\", title: \"Number\", default: \"\" },\n        address: {\n          type: \"object\",\n          title: \"Address\",\n          properties: {\n            street: { type: \"string\", title: \"Street\" }\n          }\n        }\n      }\n    };\n\n    if (!object) {\n      return <Form schema={schema} />;\n    } else {\n      return <Form schema={schema} formData={object} />;\n    }\n  }\n}\n```\n\nthe `get_form` method is passed the current object. The method returns a `react-json-schema` `Form` component. The `schema` object is used to define a `schema` for the Form (and to provide validation). See more on `react-jsonschema-form` at [react-jsonschema-form](https://github.com/mozilla-services/react-jsonschema-form). You can also read more on JSON Schema at [JSON Schema Tutorial](https://spacetelescope.github.io/understanding-json-schema/)\n\nIn `get_form` we check if an object exists displaying a preloaded form if it does and an empty one if it does not.\n\nThe output in your browser after clicking the Add Contact button should be\n\n![example21](assets/example2-1.png)\n\nThe output in your browser after clicking the first contact's name should be\n\n![example2](assets/example2.png)\n\n# Guide\n\n## List Display View\n\n### Data\n\nData is primarily injected through `get_queryset`.\n\n```javascript\nget_queryset(page_number, list_per_page, queryset);\n{\n  return [\n    {\n      id: 1,\n      name: \"Ken Next\",\n      number: \"08939303003\",\n      address: { street: \"Hallmark Street\" }\n    },\n    {\n      id: 2,\n      name: \"Isa Yoll\",\n      number: \"0908839202\",\n      address: { street: \"Barbican Street\" }\n    }\n  ];\n}\n```\n\nThe `get_queryset` method returns the queryset array including objects to be displayed in the current display page. Returning an array may not be useful when asynchronous network calls are made to a remote backend using AJAX or `window.fetch`. A class method of the `Admin` component `set_queryset` can be used for asynchronous calls.\n\nThe example below returns the queryset in the current state object synchronously and sets a new queryset when the asynchronous call returns successfully. `set_queryset` invokes `setState` internally.\n\n```javascript\nget_queryset(page_number, list_per_page, queryset);\n{\n  fetch(\"/path/to/backend\", { method: \"get\" }).then(response => {\n    if (response.ok) {\n      this.set_queryset(response.results);\n    }\n  });\n  return queryset;\n}\n```\n\nIt is important to note that `get_queryset` returns only items to be listed in the current display view/page. It is necessary to use the arguments `page_number` and `list_per_page` for fetching data from the backend. This allows us to implement pagination.\n\n```javascript\nget_queryset(page_number, list_per_page, queryset);\n{\n  let backend = \"/path/to/backend\";\n  let path =\n    backend +\n    \"&limit=\" +\n    list_per_page +\n    \"&skip=\" +\n    (page_number - 1) * list_per_page;\n  fetch(path, { method: \"get\" }).then(response => {\n    if (response.ok) {\n      response.json().then(results => {\n        this.set_queryset(results.data);\n        this.set_total(results.total);\n      });\n    }\n  });\n\n  return queryset;\n}\n```\n\n`set_total` is used to set the total number of items available. For example if `list_per_page` is 10\nand there are a total 100 records in the backend `results.data` will have 10 items and `results.total` is 10. Please note that it is the responsibility of the backend to return these values in whatever format.\n\n`set_queryset` is just,\n\n```javascript\nset_queryset(queryset);\n{\n  this.setState({ queryset: queryset });\n}\n```\n\nand `set_total` is ,\n\n```javascript\nset_total(total);\n{\n  this.setState({ total: total });\n}\n```\n\nIt is also possible to set a fixed queryset using `queryset` property.\n\n```javascript\nthis.queryset = [\n  {\n    id: 1,\n    name: \"Ken Next\",\n    number: \"08939303003\",\n    address: { street: \"Hallmark Street\" }\n  },\n  {\n    id: 2,\n    name: \"Isa Yoll\",\n    number: \"0908839202\",\n    address: { street: \"Barbican Street\" }\n  }\n];\n```\n\nThis is always overriden by `get_queryset`.\n\n### UI Customisation\n\n#### Display\n\n##### List Display\n\nThe `get_list_display` method returns a list/array of properties/field names of the objects in the queryset to be displayed on the list display page. It can be overridden by the member variable\nlist*display. A property is any string that should exist in the objects within\na queryset and works with lodash's *.at function. See more at [Lodash](https://lodash.com/docs/#at)\n\n```javascript\nlet object={ name : \"any name\",{ address : { street : \"any\"}},emails: [\"any@any.com\"]}\n```\n\nThe properties \"name\",\"address.street\" and \"emails[0]\" are all acceptable. In our example we use,\n\n```javascript\nthis.list_display = [\"name\", \"number\", \"address.street\"];\n```\n\nWe can also use,\n\n```javascript\nget_list_display();\n{\n  return [\"name\", \"number\", \"address.street\"];\n}\n```\n\n##### List Display Links\n\nThe `get_list_display_links` method returns the list/array of properties of the objects in the queryset that are clickable (and redirect to the add/change view) when displayed on the list display page. It can be overridden by the member variable\n`list_display_links`. A property is any string that should exist as a property in the objects within\na queryset and works with lodash's `_.at` function.\n\nIn our example we use,\n\n```javascript\nthis.list_display_links = [\"name\"];\n```\n\nin the constructor but we could have used,\n\n```javascript\nget_list_display_links(){\n\n      return ['name']\n\n}\n```\n\n#### Header Transforms\n\nTable headers in the list display view are obtained from property names in `get_list_display` method by default. There are certain cases when one would like to customise these headers. `get_header_transforms` does just that. As an example\n\n```javascript\nget_header_transforms();\n{\n  return {\n    name: function(header) {\n      return \"Contact \" + header;\n    }\n  };\n}\n```\n\nShould produce\n\n![example3](assets/example3.png)\n\nHeader transforms can be defined using the instance variable `header_transforms` (which is always overridden by `get_header_transforms`).\n\n```javascript\nthis.header_transforms = {\n  name: function(header) {\n    return \"Contact \" + header;\n  }\n};\n```\n\nIn summary `get_header_transforms` returns an object whose properties are field names corresponding to properties of any object in the queryset and whose values are transform functions.\n\n#### Field Transforms\n\nField transforms return an object whose properties are field names corresponding to properties of any object in the queryset and whose values are transform functions. They are used to transform the values of objects within the queryset. For example to transform every \"name\" property of all the objects in the queryset to lower case we use,\n\n```javascript\nget_field_transforms();\n{\n  return {\n    name: function(content, object) {\n      return content.toLowerCase();\n    }\n  };\n}\n```\n\nor\n\n```javascript\nthis.field_transforms = {\n  name: function(content, object) {\n    return content.toLowerCase();\n  }\n};\n```\n\nThe first argument of the transform function is the content to be displayed while the second argument is the current object.\n\nThis produces\n\n![example31](assets/example3-1.png)\n\nAll the contact names have been turned to lower case. Field transforms apply to full columns on the data table in the display view. It is possible to replace fields with React components like images and buttons. As an example suppose a column has fields which contain image urls, we can replace each field with a corresponding image.\n\n```javascript\nthis.field_transforms = {\n  image_url: function(content, object) {\n    return <img src={content} />;\n  }\n};\n```\n\n#### Extra Fields\n\nIt is sometimes desirable to create new fields that are not properties of any of the objects in the queryset. As an example, we create a new field that displays the current time using the `moment` library.\n\n```javascript\nget_extra_fields();\n{\n  return {\n    now: function(object, label) {\n      return moment(new Date()).format(\"LLL\");\n    }\n  };\n}\n```\n\nor somewhere in the constructor,\n\n```javascript\nthis.extra_fields = {\n  now: function(object, label) {\n    return moment(new Date()).format(\"LLL\");\n  }\n};\n```\n\nThe `get_extra_fields` method returns an object whose properties are extra field names not corresponding to properties of any object in the queryset and whose values are display functions. This will create extra fields that are not tied to objects. Extra fields have to be manually included in the `get_list_display` in order to appear in the list display page.\n\nAdding the `get_extra_fields` method is not enough to display the newly created field. We must add the field to `list_display` .\n\n```javascript\nthis.list_display = [\"name\", \"number\", \"address.street\", \"now\"];\n```\n\nDon't forget to add `import moment from \"moment\";` at the top of the file. The output is,\n\n![example32](assets/example3-2.png)\n\n#### Pagination\n\n`get_list_per_page` method returns the number of items to be listed in a page. Can be overridden by `list_per_page`.\n\n```javascript\nthis.list_per_page = 10;\n```\n\nor\n\n```javascript\nget_list_per_page();\n{\n  return 10;\n}\n```\n\n#### Search\n\nSearch is not implemented by default. One has to implement the `search(term,queryset)` method.\nFrom our previous example, we can implement search by matching the search term with the \"name\" property of all objects in the queryset. The method returns a filtered queryset. Optionally, if search requires an asynchronous call to a backend, one can use `set_queryset`.\n\n```javascript\nsearch(term, queryset);\n{\n  let filtered_queryset = [];\n  for (var object of queryset) {\n    if (object.name.search(new RegExp(term, \"i\")) >= 0) {\n      filtered_queryset.push(object);\n    }\n  }\n  return filtered_queryset;\n}\n```\n\nor asynchronously\n\n```javascript\nsearch(term, queryset);\n{\n  fetch(\"/path/to/backend/search?q=\" + term, { method: \"get\" }).then(\n    response => {\n      if (response.ok) {\n        this.set_queryset(response.results);\n      }\n    }\n  );\n  return queryset; //remember to return queryset synchronously\n}\n```\n\nWe can enable live search by\n\n```javascript\nthis.live_search = true;\n```\n\ndefault is `false`.\n\n#### Sorting\n\nSorting is not implemented by default. Sorting can be achieved by implementing the `sort_by` method,\n\n```javascript\nsort_by(sort_fields, queryset);\n{\n}\n```\n\n`sort_fields` is an array containing objects whose properties are properties of objects in the queryset and whose values are either \"asc\" or \"desc\". As an example, for a queryset\n\n```javascript\n[\n  {\n    id: 1,\n    name: \"Joe Next\",\n    number: \"08939303003\",\n    address: { street: \"Hallmark Street\" }\n  },\n  {\n    id: 2,\n    name: \"Isa Yoll\",\n    number: \"0908839202\",\n    address: { street: \"Barbican Street\" }\n  }\n];\n```\n\nwe can have `sort_fields` equal to\n\n```javascript\n[{ name: \"asc\" }, { number: \"desc\" }, { address: \"asc\" }];\n```\n\nFor our example, we implement `sort_by` using,\n\n```javascript\nsort_by(sort_fields, queryset); //from adminjs\n{\n  let item = sort_fields[sort_fields.length - 1];\n\n  let pairs = _.toPairs(item);\n  let field_names = pairs.map(item => item[0]);\n  let field_orders = pairs.map(item => item[1]);\n\n  return _.orderBy(queryset, field_names, field_orders);\n}\n```\n\nWe use the `lodash` library to sort the current queryset and return an updated one. We only use the latest sort order by examining the last item of the `sort_fields` array. In a practical application,\na backend will perform the sort operations and we will use `set_queryset`.\n\n```javascript\n    sort_by(sort_fields,queryset)\n    {\n\tfetch('/path/to/backend/sort',{\n\t     'method': 'post',\n\t     'body': JSON.stringify(sort_fields)}).then((response)\n\t     {\n\t         if(response.ok}\n\t          {\n\t\t\tresponse.json().then((results)=>\n\t\t\t{\n\n\t\t\tthis.set_queryset(results.data);\n\n\t\t\t})\n\n                   }\n\t     })\n\n      return  queryset;\n    }\n```\n\nIt is also important to define the member variable `is_object_equal` which defines equality between objects in a queryset. This variable is used to test if an object has been previously selected using the radio buttons in the display view. By default,`is_object_equal` is\n\n```javascript\nthis.is_object_equal = function(a, b) {\n  return a == b;\n};\n```\n\nThis may not be sufficient for some applications. For example we might want to use the object's `id` property to check equality.\n\nSorting can achieved in the list display view by clicking on the table headers corresponding to property names.\n\n```javascript\nthis.is_object_equal = function(a, b) {\n  return a.id == b.id;\n};\n```\n\n#### Actions\n\n`get_actions` returns an actions object whose properties are action names and values are action methods. `get_actions` can be overridden by the `actions` member variable.\n\nEach actions object property (e.g. \"delete\") is passed an array of selected objects. One\ncan then handle those objects. Actions will appear on the list display page within a\ndropdown. The default \"delete\" action method is not implemented.\n\nWe can implement the delete action for our previous example,\n\n```javascript\nimport React from 'react';\nimport Admin from \"react-crud-admin\";\nimport Form from \"react-jsonschema-form\";\nimport moment from \"moment\";\nimport \"react-crud-admin/css\";//optional css import\n\nvar data=[\n\t    {id: 1, name: 'Ken Next', number: '08939303003',address:{ street: \"Hallmark Street\"}},\n            {id: 2,name: 'Isa Yoll', number: '0908839202',address:{ street: \"Barbican Street\"}}\n];\nexport default class Example extends Admin\n{\n\t......\n\t......\n\t......\n\tget_queryset()\n\t{\n\t\treturn data\n        }\n\n\tget_actions()\n\t\t{\n   \t     \treturn { \"delete\" : (selected_objects)=>{\n   \t       \t                   let total=data.length;\n                                   for(let object of selected_objects)\n   \t\t\t\t    {\n      \t\t\t\t       data.splice(data.indexOf(object),1);\n\n                                   }\n\t\t\t\t   this.set_queryset(data);\n\t\t\t\t   this.set_total(total-selected_objects.length);\n\t\t\t  }\n\t\t  }\n\n\t}\n\n}\n```\n\n#### Filters\n\n`get_filters` can be used to implement filters for the queryset.\n\n```javascript\nget_filters();\n{\n  return {\n    by_street_name: {\n      options: [\n        { value: \"Hallmark Street\", label: \"Hallmark Street\" },\n        { value: \"Barbican Street\", label: \"Barbican Street\" }\n      ],\n      filter_function: (option, queryset) => {\n        let grouped = _.groupBy(queryset, \"address.street\");\n\n        return _.has(grouped, option.value) ? grouped[option.value] : [];\n      }\n    },\n    by_id: {\n      options: [\n        { value: \"even\", label: \"even\" },\n        { value: \"odd\", label: \"odd\" }\n      ],\n      filter_function: (option, queryset) => {\n        let grouped = _.groupBy(queryset, contact => {\n          return contact.id % 2 == 0 ? \"even\" : \"odd\";\n        });\n\n        return _.has(grouped, option.value) ? grouped[option.value] : [];\n      }\n    }\n  };\n}\n```\n\nThe `get_filters` method returns an object whose properties are filter names. The example above returns 2 filters. The first is a filter `\"by_street_names\"` that filters based on the street addresses of the contacts. Each filter object has two properties : `\"options\"` and `\"filter_function\"`. `\"options\"` is an array of options objects which have a `\"value\"` and `\"label\"` properties. The `\"label\"` will appear in the UI while the `\"value\"` is used for processing. This is similar to the `select` HTML tag. For asynchronous operations, a method to set the options of a filter is provided. `set_filter_options` takes two arguments,\n\n```javascript\nset_filter_options(filter_name, options);\n```\n\nthe name of the filter and the options array of the filter.\n\nThe `\"filter_function\"` is a function that performs filtering. It has two arguments, `\"option\"` which is the selected `\"option\"` and the current queryset. It must return a queryset. `\"option\"` is one of `\"options\"` array. For asynchronous cases, `set_queryset` and `set_total` methods can be used to set the queryset after backend filtering.\n\nThe second filter `\"by_id\"` filters the queryset by even and odd `id` property. The filter UI uses [React Select](https://github.com/JedWatson/react-select) component.\n\n## Add/Change View\n\n### Forms\n\nWe can add submit handlers for the form in our example,\n\n```javascript\n....\n....\n....\nexport default class Example extends Admin\n{\n\n.....\n.....\n.....\n\n get_form(object=null)\n    {\n    \tlet schema = {\n\t    title: this.name,\n\t    type: \"object\",\n\t    required: [\"name\"],\n\t    properties: {\n\t\tid: {type: \"number\", title: \"id\", default: Math.floor(1000*Math.random())+1 },\n\t\tname: {type: \"string\", title: \"Name\", default: \"\"},\n\t\tnumber : {type: \"string\", title: \"Number\", default: \"\"},\n\t\taddress : {type: \"object\", title: \"Address\",\n\t\t       properties : {\n\t\t              street : { type : \"string\",title : \"Street\"}\n\t\t        }\n\t\t    }\n\t    \t }\n\t    };\n\n\t if(!object)\n\t {\n\t\t   return <Form schema={schema} onSubmit={this.form_submit.bind(this)} />\n\t }\n\t else\n\t {\n\t        return <Form schema={schema}  formData={object} onSubmit={this.form_submit.bind(this)} />\n\t }\n     }\n....\n....\n....\n    form_submit(form)\n    {\n\tlet contact=form.formData;\n\n\tif(form.edit)\n\t{\n\n\t    this.state.queryset.splice(this.state.queryset.indexOf(this.state.object),1,contact);\n\t    this.response_change();\n\t}\n\telse\n\t{\n\t    this.state.queryset.push(contact);\n\t    this.response_add();\n\t}\n    }\n\n......\n......\n......\n}\n```\n\nThe submit handler checks to see if an object is being edited and replaces it with the edited object. If the object is being added, the method appends it to the `state.queryset` object.\n\n#### Post Submit\n\n`response_add` or `response_change` can be called after a new object is created or edited respectively. These functions should implement behaviour after a successful form submission. By default these functions are both defined as,\n\n```javascript\nfunction()\n{\n  this.setState({display_type :display_type.list,\n                 object :null,\n                 queryset: this.get_queryset(this.state.page_number,this.list_per_page,this.state.queryset)\n\t       });\n}\n```\n\nThis sets the display type to \"list\", changes the object to `null` and invokes `get_queryset` to fetch the latest data.\n\n## Permissions\n\n`has_add_permission` , `has_change_permission` and `has_module_permission` methods are used to control access.\n\nThe `has_add_permission` method takes no arguments and should return a boolean that signifies wether the user can add a new object. It simply hides the Add button.\n\nThe `has_change_permission` method takes the current object being edited, `state.object`, as an argument and should return a boolean that signifies wether the user can edit an object. It simply disables all `list_display_links`.\n\nThe `has_module_permission` method takes no arguments and should return a boolean that signifies wether the user should load the component. It simply shows an error message after an unauthorized access attempt.\n\n## Miscellany\n\n### `state` object\n\nThe default `state` object has the following properties,\n\n| Property           | Default Value | Description                                                        |\n| ------------------ | ------------- | ------------------------------------------------------------------ |\n| `queryset`         | `[]`          | Can be set with `set_queryset`                                     |\n| `page_number`      | `1`           |\n| `total`            | `0`           | Total number of items. Can be set with `set_total`.                |\n| `display_type`     | `\"list\"`      | Current display. Can be `\"list\"` or `\"change\"` for add/change view |\n| `object`           | `null`        | Current object to be edited (or created) in the add/change view    |\n| `selected_objects` | Empty set     | The `Set` class a wrapper around `array` that implements set       |\n\n### Progress Indicator\n\n`show_progress` and `hide_progress` can be used in the both the list display and add/change view to display and hide a progress indicator. `render_progress` can be used to override the default progress indicator component to be rendered. `render_progress` has one argument which is a boolean denoting whether or not to render a progress indicator. For example,\n\n```javascript\nrender_progress(loading);\n{\n  if (loading) {\n    return <progress />;\n  }\n}\n```\n\n`render_progress` should return a component.\n\n### ESDOC API Documentation.\n\nThe API documentation generated with `esdoc.js` is available [here](https://mjibril.github.io/react-crud-admin/).\n\n## Component Props\n\nThere are many instances where customising the `react-crud-admin` component using component props is beneficial. Perhaps the component is to be used as a child component that reacts to changes in the parent component. For those cases it is possible to use props to customise the `Admin` component.\n\nAll members and properties of the `Admin` component class can be assigned using React component props. All functions passed as props are automatically bound to the `Admin` thus making them class members. This means that `this` will reference the `Admin` component despite being used outside the component.\n\nThe end result will look like,\n\n```javascript\n<Example\n  queryset={data}\n  search={search}\n  form_submit={form_submit}\n  get_form={get_form}\n  get_header_transforms={get_header_transforms}\n  get_field_transforms={get_field_transforms}\n  get_extra_fields={get_extra_fields}\n  get_actions={get_actions}\n  get_filters={get_filters}\n  name={name}\n  name_plural={name_plural}\n  list_display={list_display}\n  list_display_links={list_display_links}\n/>\n```\n\nYou can use `bind_exclude` prop which is an array that contains names of methods that should be excluded from automatic binding, allowing `this` reference to refer to something else.\n\nA complete example is available at [link](https://github.com/mjibril/react-crud-admin/blob/master/doc_example.props.js).\n\n### Example\n\nThe file containing the example used here is available at [link](https://github.com/mjibril/react-crud-admin/blob/master/doc_example.js).\n\n# Advanced\n\n## Rendering\n\nThere are two main `render` like methods that combine to form the `Component.render` method of `react-crud-admin`. The first is `render_list_page` which renders the current list view and the second is `render_change_page` which renders the add/change view. Only one of these views is active at a time and forms the `Component.render` for the component. A full implementation is given below,\n\n```javascript\nrender();\n{\n  if (!this.has_module_permission()) {\n    return (\n      <div>\n        {\" \"}\n        <h1> Permission Denied </h1>\n      </div>\n    );\n  }\n\n  if (this.state.display_type == display_type.list) {\n    return this.render_list_page();\n  } else {\n    //Important: the next two lines are for URL navigation and handling the browser back button\n    this._change_uuid = uuidv1();\n    history.pushState(\n      {},\n      \"Change View\",\n      window.location.hash + \"/change/\" + this._change_uuid\n    );\n\n    return this.render_change_page();\n  }\n}\n```\n\n### List Page\n\nIt is possible to add components above and below the list view using `render_above_list_view` and `render_below_list_view` methods. Both methods take no arguments and by default return `null`. These methods can be overridden to return components.\n\n```javascript\nrender_list_page();\n{\n  return (\n    <div>\n      {this.render_above_list_view()}\n      {this.render_list_view()}\n      {this.render_below_list_view()}\n    </div>\n  );\n}\n```\n\nWithin the `render_list_view` method itself, customisations are possible. The full implementation of `render_list_view` is,\n\n```javascript\nrender_list_view();\n{\n  return (\n    <div>\n      {this.render_add_button()}\n      {this.render_below_add_button()}\n      {this.render_search_field()}\n      {this.render_below_search_field()}\n      {this.render_actions()}\n      {this.render_below_actions()}\n      {this.render_filters()}\n      {this.render_below_filters()}\n      {this.render_table()}\n      {this.render_below_table()}\n      {this.render_progress(this.state.loading)}\n      {this.render_below_progress()}\n      {this.render_pagination()}\n    </div>\n  );\n}\n```\n\nThe `render_below_*` methods are used to add components below the add button, search field, actions,filters,list table and progress indicator. By default these methods return `null`. These methods can be overridden to return components.\n\nIt is also worth noting that one can hide any of the components by the overriding their methods and returning null. For example to hide the actions component, we override the `render_actions` method.\n\n```javascript\nrender_actions();\n{\n}\n```\n\n### The Add/Change Page\n\nIt is possible to add components above and below the add/change view using `render_above_change_view` and `render_below_change_view` methods. Both methods take no arguments and by default return `null`. These methods can be overridden to return components. The full implementation is\n\n```javascript\nrender_change_page();\n{\n  return (\n    <div>\n      {this.render_above_change_view()}\n      {this.render_change_view()}\n      {this.render_below_change_view()}\n    </div>\n  );\n}\n```\n",
+    "content": "# react-crud-admin\n\n**react-crud-admin** is inspired by the Django Admin Interface. In the spirit of Django admin it opts for component customization by inheritance. The create-read-update-delete pattern is something that is encountered in a lot of apps. By creating a single component that lists entries and allows adding/changing it becomes possible to implement a DRY approach.\n\nSince React is primarily a UI library and there are a litany of backends, **react-crud-admin** does not implement any backend specific features but allows the developer to provide custom implementations.\n\n# Getting Started\n\n## Installation\n\nInstall the library,\n\n    npm install react-crud-admin\n\n## Example\n\nIf you are starting a react project you can use **create-react-app** to speed up bootstrapping,\n\n    npm install create-react-app\n    npx create-react-app example\n    cd example\n\nthen within the `example` directory,\n\n    npm install react-crud-admin\n\nCreate a new file `example.js` in the `\\src` folder, in that file add the following lines\n\n```javascript\nimport React from \"react\";\nimport Admin from \"react-crud-admin\";\nimport \"react-crud-admin/css\"; //optional css import\n\nexport default class Example extends Admin {\n  constructor() {\n    super();\n    this.name = \"Contact\"; // name of the objects\n    this.name_plural = \"Contacts\"; // name of the objects in plural\n    this.list_display_links = [\"name\"]; // which property of the object is clickable\n    this.list_display = [\"name\", \"number\", \"address.street\"]; // a list of properties of the object to displayed on the list display page\n  }\n  get_queryset(page_number, list_per_page, queryset) {\n    // the actual array containing objects to be displayed\n    return [\n      {\n        id: 1,\n        name: \"Joe Next\",\n        number: \"08939303003\",\n        address: { street: \"Hallmark Street\" }\n      },\n      {\n        id: 2,\n        name: \"Isa Yoll\",\n        number: \"0908839202\",\n        address: { street: \"Barbican Street\" }\n      }\n    ];\n  }\n}\n```\n\nthen in `index.js` do\n\n```javascript\nimport React from \"react\";\nimport ReactDOM from \"react-dom\";\nimport Example from \"./example.js\";\n\nReactDOM.render(<Example />, document.getElementById(\"root\"));\n```\n\nThe output in your browser should be\n\n![example1](assets/example1.png)\n\nThis is the list display view. At this point adding and editing objects will not be possible since we have not configured the add/change view. To do that we need to import the `react-jsonschema-form` package.\n\nEdit `example.js` and add the following,\n\n```javascript\nimport React from \"react\";\nimport Admin from \"react-crud-admin\";\nimport Form from \"react-jsonschema-form\";\nimport \"react-crud-admin/css\"; //optional css import\n\nexport default class Example extends Admin {\n  constructor() {\n    super();\n    this.name = \"Contact\";\n    this.name_plural = \"Contacts\";\n    this.list_display_links = [\"name\"];\n    this.list_display = [\"name\", \"number\", \"address.street\"];\n  }\n  get_queryset(page_number, list_per_page, queryset) {\n    return [\n      {\n        id: 1,\n        name: \"Ken Next\",\n        number: \"08939303003\",\n        address: { street: \"Hallmark Street\" }\n      },\n      {\n        id: 2,\n        name: \"Isa Yoll\",\n        number: \"0908839202\",\n        address: { street: \"Barbican Street\" }\n      }\n    ];\n  }\n  get_form(object = null) {\n    let schema = {\n      title: this.name,\n      type: \"object\",\n      required: [\"name\"],\n      properties: {\n        id: {\n          type: \"number\",\n          title: \"id\",\n          default: Math.floor(1000 * Math.random()) + 1\n        },\n        name: { type: \"string\", title: \"Name\", default: \"\" },\n        number: { type: \"string\", title: \"Number\", default: \"\" },\n        address: {\n          type: \"object\",\n          title: \"Address\",\n          properties: {\n            street: { type: \"string\", title: \"Street\" }\n          }\n        }\n      }\n    };\n\n    if (!object) {\n      return <Form schema={schema} />;\n    } else {\n      return <Form schema={schema} formData={object} />;\n    }\n  }\n}\n```\n\nthe `get_form` method is passed the current object. The method returns a `react-json-schema` `Form` component. The `schema` object is used to define a `schema` for the Form (and to provide validation). See more on `react-jsonschema-form` at [react-jsonschema-form](https://github.com/mozilla-services/react-jsonschema-form). You can also read more on JSON Schema at [JSON Schema Tutorial](https://spacetelescope.github.io/understanding-json-schema/)\n\nIn `get_form` we check if an object exists displaying a preloaded form if it does and an empty one if it does not.\n\nThe output in your browser after clicking the Add Contact button should be\n\n![example21](assets/example2-1.png)\n\nThe output in your browser after clicking the first contact's name should be\n\n![example2](assets/example2.png)\n\n# Guide\n\n## List Display View\n\n### Data\n\nData is primarily injected through `get_queryset`.\n\n```javascript\nget_queryset(page_number, list_per_page, queryset);\n{\n  return [\n    {\n      id: 1,\n      name: \"Ken Next\",\n      number: \"08939303003\",\n      address: { street: \"Hallmark Street\" }\n    },\n    {\n      id: 2,\n      name: \"Isa Yoll\",\n      number: \"0908839202\",\n      address: { street: \"Barbican Street\" }\n    }\n  ];\n}\n```\n\nThe `get_queryset` method returns the queryset array including objects to be displayed in the current display page. Returning an array may not be useful when asynchronous network calls are made to a remote backend using AJAX or `window.fetch`. A class method of the `Admin` component `set_queryset` can be used for asynchronous calls.\n\nThe example below returns the queryset in the current state object synchronously and sets a new queryset when the asynchronous call returns successfully. `set_queryset` invokes `setState` internally.\n\n```javascript\nget_queryset(page_number, list_per_page, queryset);\n{\n  fetch(\"/path/to/backend\", { method: \"get\" }).then(response => {\n    if (response.ok) {\n      this.set_queryset(response.results);\n    }\n  });\n  return queryset;\n}\n```\n\nIt is important to note that `get_queryset` returns only items to be listed in the current display view/page. It is necessary to use the arguments `page_number` and `list_per_page` for fetching data from the backend. This allows us to implement pagination.\n\n```javascript\nget_queryset(page_number, list_per_page, queryset);\n{\n  let backend = \"/path/to/backend\";\n  let path =\n    backend +\n    \"&limit=\" +\n    list_per_page +\n    \"&skip=\" +\n    (page_number - 1) * list_per_page;\n  fetch(path, { method: \"get\" }).then(response => {\n    if (response.ok) {\n      response.json().then(results => {\n        this.set_queryset(results.data);\n        this.set_total(results.total);\n      });\n    }\n  });\n\n  return queryset;\n}\n```\n\n`set_total` is used to set the total number of items available. For example if `list_per_page` is 10\nand there are a total 100 records in the backend `results.data` will have 10 items and `results.total` is 10. Please note that it is the responsibility of the backend to return these values in whatever format.\n\n`set_queryset` is just,\n\n```javascript\nset_queryset(queryset);\n{\n  this.setState({ queryset: queryset });\n}\n```\n\nand `set_total` is ,\n\n```javascript\nset_total(total);\n{\n  this.setState({ total: total });\n}\n```\n\nIt is also possible to set a fixed queryset using `queryset` property.\n\n```javascript\nthis.queryset = [\n  {\n    id: 1,\n    name: \"Ken Next\",\n    number: \"08939303003\",\n    address: { street: \"Hallmark Street\" }\n  },\n  {\n    id: 2,\n    name: \"Isa Yoll\",\n    number: \"0908839202\",\n    address: { street: \"Barbican Street\" }\n  }\n];\n```\n\nThis is always overriden by `get_queryset`.\n\n### UI Customisation\n\n#### Display\n\n##### List Display\n\nThe `get_list_display` method returns a list/array of properties/field names of the objects in the queryset to be displayed on the list display page. It can be overridden by the member variable\nlist*display. A property is any string that should exist in the objects within\na queryset and works with lodash's *.at function. See more at [Lodash](https://lodash.com/docs/#at)\n\n```javascript\nlet object={ name : \"any name\",{ address : { street : \"any\"}},emails: [\"any@any.com\"]}\n```\n\nThe properties \"name\",\"address.street\" and \"emails[0]\" are all acceptable. In our example we use,\n\n```javascript\nthis.list_display = [\"name\", \"number\", \"address.street\"];\n```\n\nWe can also use,\n\n```javascript\nget_list_display();\n{\n  return [\"name\", \"number\", \"address.street\"];\n}\n```\n\n##### List Display Links\n\nThe `get_list_display_links` method returns the list/array of properties of the objects in the queryset that are clickable (and redirect to the add/change view) when displayed on the list display page. It can be overridden by the member variable\n`list_display_links`. A property is any string that should exist as a property in the objects within\na queryset and works with lodash's `_.at` function.\n\nIn our example we use,\n\n```javascript\nthis.list_display_links = [\"name\"];\n```\n\nin the constructor but we could have used,\n\n```javascript\nget_list_display_links(){\n\n      return ['name']\n\n}\n```\n\n#### Header Transforms\n\nTable headers in the list display view are obtained from property names in `get_list_display` method by default. There are certain cases when one would like to customise these headers. `get_header_transforms` does just that. As an example\n\n```javascript\nget_header_transforms();\n{\n  return {\n    name: function(header) {\n      return \"Contact \" + header;\n    }\n  };\n}\n```\n\nShould produce\n\n![example3](assets/example3.png)\n\nHeader transforms can be defined using the instance variable `header_transforms` (which is always overridden by `get_header_transforms`).\n\n```javascript\nthis.header_transforms = {\n  name: function(header) {\n    return \"Contact \" + header;\n  }\n};\n```\n\nIn summary `get_header_transforms` returns an object whose properties are field names corresponding to properties of any object in the queryset and whose values are transform functions.\n\n#### Field Transforms\n\nField transforms return an object whose properties are field names corresponding to properties of any object in the queryset and whose values are transform functions. They are used to transform the values of objects within the queryset. For example to transform every \"name\" property of all the objects in the queryset to lower case we use,\n\n```javascript\nget_field_transforms();\n{\n  return {\n    name: function(content, object) {\n      return content.toLowerCase();\n    }\n  };\n}\n```\n\nor\n\n```javascript\nthis.field_transforms = {\n  name: function(content, object) {\n    return content.toLowerCase();\n  }\n};\n```\n\nThe first argument of the transform function is the content to be displayed while the second argument is the current object.\n\nThis produces\n\n![example31](assets/example3-1.png)\n\nAll the contact names have been turned to lower case. Field transforms apply to full columns on the data table in the display view. It is possible to replace fields with React components like images and buttons. As an example suppose a column has fields which contain image urls, we can replace each field with a corresponding image.\n\n```javascript\nthis.field_transforms = {\n  image_url: function(content, object) {\n    return <img src={content} />;\n  }\n};\n```\n\n#### Extra Fields\n\nIt is sometimes desirable to create new fields that are not properties of any of the objects in the queryset. As an example, we create a new field that displays the current time using the `moment` library.\n\n```javascript\nget_extra_fields();\n{\n  return {\n    now: function(object, label) {\n      return moment(new Date()).format(\"LLL\");\n    }\n  };\n}\n```\n\nor somewhere in the constructor,\n\n```javascript\nthis.extra_fields = {\n  now: function(object, label) {\n    return moment(new Date()).format(\"LLL\");\n  }\n};\n```\n\nThe `get_extra_fields` method returns an object whose properties are extra field names not corresponding to properties of any object in the queryset and whose values are display functions. This will create extra fields that are not tied to objects. Extra fields have to be manually included in the `get_list_display` in order to appear in the list display page.\n\nAdding the `get_extra_fields` method is not enough to display the newly created field. We must add the field to `list_display` .\n\n```javascript\nthis.list_display = [\"name\", \"number\", \"address.street\", \"now\"];\n```\n\nDon't forget to add `import moment from \"moment\";` at the top of the file. The output is,\n\n![example32](assets/example3-2.png)\n\n#### Pagination\n\n`get_list_per_page` method returns the number of items to be listed in a page. Can be overridden by `list_per_page`.\n\n```javascript\nthis.list_per_page = 10;\n```\n\nor\n\n```javascript\nget_list_per_page();\n{\n  return 10;\n}\n```\n\n#### Search\n\nSearch is not implemented by default. One has to implement the `search(term,queryset)` method.\nFrom our previous example, we can implement search by matching the search term with the \"name\" property of all objects in the queryset. The method returns a filtered queryset. Optionally, if search requires an asynchronous call to a backend, one can use `set_queryset`.\n\n```javascript\nsearch(term, queryset);\n{\n  let filtered_queryset = [];\n  for (var object of queryset) {\n    if (object.name.search(new RegExp(term, \"i\")) >= 0) {\n      filtered_queryset.push(object);\n    }\n  }\n  return filtered_queryset;\n}\n```\n\nor asynchronously\n\n```javascript\nsearch(term, queryset);\n{\n  fetch(\"/path/to/backend/search?q=\" + term, { method: \"get\" }).then(\n    response => {\n      if (response.ok) {\n        this.set_queryset(response.results);\n      }\n    }\n  );\n  return queryset; //remember to return queryset synchronously\n}\n```\n\nWe can enable live search by\n\n```javascript\nthis.live_search = true;\n```\n\ndefault is `false`.\n\n#### Sorting\n\nSorting is not implemented by default. Sorting can be achieved by implementing the `sort_by` method,\n\n```javascript\nsort_by(sort_fields, queryset);\n{\n}\n```\n\n`sort_fields` is an array containing objects whose properties are properties of objects in the queryset and whose values are either \"asc\" or \"desc\". As an example, for a queryset\n\n```javascript\n[\n  {\n    id: 1,\n    name: \"Joe Next\",\n    number: \"08939303003\",\n    address: { street: \"Hallmark Street\" }\n  },\n  {\n    id: 2,\n    name: \"Isa Yoll\",\n    number: \"0908839202\",\n    address: { street: \"Barbican Street\" }\n  }\n];\n```\n\nwe can have `sort_fields` equal to\n\n```javascript\n[{ name: \"asc\" }, { number: \"desc\" }, { address: \"asc\" }];\n```\n\nFor our example, we implement `sort_by` using,\n\n```javascript\nsort_by(sort_fields, queryset); //from adminjs\n{\n  let item = sort_fields[sort_fields.length - 1];\n\n  let pairs = _.toPairs(item);\n  let field_names = pairs.map(item => item[0]);\n  let field_orders = pairs.map(item => item[1]);\n\n  return _.orderBy(queryset, field_names, field_orders);\n}\n```\n\nWe use the `lodash` library to sort the current queryset and return an updated one. We only use the latest sort order by examining the last item of the `sort_fields` array. In a practical application,\na backend will perform the sort operations and we will use `set_queryset`.\n\n```javascript\n    sort_by(sort_fields,queryset)\n    {\n\tfetch('/path/to/backend/sort',{\n\t     'method': 'post',\n\t     'body': JSON.stringify(sort_fields)}).then((response)\n\t     {\n\t         if(response.ok}\n\t          {\n\t\t\tresponse.json().then((results)=>\n\t\t\t{\n\n\t\t\tthis.set_queryset(results.data);\n\n\t\t\t})\n\n                   }\n\t     })\n\n      return  queryset;\n    }\n```\n\nIt is also important to define the member variable `is_object_equal` which defines equality between objects in a queryset. This variable is used to test if an object has been previously selected using the radio buttons in the display view. By default,`is_object_equal` is\n\n```javascript\nthis.is_object_equal = function(a, b) {\n  return a == b;\n};\n```\n\nThis may not be sufficient for some applications. For example we might want to use the object's `id` property to check equality.\n\nSorting can achieved in the list display view by clicking on the table headers corresponding to property names.\n\n```javascript\nthis.is_object_equal = function(a, b) {\n  return a.id == b.id;\n};\n```\n\n#### Actions\n\n`get_actions` returns an actions object whose properties are action names and values are action methods. `get_actions` can be overridden by the `actions` member variable.\n\nEach actions object property (e.g. \"delete\") is passed an array of selected objects. One\ncan then handle those objects. Actions will appear on the list display page within a\ndropdown. The default \"delete\" action method is not implemented.\n\nWe can implement the delete action for our previous example,\n\n```javascript\nimport React from 'react';\nimport Admin from \"react-crud-admin\";\nimport Form from \"react-jsonschema-form\";\nimport moment from \"moment\";\nimport \"react-crud-admin/css\";//optional css import\n\nvar data=[\n\t    {id: 1, name: 'Ken Next', number: '08939303003',address:{ street: \"Hallmark Street\"}},\n            {id: 2,name: 'Isa Yoll', number: '0908839202',address:{ street: \"Barbican Street\"}}\n];\nexport default class Example extends Admin\n{\n\t......\n\t......\n\t......\n\tget_queryset()\n\t{\n\t\treturn data\n        }\n\n\tget_actions()\n\t\t{\n   \t     \treturn { \"delete\" : (selected_objects)=>{\n   \t       \t                   let total=data.length;\n                                   for(let object of selected_objects)\n   \t\t\t\t    {\n      \t\t\t\t       data.splice(data.indexOf(object),1);\n\n                                   }\n\t\t\t\t   this.set_queryset(data);\n\t\t\t\t   this.set_total(total-selected_objects.length);\n\t\t\t  }\n\t\t  }\n\n\t}\n\n}\n```\n\n#### Filters\n\n`get_filters` can be used to implement filters for the queryset.\n\n```javascript\nget_filters();\n{\n  return {\n    by_street_name: {\n      options: [\n        { value: \"Hallmark Street\", label: \"Hallmark Street\" },\n        { value: \"Barbican Street\", label: \"Barbican Street\" }\n      ],\n      filter_function: (option, queryset) => {\n        let grouped = _.groupBy(queryset, \"address.street\");\n\n        return _.has(grouped, option.value) ? grouped[option.value] : [];\n      }\n    },\n    by_id: {\n      options: [\n        { value: \"even\", label: \"even\" },\n        { value: \"odd\", label: \"odd\" }\n      ],\n      filter_function: (option, queryset) => {\n        let grouped = _.groupBy(queryset, contact => {\n          return contact.id % 2 == 0 ? \"even\" : \"odd\";\n        });\n\n        return _.has(grouped, option.value) ? grouped[option.value] : [];\n      }\n    }\n  };\n}\n```\n\nThe `get_filters` method returns an object whose properties are filter names. The example above returns 2 filters. The first is a filter `\"by_street_names\"` that filters based on the street addresses of the contacts. Each filter object has two properties : `\"options\"` and `\"filter_function\"`. `\"options\"` is an array of options objects which have a `\"value\"` and `\"label\"` properties. The `\"label\"` will appear in the UI while the `\"value\"` is used for processing. This is similar to the `select` HTML tag. For asynchronous operations, a method to set the options of a filter is provided. `set_filter_options` takes two arguments,\n\n```javascript\nset_filter_options(filter_name, options);\n```\n\nthe name of the filter and the options array of the filter.\n\nThe `\"filter_function\"` is a function that performs filtering. It has two arguments, `\"option\"` which is the selected `\"option\"` and the current queryset. It must return a queryset. `\"option\"` is one of `\"options\"` array. For asynchronous cases, `set_queryset` and `set_total` methods can be used to set the queryset after backend filtering.\n\nThe second filter `\"by_id\"` filters the queryset by even and odd `id` property. The filter UI uses [React Select](https://github.com/JedWatson/react-select) component.\n\n## Add/Change View\n\nStarting from version 1.0.48 the add/change view is presented in a modal. \n\n### Forms\n\nWe can add submit handlers for the form in our example,\n\n```javascript\n....\n....\n....\nexport default class Example extends Admin\n{\n\n.....\n.....\n.....\n\n get_form(object=null)\n    {\n    \tlet schema = {\n\t    title: this.name,\n\t    type: \"object\",\n\t    required: [\"name\"],\n\t    properties: {\n\t\tid: {type: \"number\", title: \"id\", default: Math.floor(1000*Math.random())+1 },\n\t\tname: {type: \"string\", title: \"Name\", default: \"\"},\n\t\tnumber : {type: \"string\", title: \"Number\", default: \"\"},\n\t\taddress : {type: \"object\", title: \"Address\",\n\t\t       properties : {\n\t\t              street : { type : \"string\",title : \"Street\"}\n\t\t        }\n\t\t    }\n\t    \t }\n\t    };\n\n\t if(!object)\n\t {\n\t\t   return <Form schema={schema} onSubmit={this.form_submit.bind(this)} />\n\t }\n\t else\n\t {\n\t        return <Form schema={schema}  formData={object} onSubmit={this.form_submit.bind(this)} />\n\t }\n     }\n....\n....\n....\n    form_submit(form)\n    {\n\tlet contact=form.formData;\n\n\tif(form.edit)\n\t{\n\n\t    this.state.queryset.splice(this.state.queryset.indexOf(this.state.object),1,contact);\n\t    this.response_change();\n\t}\n\telse\n\t{\n\t    this.state.queryset.push(contact);\n\t    this.response_add();\n\t}\n    }\n\n......\n......\n......\n}\n```\n\nThe submit handler checks to see if an object is being edited and replaces it with the edited object. If the object is being added, the method appends it to the `state.queryset` object.\n\n#### Post Submit\n\n`response_add` or `response_change` can be called after a new object is created or edited respectively. These functions should implement behaviour after a successful form submission. By default these functions are both defined as,\n\n```javascript\nfunction()\n{\n  this.setState({display_type :display_type.list,\n                 object :null,\n                 queryset: this.get_queryset(this.state.page_number,this.list_per_page,this.state.queryset)\n\t       });\n}\n```\n\nThis sets the display type to \"list\", changes the object to `null` and invokes `get_queryset` to fetch the latest data.\n\n## Permissions\n\n`has_add_permission` , `has_change_permission` and `has_module_permission` methods are used to control access.\n\nThe `has_add_permission` method takes no arguments and should return a boolean that signifies wether the user can add a new object. It simply hides the Add button.\n\nThe `has_change_permission` method takes the current object being edited, `state.object`, as an argument and should return a boolean that signifies wether the user can edit an object. It simply disables all `list_display_links`.\n\nThe `has_module_permission` method takes no arguments and should return a boolean that signifies wether the user should load the component. It simply shows an error message after an unauthorized access attempt.\n\n## Miscellany\n\n### `state` object\n\nThe default `state` object has the following properties,\n\n| Property           | Default Value | Description                                                        |\n| ------------------ | ------------- | ------------------------------------------------------------------ |\n| `queryset`         | `[]`          | Can be set with `set_queryset`                                     |\n| `page_number`      | `1`           |\n| `total`            | `0`           | Total number of items. Can be set with `set_total`.                |\n| `display_type`     | `\"list\"`      | Current display. Can be `\"list\"` or `\"change\"` for add/change view |\n| `object`           | `null`        | Current object to be edited (or created) in the add/change view    |\n| `selected_objects` | Empty set     | The `Set` class a wrapper around `array` that implements set logic |\n\nCare must be taken note to override the state object values especially at initialization stages e.g. in the constructor or `component_will_mount` .\n\n### Progress Indicator\n\n`show_progress` and `hide_progress` can be used in the both the list display and add/change view to display and hide a progress indicator. `render_progress` can be used to override the default progress indicator component to be rendered. `render_progress` has one argument which is a boolean denoting whether or not to render a progress indicator. For example,\n\n```javascript\nrender_progress(loading);\n{\n  if (loading) {\n    return <progress />;\n  }\n}\n```\n\n`render_progress` should return a component.\n\n### ESDOC API Documentation.\n\nThe API documentation generated with `esdoc.js` is available [here](https://mjibril.github.io/react-crud-admin/).\n\n## Component Props\n\nThere are many instances where customising the `react-crud-admin` component using component props is beneficial. Perhaps the component is to be used as a child component that reacts to changes in the parent component. For those cases it is possible to use props to customise the `Admin` component.\n\nAll members and properties of the `Admin` component class can be assigned using React component props. All functions passed as props are automatically bound to the `Admin` thus making them class members. This means that `this` will reference the `Admin` component despite being used outside the component.\n\nThe end result will look like,\n\n```javascript\n<Example\n  queryset={data}\n  search={search}\n  form_submit={form_submit}\n  get_form={get_form}\n  get_header_transforms={get_header_transforms}\n  get_field_transforms={get_field_transforms}\n  get_extra_fields={get_extra_fields}\n  get_actions={get_actions}\n  get_filters={get_filters}\n  name={name}\n  name_plural={name_plural}\n  list_display={list_display}\n  list_display_links={list_display_links}\n/>\n```\n\nYou can use `bind_exclude` prop which is an array that contains names of methods that should be excluded from automatic binding, allowing `this` reference to refer to something else.\n\nA complete example is available at [link](https://github.com/mjibril/react-crud-admin/blob/master/doc_example.props.js).\n\n### Example\n\nThe file containing the example used here is available at [link](https://github.com/mjibril/react-crud-admin/blob/master/doc_example.js).\n\n# Advanced\n\n## Rendering\n\nThere are two main `render` like methods that combine to form the `Component.render` method of `react-crud-admin`. The first is `render_list_page` which renders the current list view and the second is `render_change_page` which renders the add/change view. Only one of these views is active at a time and forms the `Component.render` for the component. A full implementation is given below,\n\n```javascript\nrender();\n{\n  if (!this.has_module_permission()) {\n    return (\n      <div>\n        {\" \"}\n        <h1> Permission Denied </h1>\n      </div>\n    );\n  }\n\n  if (this.state.display_type == display_type.list) {\n    return this.render_list_page();\n  } else {\n    //Important: the next two lines are for URL navigation and handling the browser back button\n    this._change_uuid = uuidv1();\n    history.pushState(\n      {},\n      \"Change View\",\n      window.location.hash + \"/change/\" + this._change_uuid\n    );\n\n    return this.render_change_page();\n  }\n}\n```\nYou can also listen to events that are triggered when the display is about to change or has changed,\n\n```javascript\ndisplay_will_change(display_type,object)\n{\n\n}\n```\nand\n```javascript\ndisplay_changed(display_type,object)\n{\n\n}\n```\n`display_type` is either `\"list\"` or `\"change\"`.\n\n### List Page\n\nIt is possible to add components above and below the list view using `render_above_list_view` and `render_below_list_view` methods. Both methods take no arguments and by default return `null`. These methods can be overridden to return components.\n\n```javascript\nrender_list_page();\n{\n  return (\n    <div>\n      {this.render_above_list_view()}\n      {this.render_list_view()}\n      {this.render_below_list_view()}\n    </div>\n  );\n}\n```\n\nWithin the `render_list_view` method itself, customisations are possible. The full implementation of `render_list_view` is,\n\n```javascript\nrender_list_view();\n{\n  return (\n    <div>\n      {this.render_add_button()}\n      {this.render_below_add_button()}\n      {this.render_search_field()}\n      {this.render_below_search_field()}\n      {this.render_actions()}\n      {this.render_below_actions()}\n      {this.render_filters()}\n      {this.render_below_filters()}\n      {this.render_table()}\n      {this.render_below_table()}\n      {this.render_progress(this.state.loading)}\n      {this.render_below_progress()}\n      {this.render_pagination()}\n    </div>\n  );\n}\n```\n\nThe `render_below_*` methods are used to add components below the add button, search field, actions,filters,list table and progress indicator. By default these methods return `null`. These methods can be overridden to return components.\n\nIt is also worth noting that one can hide any of the components by the overriding their methods and returning null. For example to hide the actions component, we override the `render_actions` method.\n\n```javascript\nrender_actions();\n{\n}\n```\n\n### The Add/Change Page\n\nIt is possible to add components above and below the add/change view using `render_above_change_view` and `render_below_change_view` methods. Both methods take no arguments and by default return `null`. These methods can be overridden to return components. The full implementation is\n\n```javascript\nrender_change_page();\n{\n  return (\n    <div>\n      {this.render_above_change_view()}\n      {this.render_change_view()}\n      {this.render_below_change_view()}\n    </div>\n  );\n}\n```\n",
     "longname": "/home/mubarak/Dropbox/Projects/react-crud-admin/README.md",
     "name": "./README.md",
     "static": true,
@@ -2959,7 +2951,7 @@
   },
   {
     "kind": "packageJSON",
-    "content": "{\n  \"name\": \"react-crud-admin\",\n  \"version\": \"1.0.42\",\n  \"private\": false,\n  \"main\": \"build/static/js/main.js\",\n  \"description\": \"React Admin inspired by DjangoAdmin\",\n  \"dependencies\": {\n    \"lodash\": \"\",\n    \"react\": \"\",\n    \"react-jsonschema-form\": \"\",\n    \"react-select\": \"\",\n    \"uuid\": \"\"\n  },\n  \"devDependencies\": {\n    \"@babel/core\": \"7.2.2\",\n    \"@svgr/webpack\": \"4.1.0\",\n    \"babel-core\": \"7.0.0-bridge.0\",\n    \"babel-eslint\": \"9.0.0\",\n    \"babel-jest\": \"23.6.0\",\n    \"babel-loader\": \"8.0.5\",\n    \"babel-plugin-named-asset-import\": \"^0.3.1\",\n    \"babel-preset-react-app\": \"^7.0.1\",\n    \"bfj\": \"6.1.1\",\n    \"bootstrap\": \"^4.3.1\",\n    \"case-sensitive-paths-webpack-plugin\": \"2.2.0\",\n    \"css-loader\": \"1.0.0\",\n    \"dotenv\": \"6.0.0\",\n    \"dotenv-expand\": \"4.2.0\",\n    \"eslint\": \"5.12.0\",\n    \"eslint-config-react-app\": \"^3.0.7\",\n    \"eslint-loader\": \"2.1.1\",\n    \"eslint-plugin-flowtype\": \"2.50.1\",\n    \"eslint-plugin-import\": \"2.14.0\",\n    \"eslint-plugin-jsx-a11y\": \"6.1.2\",\n    \"eslint-plugin-react\": \"7.12.4\",\n    \"file-loader\": \"2.0.0\",\n    \"fork-ts-checker-webpack-plugin-alt\": \"0.4.14\",\n    \"fs-extra\": \"7.0.1\",\n    \"html-webpack-plugin\": \"4.0.0-alpha.2\",\n    \"identity-obj-proxy\": \"3.0.0\",\n    \"jest\": \"23.6.0\",\n    \"jest-pnp-resolver\": \"1.0.2\",\n    \"jest-resolve\": \"23.6.0\",\n    \"jest-watch-typeahead\": \"^0.2.1\",\n    \"mini-css-extract-plugin\": \"0.5.0\",\n    \"moment\": \"^2.24.0\",\n    \"node-sass\": \"^4.11.0\",\n    \"optimize-css-assets-webpack-plugin\": \"5.0.1\",\n    \"pnp-webpack-plugin\": \"1.2.1\",\n    \"postcss-flexbugs-fixes\": \"4.1.0\",\n    \"postcss-loader\": \"3.0.0\",\n    \"postcss-preset-env\": \"6.5.0\",\n    \"postcss-safe-parser\": \"4.0.1\",\n    \"react-app-polyfill\": \"^0.2.1\",\n    \"react-dev-utils\": \"^7.0.3\",\n    \"react-dom\": \"^16.8.3\",\n    \"react-jsonschema-form\": \"^1.2.1\",\n    \"resolve\": \"1.10.0\",\n    \"sass-loader\": \"7.1.0\",\n    \"style-loader\": \"0.23.1\",\n    \"terser-webpack-plugin\": \"1.2.2\",\n    \"url-loader\": \"1.1.2\",\n    \"webpack\": \"4.28.3\",\n    \"webpack-dev-server\": \"3.1.14\",\n    \"webpack-manifest-plugin\": \"2.0.4\",\n    \"workbox-webpack-plugin\": \"3.6.3\",\n    \"bootstrap-sass\": \"^3.4.1\"\n  },\n  \"scripts\": {\n    \"edocs\": \"esdoc -c .esdoc.json\",\n    \"build\": \"node scripts/build.js\",\n    \"build-publish\": \"node scripts/buildpublish.js\",\n    \"start\": \"node scripts/start.js\",\n    \"test\": \"node scripts/test.js\"\n  },\n  \"eslintConfig\": {\n    \"extends\": \"react-app\"\n  },\n  \"browserslist\": [\n    \">0.2%\",\n    \"not dead\",\n    \"not ie <= 11\",\n    \"not op_mini all\"\n  ],\n  \"jest\": {\n    \"collectCoverageFrom\": [\n      \"src/**/*.{js,jsx,ts,tsx}\",\n      \"!src/**/*.d.ts\"\n    ],\n    \"resolver\": \"jest-pnp-resolver\",\n    \"setupFiles\": [\n      \"react-app-polyfill/jsdom\"\n    ],\n    \"testMatch\": [\n      \"<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}\",\n      \"<rootDir>/src/**/?(*.)(spec|test).{js,jsx,ts,tsx}\"\n    ],\n    \"testEnvironment\": \"jsdom\",\n    \"testURL\": \"http://localhost\",\n    \"transform\": {\n      \"^.+\\\\.(js|jsx|ts|tsx)$\": \"<rootDir>/node_modules/babel-jest\",\n      \"^.+\\\\.css$\": \"<rootDir>/config/jest/cssTransform.js\",\n      \"^(?!.*\\\\.(js|jsx|ts|tsx|css|json)$)\": \"<rootDir>/config/jest/fileTransform.js\"\n    },\n    \"transformIgnorePatterns\": [\n      \"[/\\\\\\\\]node_modules[/\\\\\\\\].+\\\\.(js|jsx|ts|tsx)$\",\n      \"^.+\\\\.module\\\\.(css|sass|scss)$\"\n    ],\n    \"moduleNameMapper\": {\n      \"^react-native$\": \"react-native-web\",\n      \"^.+\\\\.module\\\\.(css|sass|scss)$\": \"identity-obj-proxy\"\n    },\n    \"moduleFileExtensions\": [\n      \"web.js\",\n      \"js\",\n      \"web.ts\",\n      \"ts\",\n      \"web.tsx\",\n      \"tsx\",\n      \"json\",\n      \"web.jsx\",\n      \"jsx\",\n      \"node\"\n    ],\n    \"watchPlugins\": [\n      \"/home/mubarak/Dropbox/Projects/react-crud-admin/node_modules/jest-watch-typeahead/filename.js\",\n      \"/home/mubarak/Dropbox/Projects/react-crud-admin/node_modules/jest-watch-typeahead/testname.js\"\n    ]\n  },\n  \"babel\": {\n    \"presets\": [\n      \"react-app\"\n    ]\n  }\n}\n",
+    "content": "{\n  \"name\": \"react-crud-admin\",\n  \"version\": \"1.0.48\",\n  \"private\": false,\n  \"main\": \"build/static/js/main.js\",\n  \"description\": \"React Admin inspired by DjangoAdmin\",\n  \"dependencies\": {\n    \"lodash\": \"\",\n    \"react\": \"\",\n    \"react-jsonschema-form\": \"\",\n    \"react-modal\": \"\",\n    \"react-select\": \"\",\n    \"uuid\": \"\"\n  },\n  \"devDependencies\": {\n    \"@babel/core\": \"7.2.2\",\n    \"@svgr/webpack\": \"4.1.0\",\n    \"babel-core\": \"7.0.0-bridge.0\",\n    \"babel-eslint\": \"9.0.0\",\n    \"babel-jest\": \"23.6.0\",\n    \"babel-loader\": \"8.0.5\",\n    \"babel-plugin-named-asset-import\": \"^0.3.1\",\n    \"babel-preset-react-app\": \"^7.0.2\",\n    \"bfj\": \"6.1.1\",\n    \"bootstrap\": \"^4.3.1\",\n    \"bootstrap-sass\": \"^3.4.1\",\n    \"case-sensitive-paths-webpack-plugin\": \"2.2.0\",\n    \"css-loader\": \"1.0.0\",\n    \"dotenv\": \"6.0.0\",\n    \"dotenv-expand\": \"4.2.0\",\n    \"eslint\": \"5.12.0\",\n    \"eslint-config-react-app\": \"^3.0.7\",\n    \"eslint-loader\": \"2.1.1\",\n    \"eslint-plugin-flowtype\": \"2.50.1\",\n    \"eslint-plugin-import\": \"2.14.0\",\n    \"eslint-plugin-jsx-a11y\": \"6.1.2\",\n    \"eslint-plugin-react\": \"7.12.4\",\n    \"file-loader\": \"2.0.0\",\n    \"fork-ts-checker-webpack-plugin-alt\": \"0.4.14\",\n    \"fs-extra\": \"7.0.1\",\n    \"html-webpack-plugin\": \"4.0.0-alpha.2\",\n    \"identity-obj-proxy\": \"3.0.0\",\n    \"jest\": \"23.6.0\",\n    \"jest-pnp-resolver\": \"1.0.2\",\n    \"jest-resolve\": \"23.6.0\",\n    \"jest-watch-typeahead\": \"^0.2.1\",\n    \"mini-css-extract-plugin\": \"0.5.0\",\n    \"moment\": \"^2.24.0\",\n    \"node-sass\": \"^4.11.0\",\n    \"optimize-css-assets-webpack-plugin\": \"5.0.1\",\n    \"pnp-webpack-plugin\": \"1.2.1\",\n    \"postcss-flexbugs-fixes\": \"4.1.0\",\n    \"postcss-loader\": \"3.0.0\",\n    \"postcss-preset-env\": \"6.5.0\",\n    \"postcss-safe-parser\": \"4.0.1\",\n    \"react-app-polyfill\": \"^0.2.1\",\n    \"react-dev-utils\": \"^7.0.3\",\n    \"react-dom\": \"^16.8.3\",\n    \"react-jsonschema-form\": \"^1.2.1\",\n    \"resolve\": \"1.10.0\",\n    \"sass-loader\": \"7.1.0\",\n    \"style-loader\": \"0.23.1\",\n    \"terser-webpack-plugin\": \"1.2.2\",\n    \"url-loader\": \"1.1.2\",\n    \"webpack\": \"4.28.3\",\n    \"webpack-dev-server\": \"3.1.14\",\n    \"webpack-manifest-plugin\": \"2.0.4\",\n    \"workbox-webpack-plugin\": \"3.6.3\"\n  },\n  \"scripts\": {\n    \"edocs\": \"esdoc -c .esdoc.json\",\n    \"build\": \"node scripts/build.js\",\n    \"build-publish\": \"node scripts/buildpublish.js\",\n    \"start\": \"node scripts/start.js\",\n    \"test\": \"node scripts/test.js\"\n  },\n  \"eslintConfig\": {\n    \"extends\": \"react-app\"\n  },\n  \"browserslist\": [\n    \">0.2%\",\n    \"not dead\",\n    \"not ie <= 11\",\n    \"not op_mini all\"\n  ],\n  \"jest\": {\n    \"collectCoverageFrom\": [\n      \"src/**/*.{js,jsx,ts,tsx}\",\n      \"!src/**/*.d.ts\"\n    ],\n    \"resolver\": \"jest-pnp-resolver\",\n    \"setupFiles\": [\n      \"react-app-polyfill/jsdom\"\n    ],\n    \"testMatch\": [\n      \"<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}\",\n      \"<rootDir>/src/**/?(*.)(spec|test).{js,jsx,ts,tsx}\"\n    ],\n    \"testEnvironment\": \"jsdom\",\n    \"testURL\": \"http://localhost\",\n    \"transform\": {\n      \"^.+\\\\.(js|jsx|ts|tsx)$\": \"<rootDir>/node_modules/babel-jest\",\n      \"^.+\\\\.css$\": \"<rootDir>/config/jest/cssTransform.js\",\n      \"^(?!.*\\\\.(js|jsx|ts|tsx|css|json)$)\": \"<rootDir>/config/jest/fileTransform.js\"\n    },\n    \"transformIgnorePatterns\": [\n      \"[/\\\\\\\\]node_modules[/\\\\\\\\].+\\\\.(js|jsx|ts|tsx)$\",\n      \"^.+\\\\.module\\\\.(css|sass|scss)$\"\n    ],\n    \"moduleNameMapper\": {\n      \"^react-native$\": \"react-native-web\",\n      \"^.+\\\\.module\\\\.(css|sass|scss)$\": \"identity-obj-proxy\"\n    },\n    \"moduleFileExtensions\": [\n      \"web.js\",\n      \"js\",\n      \"web.ts\",\n      \"ts\",\n      \"web.tsx\",\n      \"tsx\",\n      \"json\",\n      \"web.jsx\",\n      \"jsx\",\n      \"node\"\n    ],\n    \"watchPlugins\": [\n      \"/home/mubarak/Dropbox/Projects/react-crud-admin/node_modules/jest-watch-typeahead/filename.js\",\n      \"/home/mubarak/Dropbox/Projects/react-crud-admin/node_modules/jest-watch-typeahead/testname.js\"\n    ]\n  },\n  \"babel\": {\n    \"presets\": [\n      \"react-app\"\n    ]\n  },\n  \"repository\": {\n    \"type\": \"git\",\n    \"url\": \"https://github.com/mjibril/react-crud-admin.git\"\n  },\n  \"author\": \"Mubarak Jibril\",\n  \"license\": \"ISC\"\n}\n",
     "longname": "/home/mubarak/Dropbox/Projects/react-crud-admin/package.json",
     "name": "package.json",
     "static": true,
