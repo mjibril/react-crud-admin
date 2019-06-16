@@ -511,7 +511,7 @@ class Admin extends React.Component {
       this._display_will_change();
       this.setState(
         { display_type: display_type.change, object: object, loading: false },
-        this._display_changed
+        this._display_changed()
       );
       event.preventDefault();
     };

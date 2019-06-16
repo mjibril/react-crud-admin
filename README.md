@@ -675,6 +675,8 @@ The second filter `"by_id"` filters the queryset by even and odd `id` property. 
 
 ## Add/Change View
 
+Starting from version 1.0.48 the add/change view is presented in a modal. 
+
 ### Forms
 
 We can add submit handlers for the form in our example,
@@ -784,7 +786,9 @@ The default `state` object has the following properties,
 | `total`            | `0`           | Total number of items. Can be set with `set_total`.                |
 | `display_type`     | `"list"`      | Current display. Can be `"list"` or `"change"` for add/change view |
 | `object`           | `null`        | Current object to be edited (or created) in the add/change view    |
-| `selected_objects` | Empty set     | The `Set` class a wrapper around `array` that implements set       |
+| `selected_objects` | Empty set     | The `Set` class a wrapper around `array` that implements set logic |
+
+Care must be taken note to override the state object values especially at initialization stages e.g. in the constructor or `component_will_mount` .
 
 ### Progress Indicator
 
@@ -872,6 +876,22 @@ render();
   }
 }
 ```
+You can also listen to events that are triggered when the display is about to change or has changed,
+
+```javascript
+display_will_change(display_type,object)
+{
+
+}
+```
+and
+```javascript
+display_changed(display_type,object)
+{
+
+}
+```
+`display_type` is either `"list"` or `"change"`.
 
 ### List Page
 
