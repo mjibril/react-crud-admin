@@ -101,6 +101,11 @@ class Admin extends React.Component {
    */
 
   _clear() {
+    if (this._check_all) {
+      this._check_all.current.checked = false;
+      this._all_selected = false;
+    }
+
     this.setState({
       display_type: display_type.list,
       page_number: 1,
@@ -108,9 +113,6 @@ class Admin extends React.Component {
       queryset: this.get_queryset(1, this.list_per_page, this.state.queryset),
       filter_values: []
     });
-    if (this._check_all) {
-      this._check_all.current.checked = false;
-    }
   }
 
   /**
