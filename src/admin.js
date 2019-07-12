@@ -90,7 +90,6 @@ class Admin extends React.Component {
     this._select_one = this._select_one.bind(this);
     this.response_change = this.response_change.bind(this);
     this.response_add = this.response_add.bind(this);
-    this.clearFilters = this.clearFilters.bind(this);
   }
   /**
    * This function returns an array of objects that will serve as the
@@ -600,7 +599,7 @@ class Admin extends React.Component {
       options.push({
         label: _.startCase(filter),
         value: filter,
-        disabled: true,
+        isDisabled: true,
         filter: null
       });
 
@@ -622,41 +621,17 @@ class Admin extends React.Component {
       <div style={{ marginLeft: "10px", width: "100%" }}>
         <Select
           name="filter-form"
-          multi={true}
+          isMulti={true}
           onChange={this._handle_filter_change.bind(this)}
-          closeOnSelect={true}
+          closeMenuOnSelect={false}
           value={this.state.filter_values}
-          removeSelected={true}
+          className="basic-multi-select"
+          classNamePrefix="select"
           placeholder={"Select a filter"}
           options={options}
         />
       </div>
     );
-  }
-
-  /**
-   * This function clears filters, searches, select, and pagination states
-   */
-  clearFilters() {
-    // Fetch the initial query set
-    // This depends on how pagination is implemented
-    this.get_queryset(1, 9999, []);
-
-    this.state.selected_objects.items.forEach(item =>
-      this.state.selected_objects.remove(item)
-    );
-    this.setState({
-      filter_values: [],
-      page_number: 1,
-      appliedFilters: [],
-      selected_objects: this.state.selected_objects
-    });
-    // clear search term
-    var searchInput = document.querySelector("[name=search]");
-    var allBoxes = document.querySelector("#all_boxes");
-    searchInput && (searchInput.value = "");
-    // hacky way to clear all boxes check mark
-    allBoxes && allBoxes.checked && allBoxes.click();
   }
 
   sort_by(sort_fields) {
@@ -809,17 +784,14 @@ class Admin extends React.Component {
         this.setState({ queryset: queryset, total: queryset.length });
       }
     } else {
+      let queryset = this.get_queryset(
+        this.state.page_number,
+        this.get_list_per_page(),
+        this.state.queryset
+      );
       this.setState({
-        queryset: this.get_queryset(
-          this.state.page_number,
-          this.get_list_per_page(),
-          this.state.queryset
-        ),
-        total: this.get_queryset(
-          this.state.page_number,
-          this.list_per_page,
-          this.state.queryset
-        ).length
+        queryset: queryset,
+        total: queryset.length
       });
     }
   }
