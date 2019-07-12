@@ -886,7 +886,7 @@ class Admin extends React.Component {
   selectPage(page) {
     return event => {
       this.setState({ page_number: page.page }, () => {
-        // no needed if pagination is done on frontend
+        // not needed if pagination is done on frontend
         this.setState({
           queryset: this.get_queryset(
             this.state.page_number,
