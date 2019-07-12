@@ -600,7 +600,7 @@ class Admin extends React.Component {
       options.push({
         label: _.startCase(filter),
         value: filter,
-        disabled: true,
+        isDisabled: true,
         filter: null
       });
 
@@ -622,17 +622,19 @@ class Admin extends React.Component {
       <div style={{ marginLeft: "10px", width: "100%" }}>
         <Select
           name="filter-form"
-          multi={true}
+          isMulti={true}
           onChange={this._handle_filter_change.bind(this)}
-          closeOnSelect={true}
+          closeMenuOnSelect={false}
           value={this.state.filter_values}
-          removeSelected={true}
+          className="basic-multi-select"
+          classNamePrefix="select"
           placeholder={"Select a filter"}
           options={options}
         />
       </div>
     );
   }
+
   sort_by(sort_fields) {
     return this.state.queryset ? this.state.queryset : [];
   }
@@ -783,17 +785,14 @@ class Admin extends React.Component {
         this.setState({ queryset: queryset, total: queryset.length });
       }
     } else {
+      let queryset = this.get_queryset(
+        this.state.page_number,
+        this.get_list_per_page(),
+        this.state.queryset
+      );
       this.setState({
-        queryset: this.get_queryset(
-          this.state.page_number,
-          this.get_list_per_page(),
-          this.state.queryset
-        ),
-        total: this.get_queryset(
-          this.state.page_number,
-          this.list_per_page,
-          this.state.queryset
-        ).length
+        queryset: queryset,
+        total: queryset.length
       });
     }
   }
