@@ -37,6 +37,7 @@ class Admin extends React.Component {
     this.sort_fields = [];
     this.is_object_equal = (a, b) => a == b;
     this.pages_in_pagination = 3;
+    this.fetch_for_page = true;
     this.actions = {
       delete: selected_objects => {}
     };
@@ -876,23 +877,35 @@ class Admin extends React.Component {
     this.get_actions()[action](this.state.selected_objects.getItems());
     this.get_queryset(this.state.page_number, this.get_list_per_page());
   }
+
   /**
-   * An event listener that listens when a page is  selected.
+   * Calls get_queryset for a new page number
+   *
+   */
+
+  _refresh_queryset() {
+    this.setState({
+      queryset: this.get_queryset(
+        this.state.page_number,
+        this.get_list_per_page(),
+        this.state.queryset
+      )
+    });
+  }
+  /**
+   * An event listener that listens when a page is  selected. Only fetch a new queryset set
+   * if fetch_for_page is true, else ignore. Setting fetch_for_page to false allows frontend
+   * pagination
    *
    *@param {number} page -  the page number selected
    */
 
   selectPage(page) {
     return event => {
-      this.setState({ page_number: page.page }, () => {
-        this.setState({
-          queryset: this.get_queryset(
-            this.state.page_number,
-            this.get_list_per_page(),
-            this.state.queryset
-          )
-        });
-      });
+      this.setState(
+        { page_number: page.page },
+        this.fetch_for_page ? this._refresh_queryset : () => {}
+      );
       event.preventDefault();
     };
   }
