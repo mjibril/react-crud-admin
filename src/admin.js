@@ -635,10 +635,13 @@ class Admin extends React.Component {
   }
 
   /**
-   * This function clears filters, searches, selected, and pagination states
+   * This function clears filters, searches, select, and pagination states
    */
   clearFilters() {
+    // Fetch the initial query set
+    // This depends on how pagination is implemented
     this.get_queryset(1, 9999, []);
+
     this.state.selected_objects.items.forEach(item =>
       this.state.selected_objects.remove(item)
     );
