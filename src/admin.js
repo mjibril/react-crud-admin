@@ -589,7 +589,11 @@ class Admin extends React.Component {
         value,
         this.state.queryset
       );
-      this.setState({ queryset: queryset });
+      this.setState({
+        queryset: queryset,
+        total: queryset.length,
+        page_number: 1
+      });
     }
   }
   render_filters() {
@@ -885,6 +889,7 @@ class Admin extends React.Component {
   selectPage(page) {
     return event => {
       this.setState({ page_number: page.page }, () => {
+        // not needed if pagination is done on frontend
         this.setState({
           queryset: this.get_queryset(
             this.state.page_number,
