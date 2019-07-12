@@ -54,6 +54,13 @@ a
     @extend  .pull-right;
     margin : 10px;
 }
+.ra-clear-button
+{
+    @extend .btn;
+    @extend .btn-info;
+    @extend  .pull-left;
+    margin : 10px;
+}
 
 
 .ra-search-field

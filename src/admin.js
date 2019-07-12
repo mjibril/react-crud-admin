@@ -91,7 +91,28 @@ class Admin extends React.Component {
     this._select_one = this._select_one.bind(this);
     this.response_change = this.response_change.bind(this);
     this.response_add = this.response_add.bind(this);
+    this._clear = this._clear.bind(this);
+    this._check_all = React.createRef();
   }
+  /**
+   * This function clears selected filters and selected objects
+   * 
+
+   */
+
+  _clear() {
+    this.setState({
+      display_type: display_type.list,
+      page_number: 1,
+      selected_objects: new Set([], this.is_object_equal),
+      queryset: this.get_queryset(1, this.list_per_page, this.state.queryset),
+      filter_values: []
+    });
+    if (this._check_all) {
+      this._check_all.current.checked = false;
+    }
+  }
+
   /**
    * This function returns an array of objects that will serve as the
    * queryset for the admin interface. Typically involves an HTTP request
@@ -856,6 +877,7 @@ class Admin extends React.Component {
                   type="checkbox"
                   id="all_boxes"
                   onChange={this._select_all}
+                  ref={this._check_all}
                 />{" "}
                 <label htmlFor="all_boxes">&nbsp;</label>
               </th>
@@ -1073,6 +1095,14 @@ class Admin extends React.Component {
       </div>
     );
   }
+  render_clear_button() {
+    return (
+      <button className={"ra-clear-button"} onClick={this._clear}>
+        Clear
+      </button>
+    );
+  }
+
   /**
    * Renders the admin interface component
    *
@@ -1082,6 +1112,7 @@ class Admin extends React.Component {
     return (
       <div>
         {this.render_add_button()}
+        {this.render_clear_button()}
         {this.render_below_add_button()}
         {this.render_search_field()}
         {this.render_below_search_field()}
