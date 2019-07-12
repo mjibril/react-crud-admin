@@ -66,3 +66,17 @@ a
     @extend  .form-control;
     margin : 10px;
 }
+
+
+i.glyphicon { display: none; }
+.btn-add::after { content: 'Add'; }
+.array-item-move-up::after { content: 'Move Up'; }
+.array-item-move-down::after { content: 'Move Down'; }
+.array-item-remove::after { content: 'Remove'; }
+
+
+.ReactModal__Overlay
+{
+
+    z-index: 999999;
+}

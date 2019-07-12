@@ -788,7 +788,7 @@ The default `state` object has the following properties,
 | `object`           | `null`        | Current object to be edited (or created) in the add/change view    |
 | `selected_objects` | Empty set     | The `Set` class a wrapper around `array` that implements set logic |
 
-Care must be taken note to override the state object values especially at initialization stages e.g. in the constructor or `component_will_mount` .
+Care must be taken note to override the state object values especially at initialization stages e.g. in the constructor or `component_will_mount`. It is always necessary to call `super()` as the first statement in the constructor. 
 
 ### Progress Indicator
 

@@ -67,7 +67,7 @@ class Admin extends React.Component {
       page_number: 1,
       object: null,
       selected_objects: new Set([], this.is_object_equal),
-      total: 1,
+      total: 0,
       filter_options: {},
       filter_values: []
     };
@@ -703,16 +703,17 @@ class Admin extends React.Component {
     return this._get_ordered_queryset().map((object, i) => {
       return (
         <tr key={"row-" + i}>
-          <td>
-            {" "}
-            <input
-              type="checkbox"
-              id={i + "_checkbox"}
-              onChange={this._select_one(object)}
-              checked={this.state.selected_objects.contains(object)}
-            />{" "}
-            <label htmlFor={i + "_checkbox"}>&nbsp;</label>{" "}
-          </td>
+          {this.show_check_list() ? (
+            <td>
+              <input
+                type="checkbox"
+                id={i + "_checkbox"}
+                onChange={this._select_one(object)}
+                checked={this.state.selected_objects.contains(object)}
+              />
+              <label htmlFor={i + "_checkbox"}>&nbsp;</label>{" "}
+            </td>
+          ) : null}
           {this.get_list_display().map(item => {
             return (
               <td key={item}>
@@ -845,14 +846,16 @@ class Admin extends React.Component {
       <table className="table">
         <thead>
           <tr key="header">
-            <th>
-              <input
-                type="checkbox"
-                id="all_boxes"
-                onChange={this._select_all}
-              />{" "}
-              <label htmlFor="all_boxes">&nbsp;</label>
-            </th>
+            {this.show_check_list() ? (
+              <th>
+                <input
+                  type="checkbox"
+                  id="all_boxes"
+                  onChange={this._select_all}
+                />{" "}
+                <label htmlFor="all_boxes">&nbsp;</label>
+              </th>
+            ) : null}
             {this._get_table_header()}
           </tr>
         </thead>
@@ -869,7 +872,7 @@ class Admin extends React.Component {
   action_selected(event) {
     let action = event.target.value;
 
-    console.log(this.state.selected_objects.getItems());
+    //console.log(this.state.selected_objects.getItems());
     this.get_actions()[action](this.state.selected_objects.getItems());
     this.get_queryset(this.state.page_number, this.get_list_per_page());
   }
@@ -1147,6 +1150,9 @@ class Admin extends React.Component {
   show_list_view() {
     this._display_will_change();
     this.setState({ display_type: display_type.list }, this._display_changed);
+  }
+  show_check_list() {
+    return true;
   }
 }
 
