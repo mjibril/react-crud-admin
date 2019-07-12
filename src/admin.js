@@ -589,7 +589,11 @@ class Admin extends React.Component {
         value,
         this.state.queryset
       );
-      this.setState({ queryset: queryset });
+      this.setState({
+        queryset: queryset,
+        total: queryset.length,
+        page_number: 1
+      });
     }
   }
   render_filters() {
