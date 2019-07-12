@@ -6,3 +6,6 @@ voter.*
 package-lock.json
 src/example*.js
 src/evoting.js
+*.log
+*.yaml
+*.lock
