@@ -285,7 +285,7 @@ this.list_display = ["name", "number", "address.street"];
 We can also use,
 
 ```javascript
-get_list_display();
+get_list_display()
 {
   return ["name", "number", "address.street"];
 }
@@ -318,7 +318,7 @@ get_list_display_links(){
 Table headers in the list display view are obtained from property names in `get_list_display` method by default. There are certain cases when one would like to customise these headers. `get_header_transforms` does just that. As an example
 
 ```javascript
-get_header_transforms();
+get_header_transforms()
 {
   return {
     name: function(header) {
@@ -349,7 +349,7 @@ In summary `get_header_transforms` returns an object whose properties are field 
 Field transforms return an object whose properties are field names corresponding to properties of any object in the queryset and whose values are transform functions. They are used to transform the values of objects within the queryset. For example to transform every "name" property of all the objects in the queryset to lower case we use,
 
 ```javascript
-get_field_transforms();
+get_field_transforms()
 {
   return {
     name: function(content, object) {
@@ -390,7 +390,7 @@ this.field_transforms = {
 It is sometimes desirable to create new fields that are not properties of any of the objects in the queryset. As an example, we create a new field that displays the current time using the `moment` library.
 
 ```javascript
-get_extra_fields();
+get_extra_fields()
 {
   return {
     now: function(object, label) {
@@ -433,7 +433,7 @@ this.list_per_page = 10;
 or
 
 ```javascript
-get_list_per_page();
+get_list_per_page()
 {
   return 10;
 }
@@ -630,7 +630,7 @@ export default class Example extends Admin
 `get_filters` can be used to implement filters for the queryset.
 
 ```javascript
-get_filters();
+get_filters()
 {
   return {
     by_street_name: {
@@ -850,7 +850,7 @@ The file containing the example used here is available at [link](https://github.
 There are two main `render` like methods that combine to form the `Component.render` method of `react-crud-admin`. The first is `render_list_page` which renders the current list view and the second is `render_change_page` which renders the add/change view. Only one of these views is active at a time and forms the `Component.render` for the component. A full implementation is given below,
 
 ```javascript
-render();
+render()
 {
   if (!this.has_module_permission()) {
     return (
@@ -898,7 +898,7 @@ display_changed(display_type,object)
 It is possible to add components above and below the list view using `render_above_list_view` and `render_below_list_view` methods. Both methods take no arguments and by default return `null`. These methods can be overridden to return components.
 
 ```javascript
-render_list_page();
+render_list_page()
 {
   return (
     <div>
@@ -913,7 +913,7 @@ render_list_page();
 Within the `render_list_view` method itself, customisations are possible. The full implementation of `render_list_view` is,
 
 ```javascript
-render_list_view();
+render_list_view()
 {
   return (
     <div>
@@ -940,7 +940,7 @@ The `render_below_*` methods are used to add components below the add button, se
 It is also worth noting that one can hide any of the components by the overriding their methods and returning null. For example to hide the actions component, we override the `render_actions` method.
 
 ```javascript
-render_actions();
+render_actions()
 {
 }
 ```
@@ -950,7 +950,7 @@ render_actions();
 It is possible to add components above and below the add/change view using `render_above_change_view` and `render_below_change_view` methods. Both methods take no arguments and by default return `null`. These methods can be overridden to return components. The full implementation is
 
 ```javascript
-render_change_page();
+render_change_page()
 {
   return (
     <div>
